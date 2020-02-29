@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.WindowController">
+   <children>
+      <Pane prefHeight="600.0" prefWidth="500.0">
+         <children>
+            <VBox layoutX="10.0" layoutY="10.0" maxHeight="580.0" maxWidth="480.0" minHeight="580.0" minWidth="480.0" prefHeight="580.0" prefWidth="480.0">
+               <children>
+                  <HBox maxHeight="300.0" maxWidth="480.0" minHeight="300.0" minWidth="480.0" prefHeight="300.0" prefWidth="480.0">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <HBox maxHeight="150.0" maxWidth="300.0" minHeight="150.0" minWidth="300.0" prefHeight="150.0" prefWidth="300.0">
+                                 <children>
+                                    <VBox maxHeight="150.0" maxWidth="150.0" minHeight="150.0" minWidth="150.0" prefHeight="150.0" prefWidth="150.0">
+                                       <children>
+                                          <Label text="Table 1" />
+                                          <MenuButton fx:id="mbutton" mnemonicParsing="false" text="Table Name">
+                                            <items>
+                                              <MenuItem mnemonicParsing="false" text="Action 1" />
+                                              <MenuItem mnemonicParsing="false" text="Action 2" />
+                                            </items>
+                                          </MenuButton>
+                                       </children>
+                                    </VBox>
+                                    <VBox maxHeight="150.0" maxWidth="150.0" minHeight="150.0" minWidth="150.0" prefHeight="150.0" prefWidth="150.0">
+                                       <children>
+                                          <Label text="Attributes" />
+                                          <MenuButton mnemonicParsing="false" text="Attributes">
+                                            <items>
+                                              <MenuItem mnemonicParsing="false" text="Action 1" />
+                                              <MenuItem mnemonicParsing="false" text="Action 2" />
+                                            </items>
+                                          </MenuButton>
+                                       </children>
+                                    </VBox>
+                                 </children></HBox>
+                              <HBox maxHeight="0.0" maxWidth="300.0" minHeight="150.0" minWidth="300.0" prefHeight="150.0" prefWidth="300.0">
+                                 <children>
+                                    <VBox maxHeight="150.0" maxWidth="150.0" minHeight="150.0" minWidth="150.0" prefHeight="150.0" prefWidth="150.0">
+                                       <children>
+                                          <Label text="Table 2" />
+                                          <MenuButton mnemonicParsing="false" text="Table Name">
+                                            <items>
+                                              <MenuItem mnemonicParsing="false" text="Action 1" />
+                                              <MenuItem mnemonicParsing="false" text="Action 2" />
+                                            </items>
+                                          </MenuButton>
+                                       </children>
+                                    </VBox>
+                                    <VBox maxHeight="150.0" maxWidth="150.0" minHeight="150.0" minWidth="150.0" prefHeight="150.0" prefWidth="150.0">
+                                       <children>
+                                          <Label text="Attributes" />
+                                          <MenuButton mnemonicParsing="false" text="Attributes">
+                                            <items>
+                                              <MenuItem mnemonicParsing="false" text="Action 1" />
+                                              <MenuItem mnemonicParsing="false" text="Action 2" />
+                                            </items>
+                                          </MenuButton>
+                                       </children>
+                                    </VBox>
+                                 </children></HBox>
+                           </children>
+                        </VBox>
+                        <VBox maxHeight="300.0" maxWidth="180.0" minHeight="300.0" minWidth="180.0" prefHeight="300.0" prefWidth="180.0">
+                           <children>
+                              <Button fx:id="button" mnemonicParsing="false" onAction="#buttonPressed" text="Button" />
+                              <CheckBox mnemonicParsing="false" text="Generate Text File" />
+                           </children></VBox>
+                     </children>
+                  </HBox>
+                  <HBox maxHeight="200.0" maxWidth="480.0" minHeight="280.0" minWidth="480.0" prefHeight="200.0" prefWidth="480.0" />
+               </children>
+            </VBox>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
