@@ -13,6 +13,8 @@ public class WindowController {
 	MenuButton mbutton1;
 	@FXML 
 	MenuButton mbutton2;
+	@FXML 
+	MenuButton mbutton3;
 	@FXML
 	MenuItem confItem1;
 	@FXML
@@ -68,6 +70,7 @@ public class WindowController {
 		MenuButton m = mbutton1;
 		MenuItem mitem = confItem1;
 		m.setText(mitem.getText());
+		updateAttr1(m.getText());
 	}
 	
 	public void confItemSelected2() {
@@ -207,6 +210,23 @@ public class WindowController {
 		MenuButton m = mbutton2;
 		MenuItem mitem = teamYearwiseItem2;
 		m.setText(mitem.getText());
+	}
+	
+	//Update attribute items based on table selection
+	public void updateAttr1(String table) {
+		MenuButton m = mbutton3;
+		//remove all items from the menu
+		for(int i = m.getItems().size()-1; i > -1; i--) {
+			m.getItems().remove(i);
+		}
+		if(table == "Conference Yearwise") {
+			for(int i = 0; i < Attributes.confAttr.length; i++) {
+				m.getItems().add(new MenuItem(Attributes.confAttr[i]));
+			}
+		}
+	}
+	public void updateAttr2() {
+		MenuButton m = mbutton2;
 	}
 	
 

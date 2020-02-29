@@ -42,7 +42,7 @@
                                     <VBox maxHeight="150.0" maxWidth="150.0" minHeight="150.0" minWidth="150.0" prefHeight="150.0" prefWidth="150.0">
                                        <children>
                                           <Label text="Attributes" />
-                                          <MenuButton mnemonicParsing="false" text="Attributes">
+                                          <MenuButton fx:id="mbutton3" mnemonicParsing="false" text="Attributes">
                                             <items>
                                               <MenuItem mnemonicParsing="false" text="Action 1" />
                                               <MenuItem mnemonicParsing="false" text="Action 2" />
