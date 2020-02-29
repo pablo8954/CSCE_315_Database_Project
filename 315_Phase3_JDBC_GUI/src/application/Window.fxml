@@ -21,20 +21,20 @@
                                     <VBox maxHeight="150.0" maxWidth="150.0" minHeight="150.0" minWidth="150.0" prefHeight="150.0" prefWidth="150.0">
                                        <children>
                                           <Label text="Table 1" />
-                                          <MenuButton fx:id="mbutton" mnemonicParsing="false" text="Table Name">
+                                          <MenuButton fx:id="mbutton1" mnemonicParsing="false" text="Table Name">
                                             <items>
-                                              <MenuItem fx:id="confItem" mnemonicParsing="false" onAction="#ConfItemSelected" text="Conference Yearwise" />
-                                              <MenuItem mnemonicParsing="false" text="Drive" />
-                                                <MenuItem mnemonicParsing="false" text="Game" />
-                                                <MenuItem mnemonicParsing="false" text="Play" />
-                                                <MenuItem mnemonicParsing="false" text="Play Metrics" />
-                                                <MenuItem mnemonicParsing="false" text="Player" />
-                                                <MenuItem mnemonicParsing="false" text="Player Metrics Gamewise" />
-                                                <MenuItem mnemonicParsing="false" text="Player Yearwise" />
-                                                <MenuItem mnemonicParsing="false" text="Stadium Yearwise" />
-                                                <MenuItem mnemonicParsing="false" text="Team" />
-                                                <MenuItem mnemonicParsing="false" text="Team Metrics Gamewise" />
-                                                <MenuItem mnemonicParsing="false" text="Team Yearwise" />
+                                              <MenuItem fx:id="confItem1" mnemonicParsing="false" onAction="#confItemSelected1" text="Conference Yearwise" />
+                                              <MenuItem fx:id="driveItem1" mnemonicParsing="false" onAction="#driveItemSelected1" text="Drive" />
+                                                <MenuItem fx:id="gameItem1" mnemonicParsing="false" onAction="#gameItemSelected1" text="Game" />
+                                                <MenuItem fx:id="playItem1" mnemonicParsing="false" onAction="#playItemSelected1" text="Play" />
+                                                <MenuItem fx:id="playMetricsItem1" mnemonicParsing="false" onAction="#playMetricsItemSelected1" text="Play Metrics" />
+                                                <MenuItem fx:id="playerItem1" mnemonicParsing="false" onAction="#playerItemSelected1" text="Player" />
+                                                <MenuItem fx:id="playerMetricsGamewiseItem1" mnemonicParsing="false" onAction="#playerMetricsGamewiseItemSelected1" text="Player Metrics Gamewise" />
+                                                <MenuItem fx:id="playerYearwiseItem1" mnemonicParsing="false" onAction="#playerYearwiseItemSelected1" text="Player Yearwise" />
+                                                <MenuItem fx:id="stadiumYearwiseItem1" mnemonicParsing="false" onAction="#satdiumYearwiseItemSelected1" text="Stadium Yearwise" />
+                                                <MenuItem fx:id="teamItem1" mnemonicParsing="false" onAction="#teamItemSelected1" text="Team" />
+                                                <MenuItem fx:id="teamMetricsGamewiseItem1" mnemonicParsing="false" onAction="#teamMetricsGamewiseItemSelected1" text="Team Metrics Gamewise" />
+                                                <MenuItem fx:id="teamYearwiseItem1" mnemonicParsing="false" onAction="#teamYearwiseItemSelected1" text="Team Yearwise" />
                                             </items>
                                           </MenuButton>
                                        </children>
@@ -57,20 +57,20 @@
                                     <VBox maxHeight="150.0" maxWidth="150.0" minHeight="150.0" minWidth="150.0" prefHeight="150.0" prefWidth="150.0">
                                        <children>
                                           <Label text="Table 2" />
-                                          <MenuButton mnemonicParsing="false" text="Table Name">
+                                          <MenuButton fx:id="mbutton2" mnemonicParsing="false" text="Table Name">
                                              <items>
-                                                <MenuItem mnemonicParsing="false" text="Conference Yearwise" />
-                                                <MenuItem mnemonicParsing="false" text="Drive" />
-                                                <MenuItem mnemonicParsing="false" text="Game" />
-                                                <MenuItem mnemonicParsing="false" text="Play" />
-                                                <MenuItem mnemonicParsing="false" text="Play Metrics" />
-                                                <MenuItem mnemonicParsing="false" text="Player" />
-                                                <MenuItem mnemonicParsing="false" text="Player Metrics Gamewise" />
-                                                <MenuItem mnemonicParsing="false" text="Player Yearwise" />
-                                                <MenuItem mnemonicParsing="false" text="Stadium Yearwise" />
-                                                <MenuItem mnemonicParsing="false" text="Team" />
-                                                <MenuItem mnemonicParsing="false" text="Team Metrics Gamewise" />
-                                                <MenuItem mnemonicParsing="false" text="Team Yearwise" />
+                                                <MenuItem fx:id="confItem2" mnemonicParsing="false" onAction="#confItemSelected2" text="Conference Yearwise" />
+                                                <MenuItem fx:id="driveItem2" mnemonicParsing="false" onAction="#gameItemSelected2" text="Drive" />
+                                                <MenuItem fx:id="gameItem2" mnemonicParsing="false" onAction="#gameItemSelected2" text="Game" />
+                                                <MenuItem fx:id="playItem2" mnemonicParsing="false" onAction="#playItemSelected2" text="Play" />
+                                                <MenuItem fx:id="playMetricsItem2" mnemonicParsing="false" onAction="#playMetricsItemSelected2" text="Play Metrics" />
+                                                <MenuItem fx:id="playerItem2" mnemonicParsing="false" onAction="#playerItemSelected2" text="Player" />
+                                                <MenuItem fx:id="playerMetricsGamewiseItem2" mnemonicParsing="false" onAction="#playerMetricsGamewiseItemSelected2" text="Player Metrics Gamewise" />
+                                                <MenuItem fx:id="playerYearwiseItem2" mnemonicParsing="false" onAction="#playerYearwiseItemSelected2" text="Player Yearwise" />
+                                                <MenuItem fx:id="stadiumYearwiseItem2" mnemonicParsing="false" onAction="#satdiumYearwiseItemSelected2" text="Stadium Yearwise" />
+                                                <MenuItem fx:id="teamItem2" mnemonicParsing="false" onAction="#teamItemSelected2" text="Team" />
+                                                <MenuItem fx:id="teamMetricsGamewiseItem2" mnemonicParsing="false" onAction="#teamMetricsGamewiseItemSelected2" text="Team Metrics Gamewise" />
+                                                <MenuItem fx:id="teamYearwiseItem2" mnemonicParsing="false" onAction="#teamYearwiseItemSelected2" text="Team Yearwise" />
                                              </items>
                                           </MenuButton>
                                        </children>
