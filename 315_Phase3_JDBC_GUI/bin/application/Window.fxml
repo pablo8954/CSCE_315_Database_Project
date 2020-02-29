@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
@@ -15,15 +16,25 @@
                      <children>
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
-                              <HBox maxHeight="150.0" maxWidth="300.0" minHeight="150.0" minWidth="300.0" prefHeight="150.0" prefWidth="300.0">
+                              <HBox maxHeight="150.0" maxWidth="250.0" minHeight="150.0" minWidth="250.0" prefHeight="150.0" prefWidth="300.0" style="-fx-border-color: black;">
                                  <children>
                                     <VBox maxHeight="150.0" maxWidth="150.0" minHeight="150.0" minWidth="150.0" prefHeight="150.0" prefWidth="150.0">
                                        <children>
                                           <Label text="Table 1" />
                                           <MenuButton fx:id="mbutton" mnemonicParsing="false" text="Table Name">
                                             <items>
-                                              <MenuItem mnemonicParsing="false" text="Action 1" />
-                                              <MenuItem mnemonicParsing="false" text="Action 2" />
+                                              <MenuItem fx:id="confItem" mnemonicParsing="false" onAction="#ConfItemSelected" text="Conference Yearwise" />
+                                              <MenuItem mnemonicParsing="false" text="Drive" />
+                                                <MenuItem mnemonicParsing="false" text="Game" />
+                                                <MenuItem mnemonicParsing="false" text="Play" />
+                                                <MenuItem mnemonicParsing="false" text="Play Metrics" />
+                                                <MenuItem mnemonicParsing="false" text="Player" />
+                                                <MenuItem mnemonicParsing="false" text="Player Metrics Gamewise" />
+                                                <MenuItem mnemonicParsing="false" text="Player Yearwise" />
+                                                <MenuItem mnemonicParsing="false" text="Stadium Yearwise" />
+                                                <MenuItem mnemonicParsing="false" text="Team" />
+                                                <MenuItem mnemonicParsing="false" text="Team Metrics Gamewise" />
+                                                <MenuItem mnemonicParsing="false" text="Team Yearwise" />
                                             </items>
                                           </MenuButton>
                                        </children>
@@ -39,17 +50,28 @@
                                           </MenuButton>
                                        </children>
                                     </VBox>
-                                 </children></HBox>
-                              <HBox maxHeight="0.0" maxWidth="300.0" minHeight="150.0" minWidth="300.0" prefHeight="150.0" prefWidth="300.0">
+                                 </children>
+                              </HBox>
+                              <HBox maxHeight="0.0" maxWidth="250.0" minHeight="150.0" minWidth="250.0" prefHeight="150.0" prefWidth="250.0">
                                  <children>
                                     <VBox maxHeight="150.0" maxWidth="150.0" minHeight="150.0" minWidth="150.0" prefHeight="150.0" prefWidth="150.0">
                                        <children>
                                           <Label text="Table 2" />
                                           <MenuButton mnemonicParsing="false" text="Table Name">
-                                            <items>
-                                              <MenuItem mnemonicParsing="false" text="Action 1" />
-                                              <MenuItem mnemonicParsing="false" text="Action 2" />
-                                            </items>
+                                             <items>
+                                                <MenuItem mnemonicParsing="false" text="Conference Yearwise" />
+                                                <MenuItem mnemonicParsing="false" text="Drive" />
+                                                <MenuItem mnemonicParsing="false" text="Game" />
+                                                <MenuItem mnemonicParsing="false" text="Play" />
+                                                <MenuItem mnemonicParsing="false" text="Play Metrics" />
+                                                <MenuItem mnemonicParsing="false" text="Player" />
+                                                <MenuItem mnemonicParsing="false" text="Player Metrics Gamewise" />
+                                                <MenuItem mnemonicParsing="false" text="Player Yearwise" />
+                                                <MenuItem mnemonicParsing="false" text="Stadium Yearwise" />
+                                                <MenuItem mnemonicParsing="false" text="Team" />
+                                                <MenuItem mnemonicParsing="false" text="Team Metrics Gamewise" />
+                                                <MenuItem mnemonicParsing="false" text="Team Yearwise" />
+                                             </items>
                                           </MenuButton>
                                        </children>
                                     </VBox>
@@ -67,13 +89,38 @@
                                  </children></HBox>
                            </children>
                         </VBox>
-                        <VBox maxHeight="300.0" maxWidth="180.0" minHeight="300.0" minWidth="180.0" prefHeight="300.0" prefWidth="180.0">
+                        <VBox maxHeight="300.0" maxWidth="230.0" minHeight="300.0" minWidth="230.0" prefHeight="300.0" prefWidth="230.0">
                            <children>
-                              <Button fx:id="button" mnemonicParsing="false" onAction="#buttonPressed" text="Button" />
+                              <CheckBox mnemonicParsing="false" text="Generate Text File">
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </CheckBox>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Text File:" />
+                                    <TextField>
+                                       <HBox.margin>
+                                          <Insets left="15.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <Button mnemonicParsing="false" text="Generate Results">
+                                 <VBox.margin>
+                                    <Insets left="100.0" />
+                                 </VBox.margin>
+                              </Button>
                            </children></VBox>
                      </children>
                   </HBox>
-                  <HBox maxHeight="200.0" maxWidth="480.0" minHeight="280.0" minWidth="480.0" prefHeight="200.0" prefWidth="480.0" />
+                  <HBox maxHeight="200.0" maxWidth="480.0" minHeight="280.0" minWidth="480.0" prefHeight="200.0" prefWidth="480.0">
+                     <children>
+                        <TextArea maxHeight="280.0" maxWidth="480.0" minHeight="280.0" minWidth="480.0" prefHeight="280.0" prefWidth="480.0" />
+                     </children></HBox>
                </children>
             </VBox>
          </children>
