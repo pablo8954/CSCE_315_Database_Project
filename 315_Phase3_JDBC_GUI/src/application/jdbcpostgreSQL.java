@@ -19,6 +19,16 @@ public class jdbcpostgreSQL {
 
             String sqlStmt = "";
 
+            /*
+             * 4 cases 
+             * 
+             * 1: proper name and year inputs are provided -> return game data for a team in a specific year
+             * 2: only year is provided -> return game data pertaining to specific year
+             * 3: only name is provided -> return game data pertaining to specific team
+             * 4: no name or year inputs are provided -> return all game data available
+             * 
+             * */
+            
             if (!name.equals("") && !(year < 2005 || year > 2013)) {
                 sqlStmt = String.format(
                         "SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\",\"Attendance\",\"Duration\" FROM\"Stadium_Yearwise\" INNER JOIN(SELECT\"Team\" .\"TeamName\" AS\"AwayTeamName\",*FROM\"Team\" INNER JOIN(SELECT\"TeamName\" AS\"HomeTeamName\",*FROM\"Team\" INNER JOIN(SELECT*FROM\"Game\" WHERE EXTRACT(YEAR FROM\"Date\")=%s AND(\"HomeTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')OR\"AwayTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')))AS game_data ON\"TeamId\"=\"HomeTeamId\")AS team1_data ON\"Team\" .\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";",
