@@ -1,6 +1,7 @@
 package application;
-
 import java.sql.*;
+import java.time.Year;
+
 import javax.swing.JOptionPane;
 
 //import java.sql.DriverManager;
@@ -11,14 +12,30 @@ CSCE 315
  */
 public class jdbcpostgreSQL {
 
-    public static String gameDataFetcWithNameYear(String name, Integer Year, Connection conn) {
+    public static String gameDataFetcWithNameYear(String name, Integer year, Connection conn) {
         String result_str = "";
         try {
             Statement stmt = conn.createStatement();
 
-            String sqlStmt = String.format(
-                    "SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\",\"Attendance\",\"Duration\" FROM\"Stadium_Yearwise\" INNER JOIN(SELECT\"Team\" .\"TeamName\" AS\"AwayTeamName\",*FROM\"Team\" INNER JOIN(SELECT\"TeamName\" AS\"HomeTeamName\",*FROM\"Team\" INNER JOIN(SELECT*FROM\"Game\" WHERE EXTRACT(YEAR FROM\"Date\")=%s AND(\"HomeTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')OR\"AwayTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')))AS game_data ON\"TeamId\"=\"HomeTeamId\")AS team1_data ON\"Team\" .\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";",
-                    Year.toString(), name, name);
+            String sqlStmt = "";
+
+            if (!name.equals("") && !(year < 2005 || year > 2013)) {
+                sqlStmt = String.format(
+                        "SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\",\"Attendance\",\"Duration\" FROM\"Stadium_Yearwise\" INNER JOIN(SELECT\"Team\" .\"TeamName\" AS\"AwayTeamName\",*FROM\"Team\" INNER JOIN(SELECT\"TeamName\" AS\"HomeTeamName\",*FROM\"Team\" INNER JOIN(SELECT*FROM\"Game\" WHERE EXTRACT(YEAR FROM\"Date\")=%s AND(\"HomeTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')OR\"AwayTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')))AS game_data ON\"TeamId\"=\"HomeTeamId\")AS team1_data ON\"Team\" .\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";",
+                        year.toString(), name, name);
+            } else if (name.equals("") && !(year < 2005 || year > 2013)) {
+                sqlStmt = String.format(
+                        "SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\",\"Attendance\",\"Duration\" FROM\"Stadium_Yearwise\" INNER JOIN(SELECT\"Team\" .\"TeamName\" AS\"AwayTeamName\",*FROM\"Team\" INNER JOIN(SELECT\"TeamName\" AS\"HomeTeamName\",*FROM\"Team\" INNER JOIN(SELECT*FROM\"Game\" WHERE EXTRACT(YEAR FROM\"Date\")=%s)AS game_data ON\"TeamId\"=\"HomeTeamId\")AS team1_data ON\"Team\" .\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";",
+                        year.toString());
+            } else if (!name.equals("") && (year < 2005 || year > 2013)) {
+                sqlStmt = String.format(
+                        "SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\",\"Attendance\",\"Duration\" FROM\"Stadium_Yearwise\" INNER JOIN(SELECT\"Team\" .\"TeamName\" AS\"AwayTeamName\",*FROM\"Team\" INNER JOIN(SELECT\"TeamName\" AS\"HomeTeamName\",*FROM\"Team\" INNER JOIN(SELECT*FROM\"Game\" WHERE (\"HomeTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')OR\"AwayTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')))AS game_data ON\"TeamId\"=\"HomeTeamId\")AS team1_data ON\"Team\" .\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";",
+                        name, name);
+            } else if (name.equals("") && (year < 2005 || year > 2013)) {
+                sqlStmt = String.format(
+                        "SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\",\"Attendance\",\"Duration\" FROM\"Stadium_Yearwise\" INNER JOIN(SELECT\"Team\" .\"TeamName\" AS\"AwayTeamName\",*FROM\"Team\" INNER JOIN(SELECT\"TeamName\" AS\"HomeTeamName\",*FROM\"Team\" INNER JOIN(SELECT*FROM\"Game\")AS game_data ON\"TeamId\"=\"HomeTeamId\")AS team1_data ON\"Team\" .\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";",
+                        year.toString(), name, name);
+            }
 
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
@@ -46,7 +63,7 @@ public class jdbcpostgreSQL {
         }
         return result_str;
     }
-	
+
     public static String stadiumDataFetch(String name, Connection conn) {
         String result_str = "";
         try {
@@ -82,7 +99,7 @@ public class jdbcpostgreSQL {
         }
         return result_str;
     }
-    
+
     public static String ConfDataFetch(String name, Connection conn) {
         String result_str = "";
         try {
@@ -99,8 +116,8 @@ public class jdbcpostgreSQL {
                 result_str += result.getString("ConferenceName");
                 result_str += " | Subdivision: ";
                 result_str += result.getString("Subdivision");
-//                result_str += " | Year: ";
-//                result_str += result.getString("Year");
+                // result_str += " | Year: ";
+                // result_str += result.getString("Year");
                 result_str += "\n";
             }
         } catch (Exception e) {
@@ -112,8 +129,6 @@ public class jdbcpostgreSQL {
         }
         return result_str;
     }
-    
-    
 
     public static void main(String args[]) {
         dbSetup my = new dbSetup();
@@ -135,11 +150,14 @@ public class jdbcpostgreSQL {
 
         System.out.println(stadiumDataFetch("ASU", conn));
         System.out.println(stadiumDataFetch("Shrey", conn));
-        
+
         System.out.println(ConfDataFetch("Big Sky", conn));
         System.out.println(ConfDataFetch("Football_Sucks", conn));
 
         System.out.println(gameDataFetcWithNameYear("Texas A&", 2013, conn));
+        System.out.println(gameDataFetcWithNameYear("", 2013, conn));
+        System.out.println(gameDataFetcWithNameYear("Texas A&", 0, conn));
+        System.out.println(gameDataFetcWithNameYear("", 0, conn));
         System.out.println(gameDataFetcWithNameYear("Bazinga", 2003, conn));
 
         // END MAIN CODE
