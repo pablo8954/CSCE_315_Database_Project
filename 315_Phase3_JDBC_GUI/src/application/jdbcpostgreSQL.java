@@ -10,6 +10,42 @@ CSCE 315
 9-25-2019
  */
 public class jdbcpostgreSQL {
+
+    public static String gameDataFetcWithNameYear(String name, Integer Year, Connection conn) {
+        String result_str = "";
+        try {
+            Statement stmt = conn.createStatement();
+
+            String sqlStmt = String.format(
+                    "SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\",\"Attendance\",\"Duration\" FROM\"Stadium_Yearwise\" INNER JOIN(SELECT\"Team\" .\"TeamName\" AS\"AwayTeamName\",*FROM\"Team\" INNER JOIN(SELECT\"TeamName\" AS\"HomeTeamName\",*FROM\"Team\" INNER JOIN(SELECT*FROM\"Game\" WHERE EXTRACT(YEAR FROM\"Date\")=%s AND(\"HomeTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')OR\"AwayTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')))AS game_data ON\"TeamId\"=\"HomeTeamId\")AS team1_data ON\"Team\" .\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";",
+                    Year.toString(), name, name);
+
+            ResultSet result = stmt.executeQuery(sqlStmt);
+            while (result.next()) {
+                result_str += "Home Team Name: ";
+                result_str += result.getString("HomeTeamName");
+                result_str += " | Away Team Name: ";
+                result_str += result.getString("AwayTeamName");
+                result_str += " | Date: ";
+                result_str += result.getString("Date");
+                result_str += " | Attendance: ";
+                result_str += result.getString("Attendance");
+                result_str += " | Duration: ";
+                result_str += result.getString("Duration");
+                result_str += " | Stadium: ";
+                result_str += result.getString("StadiumName");
+                result_str += "\n";
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "Error accessing Game Data. Make sure that the Team name and Year is correct");
+        }
+        if (result_str == "") {
+            return "Game Data non existent\n";
+        }
+        return result_str;
+    }
 	
     public static String stadiumDataFetch(String name, Connection conn) {
         String result_str = "";
@@ -102,6 +138,9 @@ public class jdbcpostgreSQL {
         
         System.out.println(ConfDataFetch("Big Sky", conn));
         System.out.println(ConfDataFetch("Football_Sucks", conn));
+
+        System.out.println(gameDataFetcWithNameYear("Texas A&", 2013, conn));
+        System.out.println(gameDataFetcWithNameYear("Bazinga", 2003, conn));
 
         // END MAIN CODE
         //
