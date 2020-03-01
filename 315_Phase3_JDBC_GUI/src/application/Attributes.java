@@ -28,12 +28,12 @@ public final class Attributes {
 			"YardsReception", "TDReception", "KickReturn", "PuntReturn", "FumbleReturn", "Touchbacks" };
 	static final String[] playerYearwiseAttr = { "PlayerYearId", "PlayerId", "TeamYearId", "Uniform", "Class",
 			"Position", "Height", "Weight", "LastSchool", "Hometown", "HomeState", "HomeCountry", "Year" };
-	static final String[] stadiumAttr = { "StadiumYearId", "StadiumId", "StadiumName", "StadiumCity", "StadiumState",
+	static final String[] stadiumYearwiseAttr = { "StadiumYearId", "StadiumId", "StadiumName", "StadiumCity", "StadiumState",
 			"StadiumCapacity", "StadiumSurface", "StadiumYearOpened", "TeamYearId", "Year" };
 	static final String[] teamAttr = { "TeamId", "TeamName" };
 	static final String[] teamYearwiseAttr = { "TeamYearId", "TeamId", "ConfYearId", "AverageAttendance", "ConfId",
 			"Year" };
-	static final String[] teamGamewiseAttr = { "TeamMetricsGameId", "GameId", "TeamId", "Result", "YardsRush",
+	static final String[] teamMetricsGamewiseAttr = { "TeamMetricsGameId", "GameId", "TeamId", "Result", "YardsRush",
 			"YardsPass", "YardsKickoffReturn", "YardsPuntReturn", "YardsFumbleReturn", "YardsInterceptionReturn",
 			"YardsMiscReturn", "YardsPunt", "YardsKickoff", "YardsTackleLoss", "YardsSack", "YardsPenalty",
 			"TacklesSolo", "TacklesAssist", "TacklesForLoss", "InterceptionsPass", "InterceptionsReturn", "Fumbles",

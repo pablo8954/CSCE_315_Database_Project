@@ -16,7 +16,7 @@ public class Main extends Application {
 		Scene scene = new Scene(root, 800, 800);
 
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("Singh Bank Investment Returns");
+		primaryStage.setTitle("Gay");
 		primaryStage.resizableProperty().setValue(Boolean.FALSE);
 		primaryStage.show();
 	}
