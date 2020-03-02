@@ -233,11 +233,24 @@ public class WindowController {
 		updateAttr2(m.getText());
 	}
 	
-	public void satdiumYearwiseItemSelected1() {
+	public void satdiumYearwiseItemSelected1() throws IOException {
 		MenuButton m = mbutton1;
 		MenuItem mitem = stadiumYearwiseItem1;
 		m.setText(mitem.getText());
 		updateAttr1(m.getText());
+		//Boot the conference info window
+		Stage stage = new Stage();
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("Stadium.fxml"));
+		Parent root = loader.load();
+		Scene scene = new Scene(root, 400, 100);
+		stage.setScene(scene);
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.showAndWait();
+		//Get the info from conference window
+		StadiumController controller = loader.getController();
+		String h = controller.getStadiumName();
+		System.out.println(h);
 	}
 	
 	public void satdiumYearwiseItemSelected2() {
