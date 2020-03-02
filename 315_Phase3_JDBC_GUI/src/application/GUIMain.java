@@ -8,8 +8,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+<<<<<<< HEAD:315_Phase3_JDBC_GUI/src/application/GUIMain.java
 public class GUIMain extends Application {
 
+=======
+public class Main extends Application {
+	
+>>>>>>> 07be223e5fa6f2906dc201c92b92cae71ecc5d92:315_Phase3_JDBC_GUI/src/application/Main.java
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("Window.fxml"));
