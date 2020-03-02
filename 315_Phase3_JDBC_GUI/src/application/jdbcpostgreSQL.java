@@ -26,7 +26,8 @@ public class jdbcpostgreSQL extends Application{
 	
 	private static String dataSelection;
 	private static String teamName;
-	private static String playerName;
+	private static String playerFirstName;
+	private static String playerLastName;
 	private static String conferenceName;
 	private static String opposingTeam;
 	private static String stadiumName;
@@ -61,7 +62,6 @@ public class jdbcpostgreSQL extends Application{
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Gay");
 		primaryStage.resizableProperty().setValue(Boolean.FALSE);
-		
 		primaryStage.show();
 		
 		
@@ -70,6 +70,7 @@ public class jdbcpostgreSQL extends Application{
 			public void run() {
 				//Keep waking up thread for duration of program
 				while(true) {
+					
 					try {
 						Thread.sleep(new Random().nextInt(1000));
 						System.out.println("new thread");
@@ -77,25 +78,42 @@ public class jdbcpostgreSQL extends Application{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					
 					Platform.runLater(new Runnable() {
+						
 						public void run() {
+							
 							resultsRequested = controller.getResultsRequested();
 							//If get results pushed
 							if(resultsRequested) {
 								dataSelection = controller.getDataSelection();
 								teamName = controller.getTeamName();
 								conferenceName = controller.getConferenceName();
-								playerName = controller.getPlayerName();
+								playerFirstName = controller.getPlayerFirstName();
+								playerLastName = controller.getPlayerLastName();
 								opposingTeam = controller.getOpposingTeamName();
 								stadiumName = controller.getStadiumName();
 								year = controller.getYear();
+								
 								System.out.println(dataSelection + " selected");
-								String result = gameDataFetcWithNameYear(teamName, year, conn);
+								String result = "";
+								if(dataSelection.equals("Conference")) {
+									result = ConfDataFetch(conferenceName, conn);
+								}
+								else if(dataSelection.equals("Game")) {
+									result = gameDataFetcWithNameYear(teamName, year, conn);
+								}
+								else if(dataSelection.equals("Stadium")) {
+									result = stadiumDataFetch(stadiumName, conn);
+								}
+								
 								controller.updateOutputTextArea(result);
 								System.out.println(result);
+								
 								if(controller.generateTextFile()) {
 									//write to file
 									File generatedFile = new File("results.txt");
+									
 									try {
 										generatedFile.createNewFile();
 										FileWriter writer = new FileWriter(generatedFile);

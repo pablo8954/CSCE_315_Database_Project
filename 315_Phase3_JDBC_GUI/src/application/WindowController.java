@@ -40,7 +40,8 @@ public class WindowController {
 	String dataSelection = "";
 	String teamName = "";
 	String conferenceName = "";
-	String playerName = "";
+	String playerFirstName = "";
+	String playerLastName = "";
 	String opposingTeam = "";
 	String stadiumName = "";
 	int year = 0;
@@ -107,7 +108,8 @@ public class WindowController {
 		stage.showAndWait();
 		//Get the info from conference window
 		PlayerController controller = loader.getController();
-		playerName = controller.getPlayerName();
+		playerFirstName = controller.getFirstName();
+		playerLastName = controller.getLastName();
 		opposingTeam = controller.getOpposingTeam();
 		year = controller.getYear();
 	}
@@ -185,8 +187,13 @@ public class WindowController {
 	}
 	
 	//get player name
-	public String getPlayerName() {
-		return playerName;
+	public String getPlayerFirstName() {
+		return playerFirstName;
+	}
+	
+	//get player name
+	public String getPlayerLastName() {
+		return playerLastName;
 	}
 	
 	//get opposing team name
