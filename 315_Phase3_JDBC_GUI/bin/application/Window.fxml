@@ -27,14 +27,14 @@
                                              </padding></Label>
                                           <HBox prefHeight="100.0" prefWidth="200.0">
                                              <children>
-                                                <MenuButton fx:id="mbutton1" mnemonicParsing="false" text="Table Name">
+                                                <MenuButton fx:id="mbutton" mnemonicParsing="false" text="Table Name">
                                                   <items>
-                                                    <MenuItem fx:id="confItem1" mnemonicParsing="false" onAction="#confItemSelected1" text="Conference" />
-                                                      <MenuItem fx:id="gameItem1" mnemonicParsing="false" onAction="#gameItemSelected1" text="Game" />
-                                                      <MenuItem fx:id="playItem1" mnemonicParsing="false" onAction="#playItemSelected1" text="Play" />
-                                                      <MenuItem fx:id="playerItem1" mnemonicParsing="false" onAction="#playerItemSelected1" text="Player" />
-                                                      <MenuItem fx:id="stadiumYearwiseItem1" mnemonicParsing="false" onAction="#satdiumYearwiseItemSelected1" text="Stadium" />
-                                                      <MenuItem fx:id="teamItem1" mnemonicParsing="false" onAction="#teamItemSelected1" text="Team" />
+                                                    <MenuItem fx:id="confItem" mnemonicParsing="false" onAction="#confItemSelected" text="Conference" />
+                                                      <MenuItem fx:id="gameItem" mnemonicParsing="false" onAction="#gameItemSelected" text="Game" />
+                                                      <MenuItem fx:id="playItem" mnemonicParsing="false" onAction="#playItemSelected" text="Play" />
+                                                      <MenuItem fx:id="playerItem" mnemonicParsing="false" onAction="#playerItemSelected" text="Player" />
+                                                      <MenuItem fx:id="stadiumYearwiseItem" mnemonicParsing="false" onAction="#satdiumYearwiseItemSelected" text="Stadium" />
+                                                      <MenuItem fx:id="teamItem" mnemonicParsing="false" onAction="#teamItemSelected" text="Team" />
                                                   </items>
                                                    <HBox.margin>
                                                       <Insets top="30.0" />

@@ -14,25 +14,25 @@ import javafx.stage.Stage;
 public class WindowController {
 	
 	@FXML 
-	MenuButton mbutton1; //Table 1
+	MenuButton mbutton; //Table 1
 	@FXML
-	MenuItem confItem1;
+	MenuItem confItem;
 	@FXML
-	MenuItem gameItem1;
+	MenuItem gameItem;
 	@FXML
-	MenuItem playItem1;
+	MenuItem playItem;
 	@FXML
-	MenuItem playerItem1;
+	MenuItem playerItem;
 	@FXML
-	MenuItem stadiumYearwiseItem1;
+	MenuItem stadiumYearwiseItem;
 	@FXML
-	MenuItem teamItem1;
+	MenuItem teamItem;
 	
 	
 	//All functions below are for updating menu text for teams
-	public void confItemSelected1() throws IOException {
-		MenuButton m = mbutton1;
-		MenuItem mitem = confItem1;
+	public void confItemSelected() throws IOException {
+		MenuButton m = mbutton;
+		MenuItem mitem = confItem;
 		m.setText(mitem.getText());
 		//Boot the conference info window
 		Stage stage = new Stage();
@@ -51,9 +51,9 @@ public class WindowController {
 		System.out.println(year);
 	}
 	
-	public void gameItemSelected1() throws IOException {
-		MenuButton m = mbutton1;
-		MenuItem mitem = gameItem1;
+	public void gameItemSelected() throws IOException {
+		MenuButton m = mbutton;
+		MenuItem mitem = gameItem;
 		m.setText(mitem.getText());
 		//Boot the conference info window
 		Stage stage = new Stage();
@@ -72,16 +72,16 @@ public class WindowController {
 		System.out.println(year);
 	}
 	
-	public void playItemSelected1() {
-		MenuButton m = mbutton1;
-		MenuItem mitem = playItem1;
+	public void playItemSelected() {
+		MenuButton m = mbutton;
+		MenuItem mitem = playItem;
 		m.setText(mitem.getText());
 	}
 	
 	
-	public void playerItemSelected1() throws IOException {
-		MenuButton m = mbutton1;
-		MenuItem mitem = playerItem1;
+	public void playerItemSelected() throws IOException {
+		MenuButton m = mbutton;
+		MenuItem mitem = playerItem;
 		m.setText(mitem.getText());
 		//Boot the conference info window
 		Stage stage = new Stage();
@@ -102,9 +102,9 @@ public class WindowController {
 		System.out.println(year);
 	}
 	
-	public void satdiumYearwiseItemSelected1() throws IOException {
-		MenuButton m = mbutton1;
-		MenuItem mitem = stadiumYearwiseItem1;
+	public void satdiumYearwiseItemSelected() throws IOException {
+		MenuButton m = mbutton;
+		MenuItem mitem = stadiumYearwiseItem;
 		m.setText(mitem.getText());
 		//Boot the conference info window
 		Stage stage = new Stage();
@@ -121,9 +121,9 @@ public class WindowController {
 		System.out.println(h);
 	}
 
-	public void teamItemSelected1() throws IOException {
-		MenuButton m = mbutton1;
-		MenuItem mitem = teamItem1;
+	public void teamItemSelected() throws IOException {
+		MenuButton m = mbutton;
+		MenuItem mitem = teamItem;
 		m.setText(mitem.getText());
 		//Boot the conference info window
 		Stage stage = new Stage();
