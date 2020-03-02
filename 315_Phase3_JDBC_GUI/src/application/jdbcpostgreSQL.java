@@ -519,9 +519,43 @@ public class jdbcpostgreSQL {
             			+ "AS inner_play ON \"Play_Metrics\".\"GameId\" = inner_play. \"game_id\""
             			+ "AND inner_play. \"PlayNum\" = \"Play_Metrics\".\"PlayNum\";",
             			year.toString(), team, team, awayteam, awayteam);
-            
             }
             
+            else if (!team.equals("") && !awayteam.equals("") && (year < 2005 || year > 2013)) {
+            	sqlStmt = String.format(
+            			"SELECT \"HomeTeamName\", \"AwayTeamName\", \"Quarter\", \"Clock\", \"OffensePoints\", "
+            			+ "\"DefensePoints\", \"Down\", \"Distance\", \"Spot\", \"PlayType\", \"DriveNumber\", \"DrivePlay\", \"Attempt\", \"Yards\", "
+            			+ "\"FairCatch\", \"Touchback\", \"Downed\", \"OutOfBounds\", \"Onside\", \"OnsideSuccess\", \"TD\", \"Fumble\", \"FumbleLost\", \"Sack\","
+            			+ "\"Safety\", \"Completion\", \"Interception\", \"FirstDown\", \"Dropped\", \"Blocked\", \"Reception\""
+            			
+            			+ "FROM \"Play_Metrics\""
+						+ "INNER JOIN ("
+						+ "SELECT \"Play\".\"GameId\" AS \"game_id\",* FROM \"Play\" INNER JOIN ( SELECT \"Team\".\"TeamName\" AS \"AwayTeamName\", "
+						+ "* FROM \"Team\" INNER JOIN ( SELECT \"TeamName\" AS \"HomeTeamName\", * FROM \"Team\" INNER JOIN (SELECT* FROM \"Game\" WHERE "
+						+ "(\"HomeTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') OR \"AwayTeamId\" = ( SELECT DISTINCT "
+						+ "\"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%')) AND(\"HomeTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') "
+						+ "OR \"AwayTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%'))) AS game_data ON \"TeamId\" = \"HomeTeamId\") "
+						+ "AS team1_data ON \"Team\".\"TeamId\" = \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Play\".\"GameId\") AS inner_play ON \"Play_Metrics\"."
+						+ "\"GameId\" = inner_play. \"game_id\" AND inner_play. \"PlayNum\" = \"Play_Metrics\".\"PlayNum\";"
+            			, team, team, awayteam);
+            }
+            
+            else if (!team.equals("") && awayteam.equals("") && !(year < 2005 || year > 2013)) {
+            	sqlStmt = String.format(
+            			"SELECT \"HomeTeamName\", \"AwayTeamName\", \"Quarter\", \"Clock\", \"OffensePoints\",\"DefensePoints\", \"Down\",\"Distance\",\"Spot\","
+            			+ "\"PlayType\", \"DriveNumber\", \"DrivePlay\", \"Attempt\", \"Yards\", \"FairCatch\", \"Touchback\", \"Downed\", \"OutOfBounds\", "
+            			+ "\"Onside\", \"OnsideSuccess\", \"TD\", \"Fumble\", \"FumbleLost\", \"Sack\", \"Safety\", \"Completion\", \"Interception\", \"FirstDown\", "
+            			+ "\"Dropped\", \"Blocked\", \"Reception\""
+            			
+            			+ "FROM \"Play_Metrics\" INNER JOIN ( SELECT \"Play\".\"GameId\" AS \"game_id\", * FROM \"Play\" INNER JOIN (SELECT \"Team\".\"TeamName\" AS "
+            			+ "\"AwayTeamName\", * FROM \"Team\" INNER JOIN (SELECT \"TeamName\" AS \"HomeTeamName\", *FROM \"Team\" "
+            			+ "INNER JOIN (SELECT * FROM \"Game\" WHERE EXTRACT(YEAR FROM \"Date\") = %s AND((\"HomeTeamId\" = (SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE"
+            			+ "\"TeamName\" LIKE '%s%%') OR \"AwayTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%')))) AS game_data ON "
+            			+ "\"TeamId\" = \"HomeTeamId\") AS team1_data ON \"Team\".\"TeamId\" = \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Play\".\"GameId\") "
+            			+ "AS inner_play ON \"Play_Metrics\".\"GameId\" = inner_play. \"game_id\" AND inner_play. \"PlayNum\" = \"Play_Metrics\".\"PlayNum\";"
+            			, year.toString(),team, team);
+            			
+            }
             
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
