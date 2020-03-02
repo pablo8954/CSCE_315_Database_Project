@@ -88,7 +88,9 @@ public class jdbcpostgreSQL extends Application{
 								stadiumName = controller.getStadiumName();
 								year = controller.getYear();
 								System.out.println(dataSelection + " selected");
-								System.out.println(gameDataFetcWithNameYear(teamName, year, conn));
+								String result = gameDataFetcWithNameYear(teamName, year, conn);
+								controller.updateOutputTextArea(result);
+								System.out.println(result);
 							}
 						}
 					});

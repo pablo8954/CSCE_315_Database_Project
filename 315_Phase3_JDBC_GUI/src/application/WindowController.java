@@ -7,8 +7,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -30,6 +32,10 @@ public class WindowController {
 	MenuItem stadiumYearwiseItem;
 	@FXML
 	MenuItem teamItem;
+	@FXML 
+	TextArea outputTextArea;
+	@FXML
+	CheckBox generateTextFileCheckBox;
 	
 	String dataSelection = "";
 	String teamName = "";
@@ -39,7 +45,6 @@ public class WindowController {
 	String stadiumName = "";
 	int year = 0;
 	boolean resultsRequested = false;
-	
 	
 	//All functions below are for updating menu text for teams
 	public void confItemSelected() throws IOException {
@@ -159,6 +164,10 @@ public class WindowController {
 		return result;
 	}
 	
+	public boolean generateTextFile() {
+		return generateTextFileCheckBox.isSelected();
+	}
+	
 	//get data selection
 	public String getDataSelection() {
 		dataSelection = mbutton.getText();
@@ -192,6 +201,12 @@ public class WindowController {
 	
 	public int getYear() {
 		return year;
+	}
+	
+	public void updateOutputTextArea(String result) {
+		outputTextArea.setEditable(true);
+		outputTextArea.setText(result);
+		outputTextArea.setEditable(false);
 	}
 
 }
