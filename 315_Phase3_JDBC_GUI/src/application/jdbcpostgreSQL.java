@@ -2,10 +2,13 @@ package application;
 import java.io.IOException;
 import java.sql.*;
 import java.time.Year;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,14 +22,83 @@ CSCE 315
  */
 public class jdbcpostgreSQL extends Application{
 	
+	private static String dataSelection;
+	private static String teamName;
+	private static String playerName;
+	private static String conferenceName;
+	private static String opposingTeam;
+	private static String stadiumName;
+	public static Connection conn;
+	private static int year;
+	public static boolean resultsRequested = false;
+	private static WindowController controller;
+	public static Stage mainStage;
+	
 	public void start(Stage primaryStage) throws IOException {
-		Parent root = FXMLLoader.load(getClass().getResource("Window.fxml"));
-		Scene scene = new Scene(root, 800, 800);
+		//Launch database connection
+		dbSetup my = new dbSetup();
+        // Building the connection
+        conn = null;
+        try {
+            Class.forName("org.postgresql.Driver");
+            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/ace_of_spades", my.user,
+                    my.pswd);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        } // end try catch
+          // JOptionPane.showMessageDialog(null, "Opened database successfully");
+        
+		FXMLLoader loader =  new FXMLLoader();
+		loader.setLocation(getClass().getResource("Window.fxml"));
+		Parent root = loader.load();
+		Scene scene = new Scene(root, 600, 800);
+		controller = loader.getController();
 
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Gay");
 		primaryStage.resizableProperty().setValue(Boolean.FALSE);
+		
 		primaryStage.show();
+		
+		
+		
+		new Thread() {
+			public void run() {
+				//Keep waking up thread for duration of program
+				while(true) {
+					try {
+						Thread.sleep(new Random().nextInt(1000));
+						System.out.println("new thread");
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					Platform.runLater(new Runnable() {
+						public void run() {
+							resultsRequested = controller.getResultsRequested();
+							//If get results pushed
+							if(resultsRequested) {
+								dataSelection = controller.getDataSelection();
+								teamName = controller.getTeamName();
+								conferenceName = controller.getConferenceName();
+								playerName = controller.getPlayerName();
+								opposingTeam = controller.getOpposingTeamName();
+								stadiumName = controller.getStadiumName();
+								year = controller.getYear();
+								System.out.println(dataSelection + " selected");
+								System.out.println(gameDataFetcWithNameYear(teamName, year, conn));
+							}
+						}
+					});
+				}
+			}
+		}.start();
+		
+		
+
+		
 	}
 
     public static String gameDataFetcWithNameYear(String name, Integer year, Connection conn) {
@@ -158,26 +230,14 @@ public class jdbcpostgreSQL extends Application{
     }
 
     public static void main(String args[]) {
-        dbSetup my = new dbSetup();
-        // Building the connection
-        Connection conn = null;
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/ace_of_spades", my.user,
-                    my.pswd);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        } // end try catch
-          // JOptionPane.showMessageDialog(null, "Opened database successfully");
         
         launch(args);
+        
 
         //
         // MAIN CODE
 
-        System.out.println(stadiumDataFetch("ASU", conn));
+       /* System.out.println(stadiumDataFetch("ASU", conn));
         System.out.println(stadiumDataFetch("Shrey", conn));
 
         System.out.println(ConfDataFetch("Big Sky", conn));
@@ -187,7 +247,7 @@ public class jdbcpostgreSQL extends Application{
         System.out.println(gameDataFetcWithNameYear("", 2013, conn));
         System.out.println(gameDataFetcWithNameYear("Texas A&", 0, conn));
         System.out.println(gameDataFetcWithNameYear("", 0, conn));
-        System.out.println(gameDataFetcWithNameYear("Bazinga", 2003, conn));
+        System.out.println(gameDataFetcWithNameYear("Bazinga", 2003, conn));*/
 
         // END MAIN CODE
         //

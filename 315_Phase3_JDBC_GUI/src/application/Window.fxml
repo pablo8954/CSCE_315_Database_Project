@@ -40,7 +40,7 @@
                                                       <Insets top="30.0" />
                                                    </HBox.margin>
                                                 </MenuButton>
-                                                <Button mnemonicParsing="false" text="Generate Results">
+                                                <Button fx:id="getResultsButton" mnemonicParsing="false" onAction="#getResultsPressed" text="Generate Results">
                                                    <HBox.margin>
                                                       <Insets left="10.0" top="30.0" />
                                                    </HBox.margin>
