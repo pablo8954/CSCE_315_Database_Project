@@ -1,0 +1,75 @@
+//Update attribute items based on table selection
+	public void updateAttr1(String table) {
+		MenuButton m = mbutton3;
+		updateAttr(m, table);
+	}
+	public void updateAttr2(String table) {
+		MenuButton m = mbutton4;
+		updateAttr(m, table);
+	}
+	
+	public void updateAttr(MenuButton m, String table) {
+		for(int i = m.getItems().size()-1; i > -1; i--) {
+			m.getItems().remove(i);
+		}
+		if(table.equals("Conference Yearwise")) {
+			for(int i = 0; i < Attributes.confAttr.length; i++) {
+				m.getItems().add(new MenuItem(Attributes.confAttr[i]));
+			}
+		}
+		else if(table.equals("Drive")) {
+			for(int i = 0; i < Attributes.driveAttr.length; i++) {
+				m.getItems().add(new MenuItem(Attributes.driveAttr[i]));
+			}
+		}
+		else if(table.equals("Game")) {
+			for(int i = 0; i < Attributes.gameAttr.length; i++) {
+				m.getItems().add(new MenuItem(Attributes.gameAttr[i]));
+			}
+		}
+		else if(table.equals("Play")) {
+			for(int i = 0; i < Attributes.playAttr.length; i++) {
+				m.getItems().add(new MenuItem(Attributes.playAttr[i]));
+			}
+		}
+		else if(table.equals("Play Metrics")) {
+			for(int i = 0; i < Attributes.playMetricsAttr.length; i++) {
+				m.getItems().add(new MenuItem(Attributes.playMetricsAttr[i]));
+			}
+		}
+		else if(table.equals("Player")) {
+			for(int i = 0; i < Attributes.playerAttr.length; i++) {
+				m.getItems().add(new MenuItem(Attributes.playerAttr[i]));
+			}
+		}
+		else if(table.equals("Player Metrics Gamewise")) {
+			for(int i = 0; i < Attributes.playerMetricsGamewiseAttr.length; i++) {
+				m.getItems().add(new MenuItem(Attributes.playerMetricsGamewiseAttr[i]));
+			}
+		}
+		else if(table.equals("Player Yearwise")) {
+			for(int i = 0; i < Attributes.playerYearwiseAttr.length; i++) {
+				m.getItems().add(new MenuItem(Attributes.playerYearwiseAttr[i]));
+			}
+		}
+		else if(table.equals("Stadium Yearwise")) {
+			for(int i = 0; i < Attributes.stadiumYearwiseAttr.length; i++) {
+				m.getItems().add(new MenuItem(Attributes.stadiumYearwiseAttr[i]));
+			}
+		}
+		else if(table.equals("Team")) {
+			for(int i = 0; i < Attributes.teamAttr.length; i++) {
+				m.getItems().add(new MenuItem(Attributes.teamAttr[i]));
+			}
+		}
+		else if(table.equals("Team Metrics Gamewise")) {
+			for(int i = 0; i < Attributes.teamMetricsGamewiseAttr.length; i++) {
+				m.getItems().add(new MenuItem(Attributes.teamMetricsGamewiseAttr[i]));
+			}
+		}
+		else if(table.equals("Team Yearwise")) {
+			for(int i = 0; i < Attributes.teamYearwiseAttr.length; i++) {
+				m.getItems().add(new MenuItem(Attributes.teamYearwiseAttr[i]));
+			}
+		}
+	}

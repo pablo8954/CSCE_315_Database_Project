@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -12,114 +13,59 @@
          <children>
             <VBox layoutX="10.0" layoutY="10.0" maxHeight="580.0" maxWidth="480.0" minHeight="580.0" minWidth="480.0" prefHeight="580.0" prefWidth="480.0">
                <children>
-                  <HBox maxHeight="300.0" maxWidth="480.0" minHeight="300.0" minWidth="480.0" prefHeight="300.0" prefWidth="480.0">
+                  <HBox maxHeight="100.0" maxWidth="480.0" minHeight="100.0" minWidth="480.0" prefHeight="300.0" prefWidth="480.0">
                      <children>
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
                               <HBox maxHeight="150.0" maxWidth="250.0" minHeight="150.0" minWidth="250.0" prefHeight="150.0" prefWidth="300.0">
                                  <children>
-                                    <VBox maxHeight="150.0" maxWidth="150.0" minHeight="150.0" minWidth="150.0" prefHeight="150.0" prefWidth="150.0">
+                                    <VBox maxHeight="150.0" maxWidth="150.0" minHeight="150.0" minWidth="250.0" prefHeight="150.0" prefWidth="150.0">
                                        <children>
-                                          <Label text="Table 1" />
-                                          <MenuButton fx:id="mbutton1" mnemonicParsing="false" text="Table Name">
-                                            <items>
-                                              <MenuItem fx:id="confItem1" mnemonicParsing="false" onAction="#confItemSelected1" text="Conference Yearwise" />
-                                              <MenuItem fx:id="driveItem1" mnemonicParsing="false" onAction="#driveItemSelected1" text="Drive" />
-                                                <MenuItem fx:id="gameItem1" mnemonicParsing="false" onAction="#gameItemSelected1" text="Game" />
-                                                <MenuItem fx:id="playItem1" mnemonicParsing="false" onAction="#playItemSelected1" text="Play" />
-                                                <MenuItem fx:id="playMetricsItem1" mnemonicParsing="false" onAction="#playMetricsItemSelected1" text="Play Metrics" />
-                                                <MenuItem fx:id="playerItem1" mnemonicParsing="false" onAction="#playerItemSelected1" text="Player" />
-                                                <MenuItem fx:id="playerMetricsGamewiseItem1" mnemonicParsing="false" onAction="#playerMetricsGamewiseItemSelected1" text="Player Metrics Gamewise" />
-                                                <MenuItem fx:id="playerYearwiseItem1" mnemonicParsing="false" onAction="#playerYearwiseItemSelected1" text="Player Yearwise" />
-                                                <MenuItem fx:id="stadiumYearwiseItem1" mnemonicParsing="false" onAction="#satdiumYearwiseItemSelected1" text="Stadium Yearwise" />
-                                                <MenuItem fx:id="teamItem1" mnemonicParsing="false" onAction="#teamItemSelected1" text="Team" />
-                                                <MenuItem fx:id="teamMetricsGamewiseItem1" mnemonicParsing="false" onAction="#teamMetricsGamewiseItemSelected1" text="Team Metrics Gamewise" />
-                                                <MenuItem fx:id="teamYearwiseItem1" mnemonicParsing="false" onAction="#teamYearwiseItemSelected1" text="Team Yearwise" />
-                                            </items>
-                                          </MenuButton>
-                                       </children>
-                                    </VBox>
-                                    <VBox maxHeight="150.0" maxWidth="150.0" minHeight="150.0" minWidth="150.0" prefHeight="150.0" prefWidth="150.0">
-                                       <children>
-                                          <Label text="Attributes" />
-                                          <MenuButton fx:id="mbutton3" mnemonicParsing="false" text="Attributes">
-                                            <items>
-                                              <MenuItem mnemonicParsing="false" text="Action 1" />
-                                              <MenuItem mnemonicParsing="false" text="Action 2" />
-                                            </items>
-                                          </MenuButton>
+                                          <Label text="Choose a data type to receive information">
+                                             <padding>
+                                                <Insets top="10.0" />
+                                             </padding></Label>
+                                          <HBox prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <MenuButton fx:id="mbutton1" mnemonicParsing="false" text="Table Name">
+                                                  <items>
+                                                    <MenuItem fx:id="confItem1" mnemonicParsing="false" onAction="#confItemSelected1" text="Conference" />
+                                                      <MenuItem fx:id="gameItem1" mnemonicParsing="false" onAction="#gameItemSelected1" text="Game" />
+                                                      <MenuItem fx:id="playItem1" mnemonicParsing="false" onAction="#playItemSelected1" text="Play" />
+                                                      <MenuItem fx:id="playerItem1" mnemonicParsing="false" onAction="#playerItemSelected1" text="Player" />
+                                                      <MenuItem fx:id="stadiumYearwiseItem1" mnemonicParsing="false" onAction="#satdiumYearwiseItemSelected1" text="Stadium" />
+                                                      <MenuItem fx:id="teamItem1" mnemonicParsing="false" onAction="#teamItemSelected1" text="Team" />
+                                                  </items>
+                                                   <HBox.margin>
+                                                      <Insets top="30.0" />
+                                                   </HBox.margin>
+                                                </MenuButton>
+                                                <Button mnemonicParsing="false" text="Generate Results">
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" top="30.0" />
+                                                   </HBox.margin>
+                                                </Button>
+                                             </children>
+                                          </HBox>
                                        </children>
                                     </VBox>
                                  </children>
                               </HBox>
-                              <HBox maxHeight="0.0" maxWidth="250.0" minHeight="150.0" minWidth="250.0" prefHeight="150.0" prefWidth="250.0">
-                                 <children>
-                                    <VBox maxHeight="150.0" maxWidth="150.0" minHeight="150.0" minWidth="150.0" prefHeight="150.0" prefWidth="150.0">
-                                       <children>
-                                          <Label text="Table 2" />
-                                          <MenuButton fx:id="mbutton2" mnemonicParsing="false" text="Table Name">
-                                             <items>
-                                                <MenuItem fx:id="confItem2" mnemonicParsing="false" onAction="#confItemSelected2" text="Conference Yearwise" />
-                                                <MenuItem fx:id="driveItem2" mnemonicParsing="false" onAction="#gameItemSelected2" text="Drive" />
-                                                <MenuItem fx:id="gameItem2" mnemonicParsing="false" onAction="#gameItemSelected2" text="Game" />
-                                                <MenuItem fx:id="playItem2" mnemonicParsing="false" onAction="#playItemSelected2" text="Play" />
-                                                <MenuItem fx:id="playMetricsItem2" mnemonicParsing="false" onAction="#playMetricsItemSelected2" text="Play Metrics" />
-                                                <MenuItem fx:id="playerItem2" mnemonicParsing="false" onAction="#playerItemSelected2" text="Player" />
-                                                <MenuItem fx:id="playerMetricsGamewiseItem2" mnemonicParsing="false" onAction="#playerMetricsGamewiseItemSelected2" text="Player Metrics Gamewise" />
-                                                <MenuItem fx:id="playerYearwiseItem2" mnemonicParsing="false" onAction="#playerYearwiseItemSelected2" text="Player Yearwise" />
-                                                <MenuItem fx:id="stadiumYearwiseItem2" mnemonicParsing="false" onAction="#satdiumYearwiseItemSelected2" text="Stadium Yearwise" />
-                                                <MenuItem fx:id="teamItem2" mnemonicParsing="false" onAction="#teamItemSelected2" text="Team" />
-                                                <MenuItem fx:id="teamMetricsGamewiseItem2" mnemonicParsing="false" onAction="#teamMetricsGamewiseItemSelected2" text="Team Metrics Gamewise" />
-                                                <MenuItem fx:id="teamYearwiseItem2" mnemonicParsing="false" onAction="#teamYearwiseItemSelected2" text="Team Yearwise" />
-                                             </items>
-                                          </MenuButton>
-                                       </children>
-                                    </VBox>
-                                    <VBox maxHeight="150.0" maxWidth="150.0" minHeight="150.0" minWidth="150.0" prefHeight="150.0" prefWidth="150.0">
-                                       <children>
-                                          <Label text="Attributes" />
-                                          <MenuButton fx:id="mbutton4" mnemonicParsing="false" text="Attributes">
-                                            <items>
-                                              <MenuItem mnemonicParsing="false" text="Action 1" />
-                                              <MenuItem mnemonicParsing="false" text="Action 2" />
-                                            </items>
-                                          </MenuButton>
-                                       </children>
-                                    </VBox>
-                                 </children></HBox>
                            </children>
                         </VBox>
                         <VBox maxHeight="300.0" maxWidth="230.0" minHeight="300.0" minWidth="230.0" prefHeight="300.0" prefWidth="230.0">
                            <children>
                               <CheckBox mnemonicParsing="false" text="Generate Text File">
                                  <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
-                              </CheckBox>
-                              <HBox prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                    <Label text="Text File:" />
-                                    <TextField>
-                                       <HBox.margin>
-                                          <Insets left="15.0" />
-                                       </HBox.margin>
-                                    </TextField>
-                                 </children>
-                                 <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
-                              </HBox>
-                              <Button mnemonicParsing="false" text="Generate Results">
-                                 <VBox.margin>
-                                    <Insets left="100.0" />
-                                 </VBox.margin>
-                              </Button>
+                              </CheckBox>
                            </children></VBox>
                      </children>
                   </HBox>
-                  <HBox maxHeight="200.0" maxWidth="480.0" minHeight="280.0" minWidth="480.0" prefHeight="200.0" prefWidth="480.0">
+                  <HBox maxHeight="450.0" maxWidth="480.0" minHeight="450.0" minWidth="480.0" prefHeight="450.0" prefWidth="480.0">
                      <children>
-                        <TextArea maxHeight="280.0" maxWidth="480.0" minHeight="280.0" minWidth="480.0" prefHeight="280.0" prefWidth="480.0" />
+                        <TextArea editable="false" maxHeight="450.0" maxWidth="480.0" minHeight="450.0" minWidth="480.0" prefHeight="450.0" prefWidth="480.0" />
                      </children></HBox>
                </children>
             </VBox>
