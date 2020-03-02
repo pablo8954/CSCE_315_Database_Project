@@ -555,17 +555,121 @@ public class jdbcpostgreSQL {
             			+ "\"TeamName\" LIKE '%s%%') OR \"AwayTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%')))) AS game_data ON "
             			+ "\"TeamId\" = \"HomeTeamId\") AS team1_data ON \"Team\".\"TeamId\" = \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Play\".\"GameId\") "
             			+ "AS inner_play ON \"Play_Metrics\".\"GameId\" = inner_play. \"game_id\" AND inner_play. \"PlayNum\" = \"Play_Metrics\".\"PlayNum\";"
-            			, year.toString(),team, team);
-            			
+            			, year.toString(),team, team);    	
+            }
+            
+            else {
+            	sqlStmt = String.format(
+            			"SELECT \"HomeTeamName\", \"AwayTeamName\", \"Quarter\", \"Clock\", \"OffensePoints\",\"DefensePoints\", \"Down\",\"Distance\",\"Spot\","
+            			+ "\"PlayType\", \"DriveNumber\", \"DrivePlay\", \"Attempt\", \"Yards\", \"FairCatch\", \"Touchback\", \"Downed\", \"OutOfBounds\", "
+            			+ "\"Onside\", \"OnsideSuccess\", \"TD\", \"Fumble\", \"FumbleLost\", \"Sack\", \"Safety\", \"Completion\", \"Interception\", \"FirstDown\", "
+            			+ "\"Dropped\", \"Blocked\", \"Reception\" "
+        
+            			+ "FROM \"Play_Metrics\" INNER JOIN (SELECT \"Play\".\"GameId\" AS \"game_id\", * FROM \"Play\" INNER JOIN (SELECT \"Team\".\"TeamName\" AS "
+            			+ "\"AwayTeamName\", * FROM \"Team\" INNER JOIN ( SELECT \"TeamName\" AS \"HomeTeamName\", * FROM \"Team\" INNER JOIN ( SELECT * FROM \"Game\" "
+            			+ "WHERE (\"HomeTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') OR \"AwayTeamId\" = ( SELECT DISTINCT "
+            			+ "\"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%'))) AS game_data ON \"TeamId\" = \"HomeTeamId\") AS team1_data ON \"Team\".\"TeamId\""
+            			+ " = \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Play\".\"GameId\") AS inner_play ON \"Play_Metrics\".\"GameId\" = inner_play. \"game_id\" "
+            			+ "AND inner_play. \"PlayNum\" = \"Play_Metrics\".\"PlayNum\";"
+            			, team, team);    	
             }
             
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
+                result_str += "Home Team Name: ";
+                result_str += result.getString("HomeTeamName");
 
+                result_str += " | Away Team Name: ";
+                result_str += result.getString("AwayTeamName");
+                
+                result_str += " | Quarter: ";
+                result_str += result.getString("Quarter");
+                
+                result_str += " | Clock: ";
+                result_str += result.getString("Clock");
+                
+                result_str += " | Offense Points: ";
+                result_str += result.getString("OffensePoints");
+                
+                result_str += " | Defense Points: ";
+                result_str += result.getString("DefensePoints");
+                
+                result_str += " | Down: ";
+                result_str += result.getString("Down");
+                
+                result_str += " | Distance: ";
+                result_str += result.getString("Distance");
+                
+                result_str += " | Spot: ";
+                result_str += result.getString("Spot");
+                
+                result_str += " | Play Type: ";
+                result_str += result.getString("PlayType");
+                
+                result_str += " | Drive Number: ";
+                result_str += result.getString("DriveNumber");
+                
+                result_str += " | Drive Play: ";
+                result_str += result.getString("DrivePlay");
+                
+                result_str += " | Attempt: ";
+                result_str += result.getString("Attempt");
+                
+                result_str += " | Yards: ";
+                result_str += result.getString("Yards");
+                
+                result_str += " | Fair Catch: ";
+                result_str += result.getString("FairCatch");
+                
+                result_str += " | Touchback: ";
+                result_str += result.getString("Touchback");
+                
+                result_str += " | Downed: ";
+                result_str += result.getString("Downed");
+                
+                result_str += " | Out Of Bounds: ";
+                result_str += result.getString("OutOfBounds");
+                
+                result_str += " | Onside: ";
+                result_str += result.getString("Onside");
+                
+                result_str += " | Touch Down: ";
+                result_str += result.getString("TD");
+                
+                result_str += " | Fumble: ";
+                result_str += result.getString("Fumble");
+                
+                result_str += " | Fumble Lost: ";
+                result_str += result.getString("FumbleLost");
+                
+                result_str += " | Sack: ";
+                result_str += result.getString("Sack");
+                
+                result_str += " | Safety: ";
+                result_str += result.getString("Safety");
+                
+                result_str += " | Completion: ";
+                result_str += result.getString("Completion");
+                
+                result_str += " | Interception: ";
+                result_str += result.getString("Interception");
+                
+                result_str += " | First Down: ";
+                result_str += result.getString("FirstDown");
+                
+                result_str += " | Dropped: ";
+                result_str += result.getString("Dropped");
+                
+                result_str += " | Blocked: ";
+                result_str += result.getString("Blocked");
+                
+                result_str += " | Reception: ";
+                result_str += result.getString("Reception");
+                
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error accessing Team Data. Make sure that the Team name is correct");
+            JOptionPane.showMessageDialog(null, "Error accessing Team Play Data. Make sure that the Team name is correct");
         }
 
         if (result_str == "") {
