@@ -1,8 +1,15 @@
 package application;
+import java.io.IOException;
 import java.sql.*;
 import java.time.Year;
 
 import javax.swing.JOptionPane;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 //import java.sql.DriverManager;
 /*
@@ -10,7 +17,17 @@ Robert lightfoot
 CSCE 315
 9-25-2019
  */
-public class jdbcpostgreSQL {
+public class jdbcpostgreSQL extends Application{
+	
+	public void start(Stage primaryStage) throws IOException {
+		Parent root = FXMLLoader.load(getClass().getResource("Window.fxml"));
+		Scene scene = new Scene(root, 800, 800);
+
+		primaryStage.setScene(scene);
+		primaryStage.setTitle("Gay");
+		primaryStage.resizableProperty().setValue(Boolean.FALSE);
+		primaryStage.show();
+	}
 
     public static String gameDataFetcWithNameYear(String name, Integer year, Connection conn) {
         String result_str = "";
@@ -154,6 +171,8 @@ public class jdbcpostgreSQL {
             System.exit(0);
         } // end try catch
           // JOptionPane.showMessageDialog(null, "Opened database successfully");
+        
+        launch(args);
 
         //
         // MAIN CODE

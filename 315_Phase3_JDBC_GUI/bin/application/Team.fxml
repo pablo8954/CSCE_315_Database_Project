@@ -14,17 +14,17 @@
                <children>
                   <HBox maxHeight="50.0" minHeight="50.0" prefHeight="50.0" prefWidth="200.0">
                      <children>
-                        <RadioButton mnemonicParsing="false" selected="true" text="General Data">
+                        <RadioButton fx:id="GeneralRadio" mnemonicParsing="false" onAction="#generalRadioSelected" selected="true" text="General Data">
                            <HBox.margin>
                               <Insets left="10.0" top="15.0" />
                            </HBox.margin>
                         </RadioButton>
-                        <RadioButton mnemonicParsing="false" text="Game Data">
+                        <RadioButton fx:id="GameRadio" mnemonicParsing="false" onAction="#gameRadioSelected" text="Game Data">
                            <HBox.margin>
                               <Insets left="10.0" top="15.0" />
                            </HBox.margin>
                         </RadioButton>
-                        <RadioButton mnemonicParsing="false" text="Play Data">
+                        <RadioButton fx:id="PlayRadio" mnemonicParsing="false" onAction="#playRadioSelected" text="Play Data">
                            <HBox.margin>
                               <Insets left="10.0" top="15.0" />
                            </HBox.margin>

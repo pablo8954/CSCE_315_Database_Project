@@ -46,6 +46,24 @@ public class TeamController {
 	@FXML 
 	Button OKButton;
 	
+	public void generalRadioSelected() {
+		GeneralRadio.setSelected(true);
+		GameRadio.setSelected(false);
+		PlayRadio.setSelected(false);
+	}
+	
+	public void gameRadioSelected() {
+		GeneralRadio.setSelected(false);
+		GameRadio.setSelected(true);
+		PlayRadio.setSelected(false);
+	}
+	
+	public void playRadioSelected() {
+		GeneralRadio.setSelected(false);
+		GameRadio.setSelected(false);
+		PlayRadio.setSelected(true);
+	}
+	
 	public String getTeamName() {
 		return teamName;
 	}
