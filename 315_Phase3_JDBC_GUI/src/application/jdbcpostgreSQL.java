@@ -723,6 +723,241 @@ public class jdbcpostgreSQL {
         }
         return result_str;
     }
+    
+    public static String playerMetricsData(String fname, String lname, Integer year, Connection conn) {
+        String result_str = "";
+        try {
+            // create a statement object
+            Statement stmt = conn.createStatement();
+            String sqlStatement = "";
+            // create an SQL statement
+            if (!fname.equals("") && !lname.equals("") && !(year < 2005 || year > 2013)) {
+	            sqlStatement = String.format(
+	            		 "SELECT DISTINCT \"FirstName\", \"LastName\", \"Game\".\"GameId\", \"YardsRush\", \"YardsPass\", \"YardsKickoffReturn\","
+	            		 + "\"YardsPuntReturn\", \"YardsFumbleReturn\", \"YardsInterceptionReturn\", \"YardsMisc\", \"YardsPunt\", \"YardsKickoff\","
+	            		 + "\"YardsTackleLoss\", \"YardsSack\", \"TacklesSolo\", \"TacklesAssist\", \"TacklesForLoss\", \"InterceptionPass\", "
+	            		 + "\"InterceptionReturn\", \"Fumbles\", \"FumblesLost\", \"FumblesForced\", \"AttemptsRush\", \"AttemptsPass\", \"AttemptsFG\","
+	            		 + "\"AttemptsOffenseXPKick\", \"AttemptsOffense2XP\", \"TDRush\", \"TDKickoffReturn\", \"TDPuntReturn\", \"TDFumbleReturn\", "
+	            		 + "\"TDInterceptionReturn\", \"TDMIscReturn\", \"PassCompletion\", \"MiscReturn\", \"MadeFG\", \"MadeOffensiveXPKick\","
+	            		 + "\"MadeOffensive2XP\", \"MadeDefensive2XP\", \"Safety\", \"Points\", \"Punts\", \"Kickoffs\", \"KickoffsOutOfBounds\", "
+	            		 + "\"KickoffsOnside\", \"Sacks\", \"QBHurry\", \"PassBrokenUp\", \"KickPuntBlocked\", \"TDPass\", \"AttemptsDefense2XP\","
+	            		 + "\"ConvPass\", \"Reception\", \"YardsReception\", \"TDReception\", \"KickReturn\", \"PuntReturn\", \"FumbleReturn\", \"Touchbacks\""
+	            		 
+	            		 + "FROM \"Game\" INNER JOIN (SELECT * FROM \"Player_Metrics_Gamewise\" INNER JOIN (SELECT * FROM \"Team\" "
+	            		 + "INNER JOIN (SELECT * FROM \"Team_Yearwise\" INNER JOIN (SELECT * FROM \"Player_Yearwise\" INNER JOIN (SELECT "
+	            		 + "\"PlayerId\" AS \"MainPlayerId\", * FROM \"Player\" WHERE \"FirstName\" LIKE '%s%%' "
+	            		 + "AND \"LastName\" LIKE '%s%%') AS player_data ON player_data. \"PlayerId\" = \"Player_Yearwise\".\"PlayerId\") "
+	            		 + "AS player_data2 ON \"Team_Yearwise\".\"TeamYearId\" = player_data2. \"TeamYearId\") AS team_data ON \"Team\".\"TeamId\" = team_data. "
+	            		 + "\"TeamId\") AS player_data3 ON player_data3. \"MainPlayerId\" = \"Player_Metrics_Gamewise\".\"PlayerId\") AS player_data4 ON "
+	            		 + "\"Game\".\"GameId\" = player_data4. \"GameId\" WHERE EXTRACT(YEAR FROM \"Game\".\"Date\") = %s;"
+	                    ,fname, lname, year.toString());
+            }
+            else if (!fname.equals("") && !lname.equals("") && (year < 2005) || year > 2013) {
+            	sqlStatement = String.format(
+            			 "SELECT DISTINCT \"FirstName\", \"LastName\", \"Game\".\"GameId\", \"YardsRush\", \"YardsPass\", "
+            			 + "\"YardsKickoffReturn\",\"YardsPuntReturn\", \"YardsFumbleReturn\", \"YardsInterceptionReturn\", "
+            			 + "\"YardsMisc\", \"YardsPunt\", \"YardsKickoff\", \"YardsTackleLoss\", \"YardsSack\", \"TacklesSolo\", "
+            			 + "\"TacklesAssist\", \"TacklesForLoss\", \"InterceptionPass\", \"InterceptionReturn\", \"Fumbles\", "
+            			 + "\"FumblesLost\", \"FumblesForced\", \"AttemptsRush\", \"AttemptsPass\", \"AttemptsFG\", \"AttemptsOffenseXPKick\", "
+            			 + "\"AttemptsOffense2XP\", \"TDRush\", \"TDKickoffReturn\", \"TDPuntReturn\", \"TDFumbleReturn\", \"TDInterceptionReturn\","
+            			 + "\"TDMIscReturn\", \"PassCompletion\", \"MiscReturn\", \"MadeFG\", \"MadeOffensiveXPKick\", \"MadeOffensive2XP\", "
+            			 + "\"MadeDefensive2XP\", \"Safety\", \"Points\", \"Punts\", \"Kickoffs\", \"KickoffsOutOfBounds\", \"KickoffsOnside\", "
+            			 + "\"Sacks\", \"QBHurry\", \"PassBrokenUp\", \"KickPuntBlocked\", \"TDPass\", \"AttemptsDefense2XP\", \"ConvPass\","
+            			 + "\"Reception\", \"YardsReception\", \"TDReception\", \"KickReturn\", \"PuntReturn\", \"FumbleReturn\", \"Touchbacks\""
+            			 
+            			 + "FROM \"Game\" INNER JOIN (SELECT * FROM \"Player_Metrics_Gamewise\" INNER JOIN (SELECT * FROM \"Team\" INNER JOIN ("
+            			 + "SELECT * FROM \"Team_Yearwise\" INNER JOIN (SELECT * FROM \"Player_Yearwise\" INNER JOIN (SELECT\"PlayerId\" "
+            			 + "AS \"MainPlayerId\", * FROM \"Player\" WHERE \"FirstName\" LIKE '%s%%' AND \"LastName\" LIKE '%s%%') "
+            			 
+            			 + "AS player_data ON player_data. \"PlayerId\" = \"Player_Yearwise\".\"PlayerId\") AS player_data2 ON \"Team_Yearwise\"."
+            			 + "\"TeamYearId\" = player_data2. \"TeamYearId\") AS team_data ON \"Team\".\"TeamId\" = team_data. \"TeamId\") "
+            			 + "AS player_data3 ON player_data3. \"MainPlayerId\" = \"Player_Metrics_Gamewise\".\"PlayerId\") AS player_data4 ON "
+            			 + "\"Game\".\"GameId\" = player_data4. \"GameId\";"
+            			 , fname, lname);
+            }
+ 
+            // send statement to DBMS
+            ResultSet result = stmt.executeQuery(sqlStatement);
+            while (result.next()) {
+                result_str += "First Name: ";
+                result_str += result.getString("FirstName");
+                
+                result_str += " | Last Name: ";
+                result_str += result.getString("LastName");
+                
+                result_str += " | Game ID: ";
+                result_str += result.getString("GameId");         
+                
+                result_str += " | Yards Rush: ";
+                result_str += result.getString("YardsRush");
+                
+                result_str += " | Yards Pass: ";
+                result_str += result.getString("YardsPass");
+                
+                result_str += " | Yards Kickoff Return: ";
+                result_str += result.getString("YardsKickoffReturn");
+                
+                result_str += " | Yards Fumble Return: ";
+                result_str += result.getString("YardsFumbleReturn");
+                
+                result_str += " | Yards Interception Return: ";
+                result_str += result.getString("YardsInterceptionReturn");
+                
+                result_str += " | Yards Misc: ";
+                result_str += result.getString("YardsMisc");
+                
+                result_str += " | Yards Kickoff: ";
+                result_str += result.getString("YardsKickoff");
+                
+                result_str += " | Yards Tackle Loss: ";
+                result_str += result.getString("YardsTackleLoss");  
+            	
+                result_str += " | Yards Sack: ";
+                result_str += result.getString("YardsSack");
+                
+                result_str += " | Tackles Solo: ";
+                result_str += result.getString("TacklesSolo");
+                
+                result_str += " | Interception Pass: ";
+                result_str += result.getString("Interception Pass");
+                
+                result_str += " | Interception Return: ";
+                result_str += result.getString("InterceptionReturn");
+                
+                result_str += " | Fumbles: ";
+                result_str += result.getString("Fumbles");  
+                
+                result_str += " | Fumbles Lost: ";
+                result_str += result.getString("FumblesLost");
+                
+                result_str += " | Fumbles Forced: ";
+                result_str += result.getString("FumblesForced");
+                
+                result_str += " | Attempts Rush: ";
+                result_str += result.getString("AttemptsRush");
+                
+                result_str += " | Attempts Pass: ";
+                result_str += result.getString("Attempts Pass");
+                
+                result_str += " | Attempts Field Goal: ";
+                result_str += result.getString("AttemptsFG");
+                
+                result_str += " | Attempts Offense XP Kick: ";
+                result_str += result.getString("AttemptsOffenseXPKick");  
+                
+                result_str += " | Attempts Offense 2XP: ";
+                result_str += result.getString("AttemptsOffense2XP");
+                
+                result_str += " | TD Rush: ";
+                result_str += result.getString("TDRush");
+                
+                result_str += " | TD Kickoff Return: ";
+                result_str += result.getString("TDKickoffReturn: ");
+                
+                result_str += " | TD Punt Return: ";
+                result_str += result.getString("TDPuntReturn");
+                
+                result_str += " | TD Fumble Return: ";
+                result_str += result.getString("TDFumbleReturn");
+                
+                result_str += " | TD Interception Return: ";
+                result_str += result.getString("TD Interception Return");
+                
+                result_str += " | TD Misc Return: ";
+                result_str += result.getString("TDMIscReturn");
+                
+                result_str += " | Pass Completion: ";
+                result_str += result.getString("Pass Completion");
+                
+                result_str += " | MiscReturn: ";
+                result_str += result.getString("MiscReturn");
+                
+                result_str += " | MadeFG: ";
+                result_str += result.getString("MadeFG");
+                
+                result_str += " | Made Offensive XP Kick: ";
+                result_str += result.getString("MadeOffensiveXPKick");  
+                
+                result_str += " | Made Offensive 2XP: ";
+                result_str += result.getString("MadeOffensiveXP");
+                
+                result_str += " | Made Defensive 2XP: ";
+                result_str += result.getString("MadeDefensive2XP"); 
+                
+                result_str += " | Safety: ";
+                result_str += result.getString("Safety");
+                
+                result_str += " | Points: ";
+                result_str += result.getString("Points");
+                
+                result_str += " | Punts: ";
+                result_str += result.getString("Punts");
+                
+                result_str += " | Kickoffs: ";
+                result_str += result.getString("Kickoffs");
+                
+                result_str += " | Kickoffs : ";
+                result_str += result.getString("Kickoffs");
+                
+                result_str += " | Kickoffs out of Bounds: ";
+                result_str += result.getString("KickoffsOutOfBounts");
+                
+                result_str += " | Kickoffs Onside: ";
+                result_str += result.getString("Kickoffs Onside");  
+                
+                result_str += " | Sacks: ";
+                result_str += result.getString("Sacks");
+                
+                result_str += " | QBHurry: ";
+                result_str += result.getString("QBHurry");  
+                
+                result_str += " | Pass Broken Up: ";
+                result_str += result.getString("Pass Broken Up");
+                
+                result_str += " | Kick Punt Blocked: ";
+                result_str += result.getString("KickPuntBlocked");
+                
+                result_str += " | TD Pass: ";
+                result_str += result.getString("TDPass");  
+                
+                result_str += " | Attempts Defense 2XP: ";
+                result_str += result.getString("AttemptsDefense2XP");
+                
+                result_str += " | ConvPass: ";
+                result_str += result.getString("ConvPass");  
+                
+                result_str += " | Reception: ";
+                result_str += result.getString("Reception");
+                
+                result_str += " | Yards Reception: ";
+                result_str += result.getString("YardsReception");
+                
+                result_str += " | TD Reception: ";
+                result_str += result.getString("TDReception");
+                
+                result_str += " | Kick Return: ";
+                result_str += result.getString("KickReturn");
+                
+                result_str += " | Punt Return: ";
+                result_str += result.getString("PuntReturn");  
+                
+                result_str += " | Fumble Return: ";
+                result_str += result.getString("FumbleReturn");  
+                
+                result_str += " | Touchbacks: ";
+                result_str += result.getString("Touchbacks");  
+                
+                result_str += "\n";
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "Error accessing Player Metrics Data. Make sure that the Player name is correct");
+        }
+        if (result_str == "") {
+            return "Player Metrics Data non existent\n";
+        }
+        return result_str;
+    }
 
     public static void main(String args[]) {
         dbSetup my = new dbSetup();
