@@ -1,4 +1,6 @@
 package application;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
 import java.time.Year;
@@ -91,6 +93,19 @@ public class jdbcpostgreSQL extends Application{
 								String result = gameDataFetcWithNameYear(teamName, year, conn);
 								controller.updateOutputTextArea(result);
 								System.out.println(result);
+								if(controller.generateTextFile()) {
+									//write to file
+									File generatedFile = new File("results.txt");
+									try {
+										generatedFile.createNewFile();
+										FileWriter writer = new FileWriter(generatedFile);
+										writer.write(result);
+										writer.close();
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}
 							}
 						}
 					});
