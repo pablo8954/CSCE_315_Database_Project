@@ -217,6 +217,16 @@ public class WindowController {
 		outputTextArea.setEditable(true);
 		outputTextArea.setText(result);
 		outputTextArea.setEditable(false);
+	    dataSelection = "";
+		teamName = "";
+		teamType = "";
+		conferenceName = "";
+		playerFirstName = "";
+		playerLastName = "";
+		opposingTeam = "";
+		stadiumName = "";
+		year = 0; 
+		
 	}
 
 }
