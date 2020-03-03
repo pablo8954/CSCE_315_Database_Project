@@ -508,72 +508,71 @@ public class jdbcpostgreSQL {
             Statement stmt = conn.createStatement();
 
             if (!team.equals("") && !awayteam.equals("") && !(year < 2005 || year > 2013)) {
-            	sqlStmt = String.format(
-            			"SELECT \"HomeTeamName\", \"AwayTeamName\", \"Quarter\", \"Clock\", \"OffensePoints\", \"DefensePoints\", \"Down\", \"Distance\", \"Spot\", \"PlayType\", \"DriveNumber\","
-            			+ "\"DrivePlay\", \"Attempt\", \"Yards\", \"FairCatch\", \"Touchback\", \"Downed\", \"OutOfBounds\", \"Onside\", \"OnsideSuccess\", \"TD\", \"Fumble\", \"FumbleLost\", "
-            			+ "\"Sack\", \"Safety\", \"Completion\", \"Interception\", \"FirstDown\",\"Dropped\",\"Blocked\", \"Reception\" "
-            			
-            			+ "FROM \"Play_Metrics\" INNER JOIN ( SELECT \"Play\".\"GameId\" AS \"game_id\", * FROM \"Play\" INNER JOIN (SELECT \"Team\".\"TeamName\" AS \"AwayTeamName\", * FROM "
-            			+ "\"Team\" INNER JOIN (SELECT \"TeamName\" AS \"HomeTeamName\",* FROM \"Team\" INNER JOIN ( SELECT* FROM \"Game\" WHERE EXTRACT(YEAR FROM \"Date\") = %s AND((\"HomeTeamId\" "
-            			+ "= ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') OR \"AwayTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%')) "
-            			+ "AND(\"HomeTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') OR \"AwayTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" "
-            			+ "LIKE '%s%%')))) AS game_data ON \"TeamId\" = \"HomeTeamId\") AS team1_data ON \"Team\".\"TeamId\" = \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Play\".\"GameId\") "
-            			+ "AS inner_play ON \"Play_Metrics\".\"GameId\" = inner_play. \"game_id\""
-            			+ "AND inner_play. \"PlayNum\" = \"Play_Metrics\".\"PlayNum\";",
-            			year.toString(), team, team, awayteam, awayteam);
+                sqlStmt = String.format(
+                        "SELECT \"HomeTeamName\", \"AwayTeamName\", \"Quarter\", \"Clock\", \"OffensePoints\", \"DefensePoints\", \"Down\", \"Distance\", \"Spot\", \"PlayType\", \"DriveNumber\","
+                                + "\"DrivePlay\", \"Attempt\", \"Yards\", \"FairCatch\", \"Touchback\", \"Downed\", \"OutOfBounds\", \"Onside\", \"OnsideSuccess\", \"TD\", \"Fumble\", \"FumbleLost\", "
+                                + "\"Sack\", \"Safety\", \"Completion\", \"Interception\", \"FirstDown\",\"Dropped\",\"Blocked\", \"Reception\" "
+
+                                + "FROM \"Play_Metrics\" INNER JOIN ( SELECT \"Play\".\"GameId\" AS \"game_id\", * FROM \"Play\" INNER JOIN (SELECT \"Team\".\"TeamName\" AS \"AwayTeamName\", * FROM "
+                                + "\"Team\" INNER JOIN (SELECT \"TeamName\" AS \"HomeTeamName\",* FROM \"Team\" INNER JOIN ( SELECT* FROM \"Game\" WHERE EXTRACT(YEAR FROM \"Date\") = %s AND((\"HomeTeamId\" "
+                                + "= ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') OR \"AwayTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%')) "
+                                + "AND(\"HomeTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') OR \"AwayTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" "
+                                + "LIKE '%s%%')))) AS game_data ON \"TeamId\" = \"HomeTeamId\") AS team1_data ON \"Team\".\"TeamId\" = \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Play\".\"GameId\") "
+                                + "AS inner_play ON \"Play_Metrics\".\"GameId\" = inner_play. \"game_id\""
+                                + "AND inner_play. \"PlayNum\" = \"Play_Metrics\".\"PlayNum\";",
+                        year.toString(), team, team, awayteam, awayteam);
             }
-            
+
             else if (!team.equals("") && !awayteam.equals("") && (year < 2005 || year > 2013)) {
-            	sqlStmt = String.format(
-            			"SELECT \"HomeTeamName\", \"AwayTeamName\", \"Quarter\", \"Clock\", \"OffensePoints\", "
-            			+ "\"DefensePoints\", \"Down\", \"Distance\", \"Spot\", \"PlayType\", \"DriveNumber\", \"DrivePlay\", \"Attempt\", \"Yards\", "
-            			+ "\"FairCatch\", \"Touchback\", \"Downed\", \"OutOfBounds\", \"Onside\", \"OnsideSuccess\", \"TD\", \"Fumble\", \"FumbleLost\", \"Sack\","
-            			+ "\"Safety\", \"Completion\", \"Interception\", \"FirstDown\", \"Dropped\", \"Blocked\", \"Reception\""
-            			
-            			+ "FROM \"Play_Metrics\""
-						+ "INNER JOIN ("
-						+ "SELECT \"Play\".\"GameId\" AS \"game_id\",* FROM \"Play\" INNER JOIN ( SELECT \"Team\".\"TeamName\" AS \"AwayTeamName\", "
-						+ "* FROM \"Team\" INNER JOIN ( SELECT \"TeamName\" AS \"HomeTeamName\", * FROM \"Team\" INNER JOIN (SELECT* FROM \"Game\" WHERE "
-						+ "(\"HomeTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') OR \"AwayTeamId\" = ( SELECT DISTINCT "
-						+ "\"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%')) AND(\"HomeTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') "
-						+ "OR \"AwayTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%'))) AS game_data ON \"TeamId\" = \"HomeTeamId\") "
-						+ "AS team1_data ON \"Team\".\"TeamId\" = \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Play\".\"GameId\") AS inner_play ON \"Play_Metrics\"."
-						+ "\"GameId\" = inner_play. \"game_id\" AND inner_play. \"PlayNum\" = \"Play_Metrics\".\"PlayNum\";"
-            			, team, team, awayteam);
+                sqlStmt = String.format(
+                        "SELECT \"HomeTeamName\", \"AwayTeamName\", \"Quarter\", \"Clock\", \"OffensePoints\", "
+                                + "\"DefensePoints\", \"Down\", \"Distance\", \"Spot\", \"PlayType\", \"DriveNumber\", \"DrivePlay\", \"Attempt\", \"Yards\", "
+                                + "\"FairCatch\", \"Touchback\", \"Downed\", \"OutOfBounds\", \"Onside\", \"OnsideSuccess\", \"TD\", \"Fumble\", \"FumbleLost\", \"Sack\","
+                                + "\"Safety\", \"Completion\", \"Interception\", \"FirstDown\", \"Dropped\", \"Blocked\", \"Reception\""
+
+                                + "FROM \"Play_Metrics\"" + "INNER JOIN ("
+                                + "SELECT \"Play\".\"GameId\" AS \"game_id\",* FROM \"Play\" INNER JOIN ( SELECT \"Team\".\"TeamName\" AS \"AwayTeamName\", "
+                                + "* FROM \"Team\" INNER JOIN ( SELECT \"TeamName\" AS \"HomeTeamName\", * FROM \"Team\" INNER JOIN (SELECT* FROM \"Game\" WHERE "
+                                + "(\"HomeTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') OR \"AwayTeamId\" = ( SELECT DISTINCT "
+                                + "\"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%')) AND(\"HomeTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') "
+                                + "OR \"AwayTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%'))) AS game_data ON \"TeamId\" = \"HomeTeamId\") "
+                                + "AS team1_data ON \"Team\".\"TeamId\" = \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Play\".\"GameId\") AS inner_play ON \"Play_Metrics\"."
+                                + "\"GameId\" = inner_play. \"game_id\" AND inner_play. \"PlayNum\" = \"Play_Metrics\".\"PlayNum\";",
+                        team, team, awayteam);
             }
-            
+
             else if (!team.equals("") && awayteam.equals("") && !(year < 2005 || year > 2013)) {
-            	sqlStmt = String.format(
-            			"SELECT \"HomeTeamName\", \"AwayTeamName\", \"Quarter\", \"Clock\", \"OffensePoints\",\"DefensePoints\", \"Down\",\"Distance\",\"Spot\","
-            			+ "\"PlayType\", \"DriveNumber\", \"DrivePlay\", \"Attempt\", \"Yards\", \"FairCatch\", \"Touchback\", \"Downed\", \"OutOfBounds\", "
-            			+ "\"Onside\", \"OnsideSuccess\", \"TD\", \"Fumble\", \"FumbleLost\", \"Sack\", \"Safety\", \"Completion\", \"Interception\", \"FirstDown\", "
-            			+ "\"Dropped\", \"Blocked\", \"Reception\""
-            			
-            			+ "FROM \"Play_Metrics\" INNER JOIN ( SELECT \"Play\".\"GameId\" AS \"game_id\", * FROM \"Play\" INNER JOIN (SELECT \"Team\".\"TeamName\" AS "
-            			+ "\"AwayTeamName\", * FROM \"Team\" INNER JOIN (SELECT \"TeamName\" AS \"HomeTeamName\", *FROM \"Team\" "
-            			+ "INNER JOIN (SELECT * FROM \"Game\" WHERE EXTRACT(YEAR FROM \"Date\") = %s AND((\"HomeTeamId\" = (SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE"
-            			+ "\"TeamName\" LIKE '%s%%') OR \"AwayTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%')))) AS game_data ON "
-            			+ "\"TeamId\" = \"HomeTeamId\") AS team1_data ON \"Team\".\"TeamId\" = \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Play\".\"GameId\") "
-            			+ "AS inner_play ON \"Play_Metrics\".\"GameId\" = inner_play. \"game_id\" AND inner_play. \"PlayNum\" = \"Play_Metrics\".\"PlayNum\";"
-            			, year.toString(),team, team);    	
+                sqlStmt = String.format(
+                        "SELECT \"HomeTeamName\", \"AwayTeamName\", \"Quarter\", \"Clock\", \"OffensePoints\",\"DefensePoints\", \"Down\",\"Distance\",\"Spot\","
+                                + "\"PlayType\", \"DriveNumber\", \"DrivePlay\", \"Attempt\", \"Yards\", \"FairCatch\", \"Touchback\", \"Downed\", \"OutOfBounds\", "
+                                + "\"Onside\", \"OnsideSuccess\", \"TD\", \"Fumble\", \"FumbleLost\", \"Sack\", \"Safety\", \"Completion\", \"Interception\", \"FirstDown\", "
+                                + "\"Dropped\", \"Blocked\", \"Reception\""
+
+                                + "FROM \"Play_Metrics\" INNER JOIN ( SELECT \"Play\".\"GameId\" AS \"game_id\", * FROM \"Play\" INNER JOIN (SELECT \"Team\".\"TeamName\" AS "
+                                + "\"AwayTeamName\", * FROM \"Team\" INNER JOIN (SELECT \"TeamName\" AS \"HomeTeamName\", *FROM \"Team\" "
+                                + "INNER JOIN (SELECT * FROM \"Game\" WHERE EXTRACT(YEAR FROM \"Date\") = %s AND((\"HomeTeamId\" = (SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE"
+                                + "\"TeamName\" LIKE '%s%%') OR \"AwayTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%')))) AS game_data ON "
+                                + "\"TeamId\" = \"HomeTeamId\") AS team1_data ON \"Team\".\"TeamId\" = \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Play\".\"GameId\") "
+                                + "AS inner_play ON \"Play_Metrics\".\"GameId\" = inner_play. \"game_id\" AND inner_play. \"PlayNum\" = \"Play_Metrics\".\"PlayNum\";",
+                        year.toString(), team, team);
             }
-            
+
             else {
-            	sqlStmt = String.format(
-            			"SELECT \"HomeTeamName\", \"AwayTeamName\", \"Quarter\", \"Clock\", \"OffensePoints\",\"DefensePoints\", \"Down\",\"Distance\",\"Spot\","
-            			+ "\"PlayType\", \"DriveNumber\", \"DrivePlay\", \"Attempt\", \"Yards\", \"FairCatch\", \"Touchback\", \"Downed\", \"OutOfBounds\", "
-            			+ "\"Onside\", \"OnsideSuccess\", \"TD\", \"Fumble\", \"FumbleLost\", \"Sack\", \"Safety\", \"Completion\", \"Interception\", \"FirstDown\", "
-            			+ "\"Dropped\", \"Blocked\", \"Reception\" "
-        
-            			+ "FROM \"Play_Metrics\" INNER JOIN (SELECT \"Play\".\"GameId\" AS \"game_id\", * FROM \"Play\" INNER JOIN (SELECT \"Team\".\"TeamName\" AS "
-            			+ "\"AwayTeamName\", * FROM \"Team\" INNER JOIN ( SELECT \"TeamName\" AS \"HomeTeamName\", * FROM \"Team\" INNER JOIN ( SELECT * FROM \"Game\" "
-            			+ "WHERE (\"HomeTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') OR \"AwayTeamId\" = ( SELECT DISTINCT "
-            			+ "\"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%'))) AS game_data ON \"TeamId\" = \"HomeTeamId\") AS team1_data ON \"Team\".\"TeamId\""
-            			+ " = \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Play\".\"GameId\") AS inner_play ON \"Play_Metrics\".\"GameId\" = inner_play. \"game_id\" "
-            			+ "AND inner_play. \"PlayNum\" = \"Play_Metrics\".\"PlayNum\";"
-            			, team, team);    	
+                sqlStmt = String.format(
+                        "SELECT \"HomeTeamName\", \"AwayTeamName\", \"Quarter\", \"Clock\", \"OffensePoints\",\"DefensePoints\", \"Down\",\"Distance\",\"Spot\","
+                                + "\"PlayType\", \"DriveNumber\", \"DrivePlay\", \"Attempt\", \"Yards\", \"FairCatch\", \"Touchback\", \"Downed\", \"OutOfBounds\", "
+                                + "\"Onside\", \"OnsideSuccess\", \"TD\", \"Fumble\", \"FumbleLost\", \"Sack\", \"Safety\", \"Completion\", \"Interception\", \"FirstDown\", "
+                                + "\"Dropped\", \"Blocked\", \"Reception\" "
+
+                                + "FROM \"Play_Metrics\" INNER JOIN (SELECT \"Play\".\"GameId\" AS \"game_id\", * FROM \"Play\" INNER JOIN (SELECT \"Team\".\"TeamName\" AS "
+                                + "\"AwayTeamName\", * FROM \"Team\" INNER JOIN ( SELECT \"TeamName\" AS \"HomeTeamName\", * FROM \"Team\" INNER JOIN ( SELECT * FROM \"Game\" "
+                                + "WHERE (\"HomeTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') OR \"AwayTeamId\" = ( SELECT DISTINCT "
+                                + "\"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%'))) AS game_data ON \"TeamId\" = \"HomeTeamId\") AS team1_data ON \"Team\".\"TeamId\""
+                                + " = \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Play\".\"GameId\") AS inner_play ON \"Play_Metrics\".\"GameId\" = inner_play. \"game_id\" "
+                                + "AND inner_play. \"PlayNum\" = \"Play_Metrics\".\"PlayNum\";",
+                        team, team);
             }
-            
+
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
                 result_str += "Home Team Name: ";
@@ -581,95 +580,96 @@ public class jdbcpostgreSQL {
 
                 result_str += " | Away Team Name: ";
                 result_str += result.getString("AwayTeamName");
-                
+
                 result_str += " | Quarter: ";
                 result_str += result.getString("Quarter");
-                
+
                 result_str += " | Clock: ";
                 result_str += result.getString("Clock");
-                
+
                 result_str += " | Offense Points: ";
                 result_str += result.getString("OffensePoints");
-                
+
                 result_str += " | Defense Points: ";
                 result_str += result.getString("DefensePoints");
-                
+
                 result_str += " | Down: ";
                 result_str += result.getString("Down");
-                
+
                 result_str += " | Distance: ";
                 result_str += result.getString("Distance");
-                
+
                 result_str += " | Spot: ";
                 result_str += result.getString("Spot");
-                
+
                 result_str += " | Play Type: ";
                 result_str += result.getString("PlayType");
-                
+
                 result_str += " | Drive Number: ";
                 result_str += result.getString("DriveNumber");
-                
+
                 result_str += " | Drive Play: ";
                 result_str += result.getString("DrivePlay");
-                
+
                 result_str += " | Attempt: ";
                 result_str += result.getString("Attempt");
-                
+
                 result_str += " | Yards: ";
                 result_str += result.getString("Yards");
-                
+
                 result_str += " | Fair Catch: ";
                 result_str += result.getString("FairCatch");
-                
+
                 result_str += " | Touchback: ";
                 result_str += result.getString("Touchback");
-                
+
                 result_str += " | Downed: ";
                 result_str += result.getString("Downed");
-                
+
                 result_str += " | Out Of Bounds: ";
                 result_str += result.getString("OutOfBounds");
-                
+
                 result_str += " | Onside: ";
                 result_str += result.getString("Onside");
-                
+
                 result_str += " | Touch Down: ";
                 result_str += result.getString("TD");
-                
+
                 result_str += " | Fumble: ";
                 result_str += result.getString("Fumble");
-                
+
                 result_str += " | Fumble Lost: ";
                 result_str += result.getString("FumbleLost");
-                
+
                 result_str += " | Sack: ";
                 result_str += result.getString("Sack");
-                
+
                 result_str += " | Safety: ";
                 result_str += result.getString("Safety");
-                
+
                 result_str += " | Completion: ";
                 result_str += result.getString("Completion");
-                
+
                 result_str += " | Interception: ";
                 result_str += result.getString("Interception");
-                
+
                 result_str += " | First Down: ";
                 result_str += result.getString("FirstDown");
-                
+
                 result_str += " | Dropped: ";
                 result_str += result.getString("Dropped");
-                
+
                 result_str += " | Blocked: ";
                 result_str += result.getString("Blocked");
-                
+
                 result_str += " | Reception: ";
                 result_str += result.getString("Reception");
-                
+
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error accessing Team Play Data. Make sure that the Team name is correct");
+            JOptionPane.showMessageDialog(null,
+                    "Error accessing Team Play Data. Make sure that the Team name is correct");
         }
 
         if (result_str == "") {
@@ -723,7 +723,7 @@ public class jdbcpostgreSQL {
         }
         return result_str;
     }
-    
+
     public static String playerMetricsData(String fname, String lname, Integer year, Connection conn) {
         String result_str = "";
         try {
@@ -732,221 +732,426 @@ public class jdbcpostgreSQL {
             String sqlStatement = "";
             // create an SQL statement
             if (!fname.equals("") && !lname.equals("") && !(year < 2005 || year > 2013)) {
-	            sqlStatement = String.format(
-	            		 "SELECT DISTINCT \"FirstName\", \"LastName\", \"Game\".\"GameId\", \"YardsRush\", \"YardsPass\", \"YardsKickoffReturn\","
-	            		 + "\"YardsPuntReturn\", \"YardsFumbleReturn\", \"YardsInterceptionReturn\", \"YardsMisc\", \"YardsPunt\", \"YardsKickoff\","
-	            		 + "\"YardsTackleLoss\", \"YardsSack\", \"TacklesSolo\", \"TacklesAssist\", \"TacklesForLoss\", \"InterceptionPass\", "
-	            		 + "\"InterceptionReturn\", \"Fumbles\", \"FumblesLost\", \"FumblesForced\", \"AttemptsRush\", \"AttemptsPass\", \"AttemptsFG\","
-	            		 + "\"AttemptsOffenseXPKick\", \"AttemptsOffense2XP\", \"TDRush\", \"TDKickoffReturn\", \"TDPuntReturn\", \"TDFumbleReturn\", "
-	            		 + "\"TDInterceptionReturn\", \"TDMIscReturn\", \"PassCompletion\", \"MiscReturn\", \"MadeFG\", \"MadeOffensiveXPKick\","
-	            		 + "\"MadeOffensive2XP\", \"MadeDefensive2XP\", \"Safety\", \"Points\", \"Punts\", \"Kickoffs\", \"KickoffsOutOfBounds\", "
-	            		 + "\"KickoffsOnside\", \"Sacks\", \"QBHurry\", \"PassBrokenUp\", \"KickPuntBlocked\", \"TDPass\", \"AttemptsDefense2XP\","
-	            		 + "\"ConvPass\", \"Reception\", \"YardsReception\", \"TDReception\", \"KickReturn\", \"PuntReturn\", \"FumbleReturn\", \"Touchbacks\""
-	            		 
-	            		 + "FROM \"Game\" INNER JOIN (SELECT * FROM \"Player_Metrics_Gamewise\" INNER JOIN (SELECT * FROM \"Team\" "
-	            		 + "INNER JOIN (SELECT * FROM \"Team_Yearwise\" INNER JOIN (SELECT * FROM \"Player_Yearwise\" INNER JOIN (SELECT "
-	            		 + "\"PlayerId\" AS \"MainPlayerId\", * FROM \"Player\" WHERE \"FirstName\" LIKE '%s%%' "
-	            		 + "AND \"LastName\" LIKE '%s%%') AS player_data ON player_data. \"PlayerId\" = \"Player_Yearwise\".\"PlayerId\") "
-	            		 + "AS player_data2 ON \"Team_Yearwise\".\"TeamYearId\" = player_data2. \"TeamYearId\") AS team_data ON \"Team\".\"TeamId\" = team_data. "
-	            		 + "\"TeamId\") AS player_data3 ON player_data3. \"MainPlayerId\" = \"Player_Metrics_Gamewise\".\"PlayerId\") AS player_data4 ON "
-	            		 + "\"Game\".\"GameId\" = player_data4. \"GameId\" WHERE EXTRACT(YEAR FROM \"Game\".\"Date\") = %s;"
-	                    ,fname, lname, year.toString());
+                sqlStatement = String.format(
+                        "SELECT DISTINCT \"FirstName\", \"LastName\", \"Game\".\"GameId\", \"YardsRush\", \"YardsPass\", \"YardsKickoffReturn\","
+                                + "\"YardsPuntReturn\", \"YardsFumbleReturn\", \"YardsInterceptionReturn\", \"YardsMisc\", \"YardsPunt\", \"YardsKickoff\","
+                                + "\"YardsTackleLoss\", \"YardsSack\", \"TacklesSolo\", \"TacklesAssist\", \"TacklesForLoss\", \"InterceptionPass\", "
+                                + "\"InterceptionReturn\", \"Fumbles\", \"FumblesLost\", \"FumblesForced\", \"AttemptsRush\", \"AttemptsPass\", \"AttemptsFG\","
+                                + "\"AttemptsOffenseXPKick\", \"AttemptsOffense2XP\", \"TDRush\", \"TDKickoffReturn\", \"TDPuntReturn\", \"TDFumbleReturn\", "
+                                + "\"TDInterceptionReturn\", \"TDMIscReturn\", \"PassCompletion\", \"MiscReturn\", \"MadeFG\", \"MadeOffensiveXPKick\","
+                                + "\"MadeOffensive2XP\", \"MadeDefensive2XP\", \"Safety\", \"Points\", \"Punts\", \"Kickoffs\", \"KickoffsOutOfBounds\", "
+                                + "\"KickoffsOnside\", \"Sacks\", \"QBHurry\", \"PassBrokenUp\", \"KickPuntBlocked\", \"TDPass\", \"AttemptsDefense2XP\","
+                                + "\"ConvPass\", \"Reception\", \"YardsReception\", \"TDReception\", \"KickReturn\", \"PuntReturn\", \"FumbleReturn\", \"Touchbacks\""
+
+                                + "FROM \"Game\" INNER JOIN (SELECT * FROM \"Player_Metrics_Gamewise\" INNER JOIN (SELECT * FROM \"Team\" "
+                                + "INNER JOIN (SELECT * FROM \"Team_Yearwise\" INNER JOIN (SELECT * FROM \"Player_Yearwise\" INNER JOIN (SELECT "
+                                + "\"PlayerId\" AS \"MainPlayerId\", * FROM \"Player\" WHERE \"FirstName\" LIKE '%s%%' "
+                                + "AND \"LastName\" LIKE '%s%%') AS player_data ON player_data. \"PlayerId\" = \"Player_Yearwise\".\"PlayerId\") "
+                                + "AS player_data2 ON \"Team_Yearwise\".\"TeamYearId\" = player_data2. \"TeamYearId\") AS team_data ON \"Team\".\"TeamId\" = team_data. "
+                                + "\"TeamId\") AS player_data3 ON player_data3. \"MainPlayerId\" = \"Player_Metrics_Gamewise\".\"PlayerId\") AS player_data4 ON "
+                                + "\"Game\".\"GameId\" = player_data4. \"GameId\" WHERE EXTRACT(YEAR FROM \"Game\".\"Date\") = %s;",
+                        fname, lname, year.toString());
+            } else if (!fname.equals("") && !lname.equals("") && (year < 2005) || year > 2013) {
+                sqlStatement = String.format(
+                        "SELECT DISTINCT \"FirstName\", \"LastName\", \"Game\".\"GameId\", \"YardsRush\", \"YardsPass\", "
+                                + "\"YardsKickoffReturn\",\"YardsPuntReturn\", \"YardsFumbleReturn\", \"YardsInterceptionReturn\", "
+                                + "\"YardsMisc\", \"YardsPunt\", \"YardsKickoff\", \"YardsTackleLoss\", \"YardsSack\", \"TacklesSolo\", "
+                                + "\"TacklesAssist\", \"TacklesForLoss\", \"InterceptionPass\", \"InterceptionReturn\", \"Fumbles\", "
+                                + "\"FumblesLost\", \"FumblesForced\", \"AttemptsRush\", \"AttemptsPass\", \"AttemptsFG\", \"AttemptsOffenseXPKick\", "
+                                + "\"AttemptsOffense2XP\", \"TDRush\", \"TDKickoffReturn\", \"TDPuntReturn\", \"TDFumbleReturn\", \"TDInterceptionReturn\","
+                                + "\"TDMIscReturn\", \"PassCompletion\", \"MiscReturn\", \"MadeFG\", \"MadeOffensiveXPKick\", \"MadeOffensive2XP\", "
+                                + "\"MadeDefensive2XP\", \"Safety\", \"Points\", \"Punts\", \"Kickoffs\", \"KickoffsOutOfBounds\", \"KickoffsOnside\", "
+                                + "\"Sacks\", \"QBHurry\", \"PassBrokenUp\", \"KickPuntBlocked\", \"TDPass\", \"AttemptsDefense2XP\", \"ConvPass\","
+                                + "\"Reception\", \"YardsReception\", \"TDReception\", \"KickReturn\", \"PuntReturn\", \"FumbleReturn\", \"Touchbacks\""
+
+                                + "FROM \"Game\" INNER JOIN (SELECT * FROM \"Player_Metrics_Gamewise\" INNER JOIN (SELECT * FROM \"Team\" INNER JOIN ("
+                                + "SELECT * FROM \"Team_Yearwise\" INNER JOIN (SELECT * FROM \"Player_Yearwise\" INNER JOIN (SELECT\"PlayerId\" "
+                                + "AS \"MainPlayerId\", * FROM \"Player\" WHERE \"FirstName\" LIKE '%s%%' AND \"LastName\" LIKE '%s%%') "
+
+                                + "AS player_data ON player_data. \"PlayerId\" = \"Player_Yearwise\".\"PlayerId\") AS player_data2 ON \"Team_Yearwise\"."
+                                + "\"TeamYearId\" = player_data2. \"TeamYearId\") AS team_data ON \"Team\".\"TeamId\" = team_data. \"TeamId\") "
+                                + "AS player_data3 ON player_data3. \"MainPlayerId\" = \"Player_Metrics_Gamewise\".\"PlayerId\") AS player_data4 ON "
+                                + "\"Game\".\"GameId\" = player_data4. \"GameId\";",
+                        fname, lname);
             }
-            else if (!fname.equals("") && !lname.equals("") && (year < 2005) || year > 2013) {
-            	sqlStatement = String.format(
-            			 "SELECT DISTINCT \"FirstName\", \"LastName\", \"Game\".\"GameId\", \"YardsRush\", \"YardsPass\", "
-            			 + "\"YardsKickoffReturn\",\"YardsPuntReturn\", \"YardsFumbleReturn\", \"YardsInterceptionReturn\", "
-            			 + "\"YardsMisc\", \"YardsPunt\", \"YardsKickoff\", \"YardsTackleLoss\", \"YardsSack\", \"TacklesSolo\", "
-            			 + "\"TacklesAssist\", \"TacklesForLoss\", \"InterceptionPass\", \"InterceptionReturn\", \"Fumbles\", "
-            			 + "\"FumblesLost\", \"FumblesForced\", \"AttemptsRush\", \"AttemptsPass\", \"AttemptsFG\", \"AttemptsOffenseXPKick\", "
-            			 + "\"AttemptsOffense2XP\", \"TDRush\", \"TDKickoffReturn\", \"TDPuntReturn\", \"TDFumbleReturn\", \"TDInterceptionReturn\","
-            			 + "\"TDMIscReturn\", \"PassCompletion\", \"MiscReturn\", \"MadeFG\", \"MadeOffensiveXPKick\", \"MadeOffensive2XP\", "
-            			 + "\"MadeDefensive2XP\", \"Safety\", \"Points\", \"Punts\", \"Kickoffs\", \"KickoffsOutOfBounds\", \"KickoffsOnside\", "
-            			 + "\"Sacks\", \"QBHurry\", \"PassBrokenUp\", \"KickPuntBlocked\", \"TDPass\", \"AttemptsDefense2XP\", \"ConvPass\","
-            			 + "\"Reception\", \"YardsReception\", \"TDReception\", \"KickReturn\", \"PuntReturn\", \"FumbleReturn\", \"Touchbacks\""
-            			 
-            			 + "FROM \"Game\" INNER JOIN (SELECT * FROM \"Player_Metrics_Gamewise\" INNER JOIN (SELECT * FROM \"Team\" INNER JOIN ("
-            			 + "SELECT * FROM \"Team_Yearwise\" INNER JOIN (SELECT * FROM \"Player_Yearwise\" INNER JOIN (SELECT\"PlayerId\" "
-            			 + "AS \"MainPlayerId\", * FROM \"Player\" WHERE \"FirstName\" LIKE '%s%%' AND \"LastName\" LIKE '%s%%') "
-            			 
-            			 + "AS player_data ON player_data. \"PlayerId\" = \"Player_Yearwise\".\"PlayerId\") AS player_data2 ON \"Team_Yearwise\"."
-            			 + "\"TeamYearId\" = player_data2. \"TeamYearId\") AS team_data ON \"Team\".\"TeamId\" = team_data. \"TeamId\") "
-            			 + "AS player_data3 ON player_data3. \"MainPlayerId\" = \"Player_Metrics_Gamewise\".\"PlayerId\") AS player_data4 ON "
-            			 + "\"Game\".\"GameId\" = player_data4. \"GameId\";"
-            			 , fname, lname);
-            }
- 
+
             // send statement to DBMS
             ResultSet result = stmt.executeQuery(sqlStatement);
             while (result.next()) {
-                result_str += "First Name: ";
-                result_str += result.getString("FirstName");
-                
+                try {
+                    result_str += "First Name: ";
+                    result_str += result.getString("FirstName");
+                } catch (Exception e) {
+                    result_str += "First Name: ";
+                    result_str += "NULL";
+                }
+
                 result_str += " | Last Name: ";
                 result_str += result.getString("LastName");
-                
+
                 result_str += " | Game ID: ";
-                result_str += result.getString("GameId");         
-                
+                result_str += result.getString("GameId");
+
                 result_str += " | Yards Rush: ";
                 result_str += result.getString("YardsRush");
-                
+
                 result_str += " | Yards Pass: ";
-                result_str += result.getString("YardsPass");
-                
+                try {
+                    result_str += result.getString("YardsPass");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Yards Kickoff Return: ";
-                result_str += result.getString("YardsKickoffReturn");
-                
+                try {
+                    result_str += result.getString("YardsKickoffReturn");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Yards Fumble Return: ";
-                result_str += result.getString("YardsFumbleReturn");
-                
+                try {
+                    result_str += result.getString("YardsFumbleReturn");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Yards Interception Return: ";
-                result_str += result.getString("YardsInterceptionReturn");
-                
+                try {
+                    result_str += result.getString("YardsInterceptionReturn");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Yards Misc: ";
-                result_str += result.getString("YardsMisc");
-                
+                try {
+                    result_str += result.getString("YardsMisc");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Yards Kickoff: ";
-                result_str += result.getString("YardsKickoff");
-                
+                try {
+                    result_str += result.getString("YardsKickoff");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Yards Tackle Loss: ";
-                result_str += result.getString("YardsTackleLoss");  
-            	
+                try {
+                    result_str += result.getString("YardsTackleLoss");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Yards Sack: ";
-                result_str += result.getString("YardsSack");
-                
+                try {
+                    result_str += result.getString("YardsSack");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Tackles Solo: ";
-                result_str += result.getString("TacklesSolo");
-                
+                try {
+                    result_str += result.getString("TacklesSolo");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Interception Pass: ";
-                result_str += result.getString("Interception Pass");
-                
+                try {
+                    result_str += result.getString("Interception Pass");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Interception Return: ";
-                result_str += result.getString("InterceptionReturn");
-                
+                try {
+                    result_str += result.getString("InterceptionReturn");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Fumbles: ";
-                result_str += result.getString("Fumbles");  
-                
+                try {
+                    result_str += result.getString("Fumbles");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Fumbles Lost: ";
-                result_str += result.getString("FumblesLost");
-                
+                try {
+                    result_str += result.getString("FumblesLost");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Fumbles Forced: ";
-                result_str += result.getString("FumblesForced");
-                
+                try {
+                    result_str += result.getString("FumblesForced");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Attempts Rush: ";
-                result_str += result.getString("AttemptsRush");
-                
+                try {
+                    result_str += result.getString("AttemptsRush");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Attempts Pass: ";
-                result_str += result.getString("Attempts Pass");
-                
+                try {
+                    result_str += result.getString("Attempts Pass");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Attempts Field Goal: ";
-                result_str += result.getString("AttemptsFG");
-                
+                try {
+                    result_str += result.getString("AttemptsFG");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Attempts Offense XP Kick: ";
-                result_str += result.getString("AttemptsOffenseXPKick");  
-                
+                try {
+                    result_str += result.getString("AttemptsOffenseXPKick");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Attempts Offense 2XP: ";
-                result_str += result.getString("AttemptsOffense2XP");
-                
+                try {
+                    result_str += result.getString("AttemptsOffense2XP");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | TD Rush: ";
-                result_str += result.getString("TDRush");
-                
+                try {
+                    result_str += result.getString("TDRush");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | TD Kickoff Return: ";
-                result_str += result.getString("TDKickoffReturn: ");
-                
+                try {
+                    result_str += result.getString("TDKickoffReturn: ");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | TD Punt Return: ";
-                result_str += result.getString("TDPuntReturn");
-                
+                try {
+                    result_str += result.getString("TDPuntReturn");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | TD Fumble Return: ";
-                result_str += result.getString("TDFumbleReturn");
-                
+                try {
+                    result_str += result.getString("TDFumbleReturn");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | TD Interception Return: ";
-                result_str += result.getString("TD Interception Return");
-                
+                try {
+                    result_str += result.getString("TD Interception Return");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | TD Misc Return: ";
-                result_str += result.getString("TDMIscReturn");
-                
+                try {
+                    result_str += result.getString("TDMIscReturn");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Pass Completion: ";
-                result_str += result.getString("Pass Completion");
-                
+                try {
+                    result_str += result.getString("Pass Completion");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | MiscReturn: ";
-                result_str += result.getString("MiscReturn");
-                
+                try {
+                    result_str += result.getString("MiscReturn");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | MadeFG: ";
-                result_str += result.getString("MadeFG");
-                
+                try {
+                    result_str += result.getString("MadeFG");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Made Offensive XP Kick: ";
-                result_str += result.getString("MadeOffensiveXPKick");  
-                
+                try {
+                    result_str += result.getString("MadeOffensiveXPKick");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Made Offensive 2XP: ";
-                result_str += result.getString("MadeOffensiveXP");
-                
+                try {
+                    result_str += result.getString("MadeOffensiveXP");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Made Defensive 2XP: ";
-                result_str += result.getString("MadeDefensive2XP"); 
-                
+                try {
+                    result_str += result.getString("MadeDefensive2XP");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Safety: ";
-                result_str += result.getString("Safety");
-                
+                try {
+                    result_str += result.getString("Safety");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Points: ";
-                result_str += result.getString("Points");
-                
+                try {
+                    result_str += result.getString("Points");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Punts: ";
-                result_str += result.getString("Punts");
-                
+                try {
+                    result_str += result.getString("Punts");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Kickoffs: ";
-                result_str += result.getString("Kickoffs");
-                
-                result_str += " | Kickoffs : ";
-                result_str += result.getString("Kickoffs");
-                
+                try {
+                    result_str += result.getString("Kickoffs");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Kickoffs out of Bounds: ";
-                result_str += result.getString("KickoffsOutOfBounts");
-                
+                try {
+                    result_str += result.getString("KickoffsOutOfBounts");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Kickoffs Onside: ";
-                result_str += result.getString("Kickoffs Onside");  
-                
+                try {
+                    result_str += result.getString("Kickoffs Onside");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Sacks: ";
-                result_str += result.getString("Sacks");
-                
+                try {
+                    result_str += result.getString("Sacks");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | QBHurry: ";
-                result_str += result.getString("QBHurry");  
-                
+                try {
+                    result_str += result.getString("QBHurry");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Pass Broken Up: ";
-                result_str += result.getString("Pass Broken Up");
-                
+                try {
+                    result_str += result.getString("Pass Broken Up");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Kick Punt Blocked: ";
-                result_str += result.getString("KickPuntBlocked");
-                
+                try {
+                    result_str += result.getString("KickPuntBlocked");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | TD Pass: ";
-                result_str += result.getString("TDPass");  
-                
+                try {
+                    result_str += result.getString("TDPass");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Attempts Defense 2XP: ";
-                result_str += result.getString("AttemptsDefense2XP");
-                
+                try {
+                    result_str += result.getString("AttemptsDefense2XP");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | ConvPass: ";
-                result_str += result.getString("ConvPass");  
-                
+                try {
+                    result_str += result.getString("ConvPass");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Reception: ";
-                result_str += result.getString("Reception");
-                
+                try {
+                    result_str += result.getString("Reception");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Yards Reception: ";
-                result_str += result.getString("YardsReception");
-                
+                try {
+                    result_str += result.getString("YardsReception");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | TD Reception: ";
-                result_str += result.getString("TDReception");
-                
+                try {
+                    result_str += result.getString("TDReception");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Kick Return: ";
-                result_str += result.getString("KickReturn");
-                
+                try {
+                    result_str += result.getString("KickReturn");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Punt Return: ";
-                result_str += result.getString("PuntReturn");  
-                
+                try {
+                    result_str += result.getString("PuntReturn");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Fumble Return: ";
-                result_str += result.getString("FumbleReturn");  
-                
+                try {
+                    result_str += result.getString("FumbleReturn");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += " | Touchbacks: ";
-                result_str += result.getString("Touchbacks");  
-                
+                try {
+                    result_str += result.getString("Touchbacks");
+                } catch (Exception e) {
+                    result_str += "NULL";
+                }
+
                 result_str += "\n";
             }
         } catch (Exception e) {
@@ -989,11 +1194,14 @@ public class jdbcpostgreSQL {
         System.out.println(gameDataFetcWithNameYear("Texas A&", 2013, conn));
         System.out.println(gameDataFetcWithNameYear("", 2013, conn));
         System.out.println(gameDataFetcWithNameYear("Texas A&", 0, conn));
-        System.out.println(gameDataFetcWithNameYear("", 0, conn));
+        // System.out.println(gameDataFetcWithNameYear("", 0, conn));
         System.out.println(gameDataFetcWithNameYear("Bazinga", 2003, conn));
 
         System.out.println(teamGameData("Texas A&M", "Clemson", 2005, conn));
         System.out.println(generalPlayer("Bryan", "C", conn));
+        System.out.println(generalPlayer("Baby", "Boy", conn));
+
+        System.out.println(playerMetricsData("Bryan", "C", 2012, conn));
 
         // general team
 
