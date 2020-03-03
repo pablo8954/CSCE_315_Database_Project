@@ -1377,12 +1377,12 @@ public class jdbcpostgreSQL extends Application {
         // END MAIN CODE
         //
 
-        try {
-            conn.close();
-            // JOptionPane.showMessageDialog(null, "Connection Closed.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Connection NOT Closed.");
-        }
+        // try {
+        // conn.close();
+        // // JOptionPane.showMessageDialog(null, "Connection Closed.");
+        // } catch (Exception e) {
+        // JOptionPane.showMessageDialog(null, "Connection NOT Closed.");
+        // }
 
     }
     // end backendmain
