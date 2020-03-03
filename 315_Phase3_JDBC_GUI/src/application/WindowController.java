@@ -172,56 +172,40 @@ public class WindowController {
 	
 	//get team name
 	public String getTeamName() {
-		String temp = teamName;
-		teamName = "";
-		return temp;
+		return teamName;
 	}
 	
 	//get conference name
 	public String getConferenceName() {
-		String temp = conferenceName;
-		conferenceName = "";
-		return temp;
+		return conferenceName;
 	}
 	
 	//get player name
 	public String getPlayerFirstName() {
-		String temp = playerFirstName;
-		playerFirstName = "";
-		return temp;
+		return playerFirstName;
 	}
 	
 	//get player name
 	public String getPlayerLastName() {
-		String temp = playerLastName;
-		playerLastName = "";
-		return temp;
+		return playerLastName;
 	}
 	
 	//get opposing team name
 	public String getOpposingTeamName() {
-		String temp = opposingTeam;
-		opposingTeam = "";
-		return temp;
+		return opposingTeam;
 	}
 	
 	//get stadium name
 	public String getStadiumName() {
-		String temp = stadiumName;
-		stadiumName = "";
-		return temp;
+		return stadiumName;
 	}
 	
 	public int getYear() {
-		int temp = year;
-		year = 0;
-		return temp;
+		return year;
 	}
 	
 	public String getTeamType() {
-		String temp = teamType;
-		teamType = "";
-		return temp;
+		return teamType;
 	}
 	
 	public void updateOutputTextArea(String result) {

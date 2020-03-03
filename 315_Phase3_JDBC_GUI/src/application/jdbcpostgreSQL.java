@@ -103,6 +103,7 @@ public class jdbcpostgreSQL extends Application{
 									result = gameDataFetcWithNameYear(teamName, year, conn);
 								}
 								else if(dataSelection.equals("Player")) {
+									System.out.println(controller.getPlayerFirstName());
 									if(controller.getYear() == 0) {
 										result = generalPlayer(controller.getPlayerFirstName(), controller.getPlayerLastName(),
 												conn);
@@ -1320,7 +1321,7 @@ public class jdbcpostgreSQL extends Application{
 
 
         // stadium test
-       // System.out.println(stadiumDataFetch("ASU", conn));
+        //System.out.println(stadiumDataFetch("ASU", conn));
 
        /* System.out.println(stadiumDataFetch("ASU", conn));
 
@@ -1344,6 +1345,8 @@ public class jdbcpostgreSQL extends Application{
         System.out.println(generalPlayer("Baby", "Boy", conn));
 
         System.out.println(playerMetricsData("Bryan", "C", 2012, conn));*/
+        
+        System.out.println(generalPlayer("Bryan", "C", conn));
 
         // general team
 
