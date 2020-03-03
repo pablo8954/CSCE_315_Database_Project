@@ -60,7 +60,7 @@ public class jdbcpostgreSQL extends Application{
 		controller = loader.getController();
 
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("Gay");
+		primaryStage.setTitle("College Football Data");
 		primaryStage.resizableProperty().setValue(Boolean.FALSE);
 		primaryStage.show();
 		
