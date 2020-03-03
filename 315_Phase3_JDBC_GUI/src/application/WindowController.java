@@ -37,6 +37,7 @@ public class WindowController {
 	
 	String dataSelection = "";
 	String teamName = "";
+	String teamType = "";
 	String conferenceName = "";
 	String playerFirstName = "";
 	String playerLastName = "";
@@ -142,6 +143,7 @@ public class WindowController {
 		teamName = controller.getTeamName();
 		opposingTeam = controller.getOpposingTeam();
 		year = controller.getYear();
+		teamType = controller.getTeamType();
 	}
 	
 	public void getResultsPressed() {
@@ -213,6 +215,12 @@ public class WindowController {
 	public int getYear() {
 		int temp = year;
 		year = 0;
+		return temp;
+	}
+	
+	public String getTeamType() {
+		String temp = teamType;
+		teamType = "";
 		return temp;
 	}
 	

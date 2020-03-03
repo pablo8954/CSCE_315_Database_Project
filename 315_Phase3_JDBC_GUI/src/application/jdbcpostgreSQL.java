@@ -115,6 +115,19 @@ public class jdbcpostgreSQL extends Application{
 								else if(dataSelection.equals("Stadium")) {
 									result = stadiumDataFetch(stadiumName, conn);
 								}
+								else if(dataSelection.equals("Team")) {
+									if(controller.getTeamType().equals("General")) {
+										result = generalTeam(controller.getTeamName(), conn);
+									}
+									else if(controller.getTeamType().equals("Game")) {
+										result = teamGameData(controller.getTeamName(), controller.getOpposingTeamName(), 
+												controller.getYear(), conn);
+									}
+									else if(controller.getTeamType().equals("Play")) {
+										result = teamPlayData(controller.getTeamName(), controller.getOpposingTeamName(), 
+												controller.getYear(), conn);
+									}
+								}
 								
 								controller.updateOutputTextArea(result);
 								System.out.println(result);

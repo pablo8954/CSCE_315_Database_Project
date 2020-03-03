@@ -148,5 +148,18 @@ public class TeamController {
 		s.close();
 		
 	}
+	
+	public String getTeamType() {
+		if(GeneralRadio.isSelected()) {
+			return "General";
+		}
+		else if(GameRadio.isSelected()) {
+			return "Game";
+		}
+		else if(PlayRadio.isSelected()) {
+			return "Play";
+		}
+		return "";
+	}
 
 }
