@@ -8,13 +8,27 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.PlayerController">
    <children>
-      <Pane maxHeight="200.0" maxWidth="400.0" minHeight="200.0" minWidth="400.0" prefHeight="200.0" prefWidth="400.0">
+      <Pane maxHeight="250.0" maxWidth="400.0" minHeight="250.0" minWidth="400.0" prefHeight="250.0" prefWidth="400.0">
          <children>
-            <VBox maxHeight="150.0" maxWidth="400.0" minHeight="150.0" minWidth="400.0" prefHeight="150.0" prefWidth="400.0">
+            <VBox maxHeight="250.0" maxWidth="400.0" minHeight="250.0" minWidth="400.0" prefHeight="250.0" prefWidth="400.0">
                <children>
                   <HBox maxHeight="50.0" maxWidth="400.0" minHeight="50.0" minWidth="400.0" prefHeight="50.0" prefWidth="400.0">
                      <children>
-                        <Label text="Player Name:">
+                        <Label text="First Name:">
+                           <HBox.margin>
+                              <Insets left="25.0" top="10.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="PlayerNameText1">
+                           <HBox.margin>
+                              <Insets left="33.0" top="10.0" />
+                           </HBox.margin>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox maxHeight="50.0" maxWidth="400.0" minHeight="50.0" minWidth="400.0" prefHeight="50.0" prefWidth="400.0">
+                     <children>
+                        <Label text="Last Name:">
                            <HBox.margin>
                               <Insets left="25.0" top="10.0" />
                            </HBox.margin>

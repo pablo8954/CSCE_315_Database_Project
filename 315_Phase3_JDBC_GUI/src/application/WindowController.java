@@ -25,8 +25,6 @@ public class WindowController {
 	@FXML
 	MenuItem gameItem;
 	@FXML
-	MenuItem playItem;
-	@FXML
 	MenuItem playerItem;
 	@FXML
 	MenuItem stadiumYearwiseItem;
@@ -84,12 +82,6 @@ public class WindowController {
 		GameController controller = loader.getController();
 		teamName = controller.getTeamName();
 		year = controller.getYear();
-	}
-	
-	public void playItemSelected() {
-		MenuButton m = mbutton;
-		MenuItem mitem = playItem;
-		m.setText(mitem.getText());
 	}
 	
 	
