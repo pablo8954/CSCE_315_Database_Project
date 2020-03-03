@@ -59,6 +59,7 @@ public class WindowController {
 		Scene scene = new Scene(root, 400, 150);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setTitle("Conference Data");
 		stage.showAndWait();
 		//Get the info from conference window
 		ConferenceController controller = loader.getController();
@@ -78,6 +79,7 @@ public class WindowController {
 		Scene scene = new Scene(root, 400, 150);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setTitle("Game Data");
 		stage.showAndWait();
 		//Get the info from conference window
 		GameController controller = loader.getController();
@@ -98,6 +100,7 @@ public class WindowController {
 		Scene scene = new Scene(root, 400, 250);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setTitle("Player Data");
 		stage.showAndWait();
 		//Get the info from conference window
 		PlayerController controller = loader.getController();
@@ -119,6 +122,7 @@ public class WindowController {
 		Scene scene = new Scene(root, 400, 100);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setTitle("Stadium Data");
 		stage.showAndWait();
 		//Get the info from conference window
 		StadiumController controller = loader.getController();
@@ -137,6 +141,7 @@ public class WindowController {
 		Scene scene = new Scene(root, 400, 250);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setTitle("Team Data");
 		stage.showAndWait();
 		//Get the info from conference window
 		TeamController controller = loader.getController();
