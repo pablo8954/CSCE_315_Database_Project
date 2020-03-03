@@ -97,10 +97,20 @@ public class jdbcpostgreSQL extends Application{
 								System.out.println(dataSelection + " selected");
 								String result = "";
 								if(dataSelection.equals("Conference")) {
-									result = ConfDataFetch(conferenceName, conn);
+									result = confDataFetch(conferenceName, conn);
 								}
 								else if(dataSelection.equals("Game")) {
 									result = gameDataFetcWithNameYear(teamName, year, conn);
+								}
+								else if(dataSelection.equals("Player")) {
+									if(controller.getYear() == 0) {
+										result = generalPlayer(controller.getPlayerFirstName(), controller.getPlayerLastName(),
+												conn);
+									}
+									else {
+										result = playerMetricsData(controller.getPlayerFirstName(), controller.getPlayerLastName(),
+												controller.getYear(), conn);
+									}
 								}
 								else if(dataSelection.equals("Stadium")) {
 									result = stadiumDataFetch(stadiumName, conn);
@@ -150,7 +160,7 @@ public class jdbcpostgreSQL extends Application{
              * specific year 3: only name is provided -> return game data pertaining to
              * specific team 4: no name or year inputs are provided -> return all game data
              * available
-             * 
+             *  
              */
 
             if (!name.equals("") && !(year < 2005 || year > 2013)) {
@@ -1295,12 +1305,12 @@ public class jdbcpostgreSQL extends Application{
         //
         // MAIN CODE
 
-<<<<<<< HEAD
+
         // stadium test
-        System.out.println(stadiumDataFetch("ASU", conn));
-=======
+       // System.out.println(stadiumDataFetch("ASU", conn));
+
        /* System.out.println(stadiumDataFetch("ASU", conn));
->>>>>>> frontend
+
         System.out.println(stadiumDataFetch("Shrey", conn));
 
         // general conference data
@@ -1311,19 +1321,16 @@ public class jdbcpostgreSQL extends Application{
         System.out.println(gameDataFetcWithNameYear("Texas A&", 2013, conn));
         System.out.println(gameDataFetcWithNameYear("", 2013, conn));
         System.out.println(gameDataFetcWithNameYear("Texas A&", 0, conn));
-<<<<<<< HEAD
+        
         // System.out.println(gameDataFetcWithNameYear("", 0, conn));
         System.out.println(gameDataFetcWithNameYear("Bazinga", 2003, conn));
-=======
         System.out.println(gameDataFetcWithNameYear("", 0, conn));
         System.out.println(gameDataFetcWithNameYear("Bazinga", 2003, conn));*/
->>>>>>> frontend
-
-        System.out.println(teamGameData("Texas A&M", "Clemson", 2005, conn));
+        /*System.out.println(teamGameData("Texas A&M", "Clemson", 2005, conn));
         System.out.println(generalPlayer("Bryan", "C", conn));
         System.out.println(generalPlayer("Baby", "Boy", conn));
 
-        System.out.println(playerMetricsData("Bryan", "C", 2012, conn));
+        System.out.println(playerMetricsData("Bryan", "C", 2012, conn));*/
 
         // general team
 

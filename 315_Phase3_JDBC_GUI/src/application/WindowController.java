@@ -42,7 +42,7 @@ public class WindowController {
 	String playerLastName = "";
 	String opposingTeam = "";
 	String stadiumName = "";
-	int year = 0;
+	int year = 0; 
 	boolean resultsRequested = false;
 	
 	//All functions below are for updating menu text for teams
@@ -170,36 +170,50 @@ public class WindowController {
 	
 	//get team name
 	public String getTeamName() {
-		return teamName;
+		String temp = teamName;
+		teamName = "";
+		return temp;
 	}
 	
 	//get conference name
 	public String getConferenceName() {
-		return conferenceName;
+		String temp = conferenceName;
+		conferenceName = "";
+		return temp;
 	}
 	
 	//get player name
 	public String getPlayerFirstName() {
-		return playerFirstName;
+		String temp = playerFirstName;
+		playerFirstName = "";
+		return temp;
 	}
 	
 	//get player name
 	public String getPlayerLastName() {
-		return playerLastName;
+		String temp = playerLastName;
+		playerLastName = "";
+		return temp;
 	}
 	
 	//get opposing team name
 	public String getOpposingTeamName() {
-		return opposingTeam;
+		String temp = opposingTeam;
+		opposingTeam = "";
+		return temp;
 	}
 	
 	//get stadium name
 	public String getStadiumName() {
-		return stadiumName;
+		String temp = stadiumName;
+		stadiumName = "";
+		return temp;
 	}
 	
 	public int getYear() {
-		return year;
+		int temp = year;
+		year = 0;
+		return temp;
 	}
 	
 	public void updateOutputTextArea(String result) {
