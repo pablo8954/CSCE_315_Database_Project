@@ -1,8 +1,20 @@
 package application;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
 import java.time.Year;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
+
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 //import java.sql.DriverManager;
 /*
@@ -10,7 +22,118 @@ Robert lightfoot
 CSCE 315
 9-25-2019
  */
-public class jdbcpostgreSQL {
+public class jdbcpostgreSQL extends Application{
+	
+	private static String dataSelection;
+	private static String teamName;
+	private static String playerFirstName;
+	private static String playerLastName;
+	private static String conferenceName;
+	private static String opposingTeam;
+	private static String stadiumName;
+	public static Connection conn;
+	private static int year;
+	public static boolean resultsRequested = false;
+	private static WindowController controller;
+	public static Stage mainStage;
+	
+	public void start(Stage primaryStage) throws IOException {
+		//Launch database connection
+		dbSetup my = new dbSetup();
+        // Building the connection
+        conn = null;
+        try {
+            Class.forName("org.postgresql.Driver");
+            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/ace_of_spades", my.user,
+                    my.pswd);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        } // end try catch
+          // JOptionPane.showMessageDialog(null, "Opened database successfully");
+        
+		FXMLLoader loader =  new FXMLLoader();
+		loader.setLocation(getClass().getResource("Window.fxml"));
+		Parent root = loader.load();
+		Scene scene = new Scene(root, 600, 800);
+		controller = loader.getController();
+
+		primaryStage.setScene(scene);
+		primaryStage.setTitle("Gay");
+		primaryStage.resizableProperty().setValue(Boolean.FALSE);
+		primaryStage.show();
+		
+		
+		
+		new Thread() {
+			public void run() {
+				//Keep waking up thread for duration of program
+				while(true) {
+					
+					try {
+						Thread.sleep(new Random().nextInt(1000));
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					Platform.runLater(new Runnable() {
+						
+						public void run() {
+							
+							resultsRequested = controller.getResultsRequested();
+							//If get results pushed
+							if(resultsRequested) {
+								dataSelection = controller.getDataSelection();
+								teamName = controller.getTeamName();
+								conferenceName = controller.getConferenceName();
+								playerFirstName = controller.getPlayerFirstName();
+								playerLastName = controller.getPlayerLastName();
+								opposingTeam = controller.getOpposingTeamName();
+								stadiumName = controller.getStadiumName();
+								year = controller.getYear();
+								
+								System.out.println(dataSelection + " selected");
+								String result = "";
+								if(dataSelection.equals("Conference")) {
+									result = ConfDataFetch(conferenceName, conn);
+								}
+								else if(dataSelection.equals("Game")) {
+									result = gameDataFetcWithNameYear(teamName, year, conn);
+								}
+								else if(dataSelection.equals("Stadium")) {
+									result = stadiumDataFetch(stadiumName, conn);
+								}
+								
+								controller.updateOutputTextArea(result);
+								System.out.println(result);
+								
+								if(controller.generateTextFile()) {
+									//write to file
+									File generatedFile = new File("results.txt");
+									
+									try {
+										generatedFile.createNewFile();
+										FileWriter writer = new FileWriter(generatedFile);
+										writer.write(result);
+										writer.close();
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}
+							}
+						}
+					});
+				}
+			}
+		}.start();
+		
+		
+
+		
+	}
 
     public static String gameDataFetcWithNameYear(String name, Integer year, Connection conn) {
         String result_str = "";
@@ -1165,25 +1288,19 @@ public class jdbcpostgreSQL {
     }
 
     public static void main(String args[]) {
-        dbSetup my = new dbSetup();
-        // Building the connection
-        Connection conn = null;
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/ace_of_spades", my.user,
-                    my.pswd);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        } // end try catch
-          // JOptionPane.showMessageDialog(null, "Opened database successfully");
+        
+        launch(args);
+        
 
         //
         // MAIN CODE
 
+<<<<<<< HEAD
         // stadium test
         System.out.println(stadiumDataFetch("ASU", conn));
+=======
+       /* System.out.println(stadiumDataFetch("ASU", conn));
+>>>>>>> frontend
         System.out.println(stadiumDataFetch("Shrey", conn));
 
         // general conference data
@@ -1194,8 +1311,13 @@ public class jdbcpostgreSQL {
         System.out.println(gameDataFetcWithNameYear("Texas A&", 2013, conn));
         System.out.println(gameDataFetcWithNameYear("", 2013, conn));
         System.out.println(gameDataFetcWithNameYear("Texas A&", 0, conn));
+<<<<<<< HEAD
         // System.out.println(gameDataFetcWithNameYear("", 0, conn));
         System.out.println(gameDataFetcWithNameYear("Bazinga", 2003, conn));
+=======
+        System.out.println(gameDataFetcWithNameYear("", 0, conn));
+        System.out.println(gameDataFetcWithNameYear("Bazinga", 2003, conn));*/
+>>>>>>> frontend
 
         System.out.println(teamGameData("Texas A&M", "Clemson", 2005, conn));
         System.out.println(generalPlayer("Bryan", "C", conn));

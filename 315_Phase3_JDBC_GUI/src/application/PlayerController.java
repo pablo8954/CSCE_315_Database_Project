@@ -10,8 +10,11 @@ import javafx.stage.Stage;
 public class PlayerController {
 	
 	@FXML 
-	TextField PlayerNameText;
-	String playerName;
+	TextField FirstNameText;
+	String firstName;
+	@FXML 
+	TextField LastNameText;
+	String lastName;
 	@FXML 
 	MenuButton yearButton;
 	@FXML 
@@ -39,8 +42,11 @@ public class PlayerController {
 	@FXML 
 	Button OKButton;
 	
-	public String getPlayerName() {
-		return playerName;
+	public String getFirstName() {
+		return firstName;
+	}
+	public String getLastName() {
+		return lastName;
 	}
 	
 	public int getYear() {
@@ -113,7 +119,8 @@ public class PlayerController {
 	}
 	
 	public void OKPressed() {
-		playerName = PlayerNameText.getText();
+		firstName = FirstNameText.getText();
+		lastName = LastNameText.getText();
 		opposingTeam = OpposingTeamText.getText();
 		Stage s = (Stage) OKButton.getScene().getWindow();
 		s.close();

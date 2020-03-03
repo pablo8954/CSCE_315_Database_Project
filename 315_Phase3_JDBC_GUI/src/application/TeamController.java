@@ -4,14 +4,20 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class TeamController {
 	
+	@FXML
+	RadioButton GeneralRadio;
+	@FXML
+	RadioButton GameRadio;
+	@FXML
+	RadioButton PlayRadio;
 	@FXML 
 	TextField TeamNameText;
-	String teamName;
 	@FXML 
 	MenuButton yearButton;
 	@FXML 
@@ -32,12 +38,35 @@ public class TeamController {
 	MenuItem item2012;
 	@FXML 
 	MenuItem item2013;
-	int year;
 	@FXML 
 	TextField OpposingTeamText;
-	String opposingTeam;
 	@FXML 
 	Button OKButton;
+	String teamName;
+	String opposingTeam;
+	int year;
+	String type = "General";
+	
+	public void generalRadioSelected() {
+		GeneralRadio.setSelected(true);
+		GameRadio.setSelected(false);
+		PlayRadio.setSelected(false);
+		type = "General";
+	}
+	
+	public void gameRadioSelected() {
+		GeneralRadio.setSelected(false);
+		GameRadio.setSelected(true);
+		PlayRadio.setSelected(false);
+		type = "Game";
+	}
+	
+	public void playRadioSelected() {
+		GeneralRadio.setSelected(false);
+		GameRadio.setSelected(false);
+		PlayRadio.setSelected(true);
+		type = "Play";
+	}
 	
 	public String getTeamName() {
 		return teamName;
