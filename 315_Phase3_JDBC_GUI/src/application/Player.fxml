@@ -19,7 +19,7 @@
                               <Insets left="25.0" top="10.0" />
                            </HBox.margin>
                         </Label>
-                        <TextField fx:id="PlayerNameText1">
+                        <TextField fx:id="FirstNameText">
                            <HBox.margin>
                               <Insets left="33.0" top="10.0" />
                            </HBox.margin>
@@ -33,7 +33,7 @@
                               <Insets left="25.0" top="10.0" />
                            </HBox.margin>
                         </Label>
-                        <TextField fx:id="PlayerNameText">
+                        <TextField fx:id="LastNameText">
                            <HBox.margin>
                               <Insets left="33.0" top="10.0" />
                            </HBox.margin>

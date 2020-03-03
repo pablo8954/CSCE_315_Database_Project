@@ -73,7 +73,6 @@ public class jdbcpostgreSQL extends Application{
 					
 					try {
 						Thread.sleep(new Random().nextInt(1000));
-						System.out.println("new thread");
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

@@ -74,7 +74,7 @@ public class WindowController {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("Game.fxml"));
 		Parent root = loader.load();
-		Scene scene = new Scene(root, 400, 200);
+		Scene scene = new Scene(root, 400, 150);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.showAndWait();
@@ -94,7 +94,7 @@ public class WindowController {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("Player.fxml"));
 		Parent root = loader.load();
-		Scene scene = new Scene(root, 400, 200);
+		Scene scene = new Scene(root, 400, 250);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.showAndWait();
@@ -133,7 +133,7 @@ public class WindowController {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("Team.fxml"));
 		Parent root = loader.load();
-		Scene scene = new Scene(root, 400, 200);
+		Scene scene = new Scene(root, 400, 250);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.showAndWait();

@@ -31,7 +31,6 @@
                                                   <items>
                                                     <MenuItem fx:id="confItem" mnemonicParsing="false" onAction="#confItemSelected" text="Conference" />
                                                       <MenuItem fx:id="gameItem" mnemonicParsing="false" onAction="#gameItemSelected" text="Game" />
-                                                      <MenuItem fx:id="playItem" mnemonicParsing="false" onAction="#playItemSelected" text="Play" />
                                                       <MenuItem fx:id="playerItem" mnemonicParsing="false" onAction="#playerItemSelected" text="Player" />
                                                       <MenuItem fx:id="stadiumYearwiseItem" mnemonicParsing="false" onAction="#satdiumYearwiseItemSelected" text="Stadium" />
                                                       <MenuItem fx:id="teamItem" mnemonicParsing="false" onAction="#teamItemSelected" text="Team" />
