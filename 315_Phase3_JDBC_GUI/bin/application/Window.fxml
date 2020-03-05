@@ -59,7 +59,7 @@
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </CheckBox>
-                              <Label text="Label">
+                              <Label fx:id="userInputLabel" text="Label">
                                  <VBox.margin>
                                     <Insets top="25.0" />
                                  </VBox.margin>
