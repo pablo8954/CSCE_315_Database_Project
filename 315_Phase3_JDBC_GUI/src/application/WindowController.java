@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
@@ -34,6 +35,8 @@ public class WindowController {
 	TextArea outputTextArea;
 	@FXML
 	CheckBox generateTextFileCheckBox;
+	@FXML 
+	Label userInputLabel;
 	
 	String dataSelection = "";
 	String teamName = "";
@@ -65,6 +68,15 @@ public class WindowController {
 		ConferenceController controller = loader.getController();
 		conferenceName = controller.getConferenceName();
 		year = controller.getYear();
+		//Update the userInputLabel
+		String partOne = "Requesting data for " + conferenceName;
+		String partTwo = " in " + year;
+		if(year == 0) {
+			userInputLabel.setText(partOne);
+		}
+		else {
+			userInputLabel.setText(partOne + partTwo);
+		}
 	}
 	
 	public void gameItemSelected() throws IOException {
