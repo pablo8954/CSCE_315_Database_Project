@@ -31,7 +31,6 @@
                                                   <items>
                                                     <MenuItem fx:id="confItem" mnemonicParsing="false" onAction="#confItemSelected" text="Conference" />
                                                       <MenuItem fx:id="gameItem" mnemonicParsing="false" onAction="#gameItemSelected" text="Game" />
-                                                      <MenuItem fx:id="playItem" mnemonicParsing="false" onAction="#playItemSelected" text="Play" />
                                                       <MenuItem fx:id="playerItem" mnemonicParsing="false" onAction="#playerItemSelected" text="Player" />
                                                       <MenuItem fx:id="stadiumYearwiseItem" mnemonicParsing="false" onAction="#satdiumYearwiseItemSelected" text="Stadium" />
                                                       <MenuItem fx:id="teamItem" mnemonicParsing="false" onAction="#teamItemSelected" text="Team" />
@@ -40,7 +39,7 @@
                                                       <Insets top="30.0" />
                                                    </HBox.margin>
                                                 </MenuButton>
-                                                <Button mnemonicParsing="false" text="Generate Results">
+                                                <Button fx:id="getResultsButton" mnemonicParsing="false" onAction="#getResultsPressed" text="Generate Results">
                                                    <HBox.margin>
                                                       <Insets left="10.0" top="30.0" />
                                                    </HBox.margin>
@@ -55,7 +54,7 @@
                         </VBox>
                         <VBox maxHeight="300.0" maxWidth="230.0" minHeight="300.0" minWidth="230.0" prefHeight="300.0" prefWidth="230.0">
                            <children>
-                              <CheckBox mnemonicParsing="false" text="Generate Text File">
+                              <CheckBox fx:id="generateTextFileCheckBox" mnemonicParsing="false" text="Generate Text File">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -65,7 +64,7 @@
                   </HBox>
                   <HBox maxHeight="450.0" maxWidth="480.0" minHeight="450.0" minWidth="480.0" prefHeight="450.0" prefWidth="480.0">
                      <children>
-                        <TextArea editable="false" maxHeight="450.0" maxWidth="480.0" minHeight="450.0" minWidth="480.0" prefHeight="450.0" prefWidth="480.0" />
+                        <TextArea fx:id="outputTextArea" editable="false" maxHeight="450.0" maxWidth="480.0" minHeight="450.0" minWidth="480.0" prefHeight="450.0" prefWidth="480.0" />
                      </children></HBox>
                </children>
             </VBox>

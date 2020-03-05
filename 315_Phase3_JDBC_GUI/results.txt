@@ -1,0 +1,14 @@
+Home Team Name: Arkansas | Away Team Name: Texas A&M | Date: 2013-09-28 | Attendance: 72613 | Duration: 195 | Stadium: Donald W. Reynolds Razorback Stadium
+Home Team Name: LSU | Away Team Name: Texas A&M | Date: 2013-11-23 | Attendance: 92949 | Duration: 228 | Stadium: Tiger Stadium
+Home Team Name: Mississippi | Away Team Name: Texas A&M | Date: 2013-10-12 | Attendance: 60950 | Duration: 232 | Stadium: Vaught-Hemingway Stadium
+Home Team Name: Missouri | Away Team Name: Texas A&M | Date: 2013-11-30 | Attendance: 67124 | Duration: 193 | Stadium: Faurot Field
+Home Team Name: Oklahoma | Away Team Name: Texas A&M | Date: 2013-01-04 | Attendance: 87025 | Duration: 211 | Stadium: Cowboys Stadium
+Home Team Name: Texas A&M | Away Team Name: Alabama | Date: 2013-09-14 | Attendance: 87596 | Duration: 215 | Stadium: Kyle Field
+Home Team Name: Texas A&M | Away Team Name: Auburn | Date: 2013-10-19 | Attendance: 87165 | Duration: 226 | Stadium: Kyle Field
+Home Team Name: Texas A&M | Away Team Name: Duke | Date: 2013-12-31 | Attendance: 67946 | Duration: 219 | Stadium: Georgia Dome
+Home Team Name: Texas A&M | Away Team Name: Mississippi State | Date: 2013-11-09 | Attendance: 88504 | Duration: 233 | Stadium: Kyle Field
+Home Team Name: Texas A&M | Away Team Name: Rice | Date: 2013-08-31 | Attendance: 86686 | Duration: 212 | Stadium: Kyle Field
+Home Team Name: Texas A&M | Away Team Name: Sam Houston State | Date: 2013-09-07 | Attendance: 86800 | Duration: 204 | Stadium: Kyle Field
+Home Team Name: Texas A&M | Away Team Name: SMU | Date: 2013-09-21 | Attendance: 86542 | Duration: 217 | Stadium: Kyle Field
+Home Team Name: Texas A&M | Away Team Name: UTEP | Date: 2013-11-02 | Attendance: 87126 | Duration: 186 | Stadium: Kyle Field
+Home Team Name: Texas A&M | Away Team Name: Vanderbilt | Date: 2013-10-26 | Attendance: 86584 | Duration: 212 | Stadium: Kyle Field

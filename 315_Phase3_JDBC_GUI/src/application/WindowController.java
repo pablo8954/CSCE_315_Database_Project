@@ -6,8 +6,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -15,19 +18,33 @@ public class WindowController {
 	
 	@FXML 
 	MenuButton mbutton; //Table 1
+	@FXML 
+	Button getResultsButton;
 	@FXML
 	MenuItem confItem;
 	@FXML
 	MenuItem gameItem;
-	@FXML
-	MenuItem playItem;
 	@FXML
 	MenuItem playerItem;
 	@FXML
 	MenuItem stadiumYearwiseItem;
 	@FXML
 	MenuItem teamItem;
+	@FXML 
+	TextArea outputTextArea;
+	@FXML
+	CheckBox generateTextFileCheckBox;
 	
+	String dataSelection = "";
+	String teamName = "";
+	String teamType = "";
+	String conferenceName = "";
+	String playerFirstName = "";
+	String playerLastName = "";
+	String opposingTeam = "";
+	String stadiumName = "";
+	int year = 0; 
+	boolean resultsRequested = false;
 	
 	//All functions below are for updating menu text for teams
 	public void confItemSelected() throws IOException {
@@ -42,13 +59,12 @@ public class WindowController {
 		Scene scene = new Scene(root, 400, 150);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setTitle("Conference Data");
 		stage.showAndWait();
 		//Get the info from conference window
 		ConferenceController controller = loader.getController();
-		String h = controller.getConferenceName();
-		System.out.println(h);
-		int year = controller.getYear();
-		System.out.println(year);
+		conferenceName = controller.getConferenceName();
+		year = controller.getYear();
 	}
 	
 	public void gameItemSelected() throws IOException {
@@ -60,22 +76,15 @@ public class WindowController {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("Game.fxml"));
 		Parent root = loader.load();
-		Scene scene = new Scene(root, 400, 200);
+		Scene scene = new Scene(root, 400, 150);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setTitle("Game Data");
 		stage.showAndWait();
 		//Get the info from conference window
 		GameController controller = loader.getController();
-		String h = controller.getTeamName();
-		System.out.println(h);
-		int year = controller.getYear();
-		System.out.println(year);
-	}
-	
-	public void playItemSelected() {
-		MenuButton m = mbutton;
-		MenuItem mitem = playItem;
-		m.setText(mitem.getText());
+		teamName = controller.getTeamName();
+		year = controller.getYear();
 	}
 	
 	
@@ -88,18 +97,17 @@ public class WindowController {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("Player.fxml"));
 		Parent root = loader.load();
-		Scene scene = new Scene(root, 400, 200);
+		Scene scene = new Scene(root, 400, 250);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setTitle("Player Data");
 		stage.showAndWait();
 		//Get the info from conference window
 		PlayerController controller = loader.getController();
-		String h = controller.getPlayerName();
-		System.out.println(h);
-		String t = controller.getOpposingTeam();
-		System.out.println(t);
-		int year = controller.getYear();
-		System.out.println(year);
+		playerFirstName = controller.getFirstName();
+		playerLastName = controller.getLastName();
+		opposingTeam = controller.getOpposingTeam();
+		year = controller.getYear();
 	}
 	
 	public void satdiumYearwiseItemSelected() throws IOException {
@@ -114,11 +122,11 @@ public class WindowController {
 		Scene scene = new Scene(root, 400, 100);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setTitle("Stadium Data");
 		stage.showAndWait();
 		//Get the info from conference window
 		StadiumController controller = loader.getController();
-		String h = controller.getStadiumName();
-		System.out.println(h);
+		stadiumName = controller.getStadiumName();
 	}
 
 	public void teamItemSelected() throws IOException {
@@ -130,18 +138,95 @@ public class WindowController {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("Team.fxml"));
 		Parent root = loader.load();
-		Scene scene = new Scene(root, 400, 200);
+		Scene scene = new Scene(root, 400, 250);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setTitle("Team Data");
 		stage.showAndWait();
 		//Get the info from conference window
 		TeamController controller = loader.getController();
-		String h = controller.getTeamName();
-		System.out.println(h);
-		String t = controller.getOpposingTeam();
-		System.out.println(t);
-		int year = controller.getYear();
-		System.out.println(year);
+		teamName = controller.getTeamName();
+		opposingTeam = controller.getOpposingTeam();
+		year = controller.getYear();
+		teamType = controller.getTeamType();
+	}
+	
+	public void getResultsPressed() {
+		resultsRequested = true;
+	}
+	
+	public void resetResultsRequested() {
+		resultsRequested = false;
+	}
+	
+	public boolean getResultsRequested() {
+		boolean result = resultsRequested;
+		resultsRequested = false;
+		return result;
+	}
+	
+	public boolean generateTextFile() {
+		return generateTextFileCheckBox.isSelected();
+	}
+	
+	//get data selection
+	public String getDataSelection() {
+		dataSelection = mbutton.getText();
+		return dataSelection;
+	}
+	
+	//get team name
+	public String getTeamName() {
+		return teamName;
+	}
+	
+	//get conference name
+	public String getConferenceName() {
+		return conferenceName;
+	}
+	
+	//get player name
+	public String getPlayerFirstName() {
+		return playerFirstName;
+	}
+	
+	//get player name
+	public String getPlayerLastName() {
+		return playerLastName;
+	}
+	
+	//get opposing team name
+	public String getOpposingTeamName() {
+		return opposingTeam;
+	}
+	
+	//get stadium name
+	public String getStadiumName() {
+		return stadiumName;
+	}
+	
+	public int getYear() {
+		return year;
+	}
+	
+	public String getTeamType() {
+		return teamType;
+	}
+	
+	public void updateOutputTextArea(String result) {
+		outputTextArea.setEditable(true);
+		outputTextArea.setText(result);
+		outputTextArea.setEditable(false);
+	    dataSelection = "";
+		teamName = "";
+		teamType = "";
+		conferenceName = "";
+		playerFirstName = "";
+		playerLastName = "";
+		opposingTeam = "";
+		stadiumName = "";
+		year = 0; 
+		
 	}
 
 }

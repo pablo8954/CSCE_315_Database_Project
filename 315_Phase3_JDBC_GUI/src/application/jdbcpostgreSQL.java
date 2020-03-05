@@ -1,8 +1,21 @@
 package application;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
 import java.time.Year;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
+
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 //import java.sql.DriverManager;
 /*
@@ -10,7 +23,130 @@ Robert lightfoot
 CSCE 315
 9-25-2019
  */
-public class jdbcpostgreSQL {
+public class jdbcpostgreSQL extends Application {
+
+    private static String dataSelection;
+    private static String teamName;
+    private static String playerFirstName;
+    private static String playerLastName;
+    private static String conferenceName;
+    private static String opposingTeam;
+    private static String stadiumName;
+    public static Connection conn;
+    private static int year;
+    public static boolean resultsRequested = false;
+    private static WindowController controller;
+    public static Stage mainStage;
+
+    public void start(Stage primaryStage) throws IOException {
+        // Launch database connection
+        dbSetup my = new dbSetup();
+        // Building the connection
+        conn = null;
+        try {
+            Class.forName("org.postgresql.Driver");
+            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/ace_of_spades", my.user,
+                    my.pswd);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        } // end try catch
+          // JOptionPane.showMessageDialog(null, "Opened database successfully");
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("Window.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root, 600, 800);
+        controller = loader.getController();
+
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("College Football Data");
+        primaryStage.resizableProperty().setValue(Boolean.FALSE);
+        primaryStage.show();
+
+        new Thread() {
+            public void run() {
+                // Keep waking up thread for duration of program
+                while (true) {
+
+                    try {
+                        Thread.sleep(new Random().nextInt(1000));
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+                    Platform.runLater(new Runnable() {
+
+                        public void run() {
+
+                            resultsRequested = controller.getResultsRequested();
+                            // If get results pushed
+                            if (resultsRequested) {
+                                dataSelection = controller.getDataSelection();
+                                teamName = controller.getTeamName();
+                                conferenceName = controller.getConferenceName();
+                                playerFirstName = controller.getPlayerFirstName();
+                                playerLastName = controller.getPlayerLastName();
+                                opposingTeam = controller.getOpposingTeamName();
+                                stadiumName = controller.getStadiumName();
+                                year = controller.getYear();
+
+                                System.out.println(dataSelection + " selected");
+                                String result = "";
+                                if (dataSelection.equals("Conference")) {
+                                    result = confDataFetch(conferenceName, conn);
+                                } else if (dataSelection.equals("Game")) {
+                                    result = gameDataFetcWithNameYear(teamName, year, conn);
+                                } else if (dataSelection.equals("Player")) {
+                                    System.out.println(controller.getPlayerFirstName());
+                                    if (controller.getYear() == 0) {
+                                        result = generalPlayer(controller.getPlayerFirstName(),
+                                                controller.getPlayerLastName(), conn);
+                                    } else {
+                                        result = playerMetricsData(controller.getPlayerFirstName(),
+                                                controller.getPlayerLastName(), controller.getYear(), conn);
+                                    }
+                                } else if (dataSelection.equals("Stadium")) {
+                                    result = stadiumDataFetch(stadiumName, conn);
+                                } else if (dataSelection.equals("Team")) {
+                                    if (controller.getTeamType().equals("General")) {
+                                        result = generalTeam(controller.getTeamName(), conn);
+                                    } else if (controller.getTeamType().equals("Game")) {
+                                        result = teamGameData(controller.getTeamName(),
+                                                controller.getOpposingTeamName(), controller.getYear(), conn);
+                                    } else if (controller.getTeamType().equals("Play")) {
+                                        result = teamPlayData(controller.getTeamName(),
+                                                controller.getOpposingTeamName(), controller.getYear(), conn);
+                                    }
+                                }
+
+                                controller.updateOutputTextArea(result);
+                                System.out.println(result);
+
+                                if (controller.generateTextFile()) {
+                                    // write to file
+                                    File generatedFile = new File("results.txt");
+
+                                    try {
+                                        generatedFile.createNewFile();
+                                        FileWriter writer = new FileWriter(generatedFile);
+                                        writer.write(result);
+                                        writer.close();
+                                    } catch (IOException e) {
+                                        // TODO Auto-generated catch block
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }.start();
+
+    }
 
     public static String gameDataFetcWithNameYear(String name, Integer year, Connection conn) {
         String result_str = "";
@@ -31,8 +167,7 @@ public class jdbcpostgreSQL {
              */
 
             if (!name.equals("") && !(year < 2005 || year > 2013)) {
-                sqlStmt = String.format(
-                        "SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\","
+                sqlStmt = String.format("SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\","
                         + "\"StadiumName\",\"Attendance\",\"Duration\" FROM\"Stadium_Yearwise\" "
                         + "INNER JOIN(SELECT\"Team\" .\"TeamName\" AS\"AwayTeamName\",*FROM\"Team\" "
                         + "INNER JOIN(SELECT\"TeamName\" AS\"HomeTeamName\",*FROM\"Team\" INNER JOIN"
@@ -40,38 +175,34 @@ public class jdbcpostgreSQL {
                         + "(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')OR\"AwayTeamId\"="
                         + "(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')))AS game_data ON\"TeamId\"="
                         + "\"HomeTeamId\")AS team1_data ON\"Team\" .\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" ."
-                        + "\"StadiumId\"=team2_data.\"StadiumId\";",
-                        year.toString(), name, name);
-                
+                        + "\"StadiumId\"=team2_data.\"StadiumId\";", year.toString(), name, name);
+
             } else if (name.equals("") && !(year < 2005 || year > 2013)) {
-                sqlStmt = String.format(
-                        "SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\","
+                sqlStmt = String.format("SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\","
                         + "\"Attendance\",\"Duration\" FROM\"Stadium_Yearwise\" INNER JOIN(SELECT\"Team\" "
                         + ".\"TeamName\" AS\"AwayTeamName\",*FROM\"Team\" INNER JOIN(SELECT\"TeamName\" AS"
                         + "\"HomeTeamName\",*FROM\"Team\" INNER JOIN(SELECT*FROM\"Game\" WHERE EXTRACT"
                         + "(YEAR FROM \"Date\")=%s)AS game_data ON\"TeamId\"=\"HomeTeamId\")AS team1_data ON\"Team\" "
                         + ".\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";",
                         year.toString());
-                
+
             } else if (!name.equals("") && (year < 2005 || year > 2013)) {
                 sqlStmt = String.format(
                         "SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\",\"Attendance\","
-                        + "\"Duration\" FROM\"Stadium_Yearwise\" INNER JOIN(SELECT\"Team\" .\"TeamName\" AS\"AwayTeamName\","
-                        + "*FROM\"Team\" INNER JOIN(SELECT\"TeamName\" AS\"HomeTeamName\",*FROM\"Team\" INNER JOIN(SELECT*FROM\"Game\" "
-                        + "WHERE (\"HomeTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%') OR "
-                        + "\"AwayTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')))AS game_data ON"
-                        + "\"TeamId\"=\"HomeTeamId\")AS team1_data ON\"Team\" .\"TeamId\"=\"AwayTeamId\")AS team2_data ON"
-                        + "\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";",
+                                + "\"Duration\" FROM\"Stadium_Yearwise\" INNER JOIN(SELECT\"Team\" .\"TeamName\" AS\"AwayTeamName\","
+                                + "*FROM\"Team\" INNER JOIN(SELECT\"TeamName\" AS\"HomeTeamName\",*FROM\"Team\" INNER JOIN(SELECT*FROM\"Game\" "
+                                + "WHERE (\"HomeTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%') OR "
+                                + "\"AwayTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')))AS game_data ON"
+                                + "\"TeamId\"=\"HomeTeamId\")AS team1_data ON\"Team\" .\"TeamId\"=\"AwayTeamId\")AS team2_data ON"
+                                + "\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";",
                         name, name);
             } else if (name.equals("") && (year < 2005 || year > 2013)) {
-                sqlStmt = String.format(
-                        "SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\","
+                sqlStmt = String.format("SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\","
                         + "\"Attendance\",\"Duration\" FROM\"Stadium_Yearwise\" INNER JOIN(SELECT\"Team\" ."
                         + "\"TeamName\" AS\"AwayTeamName\",*FROM\"Team\" INNER JOIN(SELECT\"TeamName\" AS\"HomeTeamName\","
                         + "*FROM\"Team\" INNER JOIN(SELECT*FROM\"Game\")AS game_data ON\"TeamId\"=\"HomeTeamId\")AS team1_data "
                         + "ON\"Team\" .\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" .\"StadiumId\"=team2_data"
-                        + ".\"StadiumId\";",
-                        year.toString(), name, name);
+                        + ".\"StadiumId\";", year.toString(), name, name);
             }
 
             ResultSet result = stmt.executeQuery(sqlStmt);
@@ -107,13 +238,11 @@ public class jdbcpostgreSQL {
             // create a statement object
             Statement stmt = conn.createStatement();
             // create an SQL statement
-            String sqlStatement = String.format(
-                    "SELECT DISTINCT "
-                    + "\"StadiumName\",\"StadiumSurface\",\"StadiumCity\",\"StadiumState\","
-                    + "\"StadiumCapacity\",\"StadiumYearOpened\" FROM \"Stadium_Yearwise\" WHERE"
-                    + " \"StadiumId\" = ( SELECT DISTINCT \"StadiumId\" FROM \"Stadium_Yearwise\" WHERE "
-                    + "\"StadiumName\" LIKE '%s%%');",
-                    name);
+            String sqlStatement = String
+                    .format("SELECT DISTINCT " + "\"StadiumName\",\"StadiumSurface\",\"StadiumCity\",\"StadiumState\","
+                            + "\"StadiumCapacity\",\"StadiumYearOpened\" FROM \"Stadium_Yearwise\" WHERE"
+                            + " \"StadiumId\" = ( SELECT DISTINCT \"StadiumId\" FROM \"Stadium_Yearwise\" WHERE "
+                            + "\"StadiumName\" LIKE '%s%%');", name);
             // send statement to DBMS
             ResultSet result = stmt.executeQuery(sqlStatement);
             while (result.next()) {
@@ -147,12 +276,10 @@ public class jdbcpostgreSQL {
             // create a statement object
             Statement stmt = conn.createStatement();
             // create an SQL statement
-            String sqlStatement = String.format(
-                    "SELECT DISTINCT \"Subdivision\", \"ConferenceName\" "
+            String sqlStatement = String.format("SELECT DISTINCT \"Subdivision\", \"ConferenceName\" "
                     + "FROM \"Conference_Yearwise\" WHERE \"ConfId\" = "
                     + "( SELECT DISTINCT \"ConfId\" FROM \"Conference_Yearwise\" WHERE "
-                    + "\"ConferenceName\" LIKE '%s%%');",
-                    name);
+                    + "\"ConferenceName\" LIKE '%s%%');", name);
             // send statement to DBMS
             ResultSet result = stmt.executeQuery(sqlStatement);
             while (result.next()) {
@@ -180,14 +307,12 @@ public class jdbcpostgreSQL {
             Statement stmt = conn.createStatement();
             String sqlStmt = "";
 
-            sqlStmt = String.format(
-                    "SELECT DISTINCT \"TeamName\", \"AverageAttendance\", "
+            sqlStmt = String.format("SELECT DISTINCT \"TeamName\", \"AverageAttendance\", "
                     + "\"ConferenceName\", \"Subdivision\", \"Conference_Yearwise\".\"Year\" FROM "
                     + "\"Conference_Yearwise\" INNER JOIN (SELECT * FROM \"Team_Yearwise\" "
                     + "INNER JOIN (SELECT * FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') "
                     + "AS Team_Data_Inner ON Team_Data_Inner.\"TeamId\" = \"Team_Yearwise\".\"TeamId\") "
-                    + "AS Team_Data ON \"Conference_Yearwise\".\"ConfYearId\"=Team_Data.\"ConfYearId\";",
-                    name);
+                    + "AS Team_Data ON \"Conference_Yearwise\".\"ConfYearId\"=Team_Data.\"ConfYearId\";", name);
 
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
@@ -234,7 +359,7 @@ public class jdbcpostgreSQL {
              */
 
             if (!team.equals("") && !awayteam.equals("") && !(year < 2005 || year > 2013)) {
-            	 JOptionPane.showMessageDialog(null, "First");
+                JOptionPane.showMessageDialog(null, "First");
                 sqlStmt = String.format(
                         "SELECT DISTINCT \"HomeTeamName\", \"AwayTeamName\", \"Result\" AS \"Result for Team 1\", \"YardsPass\", \"YardsKickoffReturn\", \"YardsPuntReturn\", "
                                 + "\"YardsFumbleReturn\", \"YardsInterceptionReturn\",\"YardsMiscReturn\", \"YardsPunt\", \"YardsKickoff\", \"YardsTackleLoss\", \"YardsSack\", \"YardsPenalty\", "
@@ -256,7 +381,7 @@ public class jdbcpostgreSQL {
             }
 
             else if (!team.equals("") && !awayteam.equals("") && (year < 2005 || year > 2013)) {
-            	 JOptionPane.showMessageDialog(null, "second");
+                JOptionPane.showMessageDialog(null, "second");
                 sqlStmt = String.format(
                         "SELECT DISTINCT \"HomeTeamName\", \"AwayTeamName\", \"Result\" AS \"Result for Team 1\", \"YardsPass\", \"YardsKickoffReturn\", \"YardsPuntReturn\", "
                                 + "\"YardsFumbleReturn\", \"YardsInterceptionReturn\", \"YardsMiscReturn\", \"YardsPunt\", \"YardsKickoff\", \"YardsTackleLoss\", \"YardsSack\", \"YardsPenalty\", "
@@ -295,7 +420,7 @@ public class jdbcpostgreSQL {
             }
 
             else if (!team.equals("") && awayteam.equals("") && (year < 2005 || year > 2013)) {
-            	
+
                 sqlStmt = String.format(
                         "SELECT DISTINCT \"HomeTeamName\", \"AwayTeamName\", \"Result\" AS \"Result for Team 1\", \"YardsPass\", \"YardsKickoffReturn\", \"YardsPunt"
                                 + "Return\", \"YardsFumbleReturn\", \"YardsInterceptionReturn\", \"YardsMiscReturn\", \"YardsPunt\", \"YardsKickoff\", \"YardsTackleLoss\", \"YardsSack\", "
@@ -317,8 +442,6 @@ public class jdbcpostgreSQL {
                         team, team, team);
             }
 
-       
-    
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
                 result_str += "Home Team Name: ";
@@ -576,8 +699,8 @@ public class jdbcpostgreSQL {
                                 + "OR \"AwayTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%'))) AS game_data ON \"TeamId\" = \"HomeTeamId\") "
                                 + "AS team1_data ON \"Team\".\"TeamId\" = \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Play\".\"GameId\") AS inner_play ON \"Play_Metrics\"."
                                 + "\"GameId\" = inner_play. \"game_id\" AND inner_play. \"PlayNum\" = \"Play_Metrics\".\"PlayNum\";",
-                                
-                                team, team, awayteam, awayteam);
+
+                        team, team, awayteam, awayteam);
             }
 
             else if (!team.equals("") && awayteam.equals("") && !(year < 2005 || year > 2013)) {
@@ -723,18 +846,17 @@ public class jdbcpostgreSQL {
             // create a statement object
             Statement stmt = conn.createStatement();
             // create an SQL statement
-            String sqlStatement = String.format(
-                    "SELECT DISTINCT\"FirstName\",\"LastName\",\"TeamName\",\"Uniform\","
+            String sqlStatement = String.format("SELECT DISTINCT\"FirstName\",\"LastName\",\"TeamName\",\"Uniform\","
                     + "\"Class\",\"Position\",\"Height\",\"Weight\",\"LastSchool\",\"Hometown\",\"HomeState\","
                     + "\"HomeCountry\" "
-                    
+
                     + "FROM\"Team\" INNER JOIN(SELECT*FROM\"Team_Yearwise\" "
                     + "INNER JOIN(SELECT*FROM\"Player_Yearwise\" INNER JOIN(SELECT*FROM\"Player\""
                     + " WHERE\"FirstName\" LIKE'%s%%' AND\"LastName\" LIKE'%s%%')AS player_data ON player_data."
                     + "\"PlayerId\"=\"Player_Yearwise\" .\"PlayerId\")AS player_data2 ON\"Team_Yearwise\""
                     + " .\"TeamYearId\"=player_data2.\"TeamYearId\")AS team_data ON\"Team\" .\"TeamId\"=team_data."
                     + "\"TeamId\";",
-                    
+
                     fname, lname);
             // send statement to DBMS
             ResultSet result = stmt.executeQuery(sqlStatement);
@@ -1237,24 +1359,14 @@ public class jdbcpostgreSQL {
     } 
    
     public static void main(String args[]) {
-        dbSetup my = new dbSetup();
-        // Building the connection
-        Connection conn = null;
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/ace_of_spades", my.user,
-                    my.pswd);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        } // end try catch
-          // JOptionPane.showMessageDialog(null, "Opened database successfully");
+
+        launch(args);
 
         //
         // MAIN CODE
 
         // stadium test
+<<<<<<< HEAD
 //        System.out.println(stadiumDataFetch("ASU", conn));
 //        System.out.println(stadiumDataFetch("Shrey", conn));
 //
@@ -1277,18 +1389,49 @@ public class jdbcpostgreSQL {
        // System.out.println(playerMetricsData("Bryan", "C", 2012, conn));
 //        System.out.println(generalPlayer("Bryan", "C", conn));
 
+=======
+        // System.out.println(stadiumDataFetch("ASU", conn));
+
+        /*
+         * System.out.println(stadiumDataFetch("ASU", conn));
+         * 
+         * System.out.println(stadiumDataFetch("Shrey", conn));
+         * 
+         * // general conference data System.out.println(confDataFetch("Big Sky",
+         * conn)); System.out.println(confDataFetch("Football_Sucks", conn));
+         * 
+         * // game data with name/year inputs
+         * System.out.println(gameDataFetcWithNameYear("Texas A&", 2013, conn));
+         * System.out.println(gameDataFetcWithNameYear("", 2013, conn));
+         * System.out.println(gameDataFetcWithNameYear("Texas A&", 0, conn));
+         * 
+         * // System.out.println(gameDataFetcWithNameYear("", 0, conn));
+         * System.out.println(gameDataFetcWithNameYear("Bazinga", 2003, conn));
+         * System.out.println(gameDataFetcWithNameYear("", 0, conn));
+         * System.out.println(gameDataFetcWithNameYear("Bazinga", 2003, conn));
+         */
+        /*
+         * System.out.println(teamGameData("Texas A&M", "Clemson", 2005, conn));
+         * System.out.println(generalPlayer("Bryan", "C", conn));
+         * System.out.println(generalPlayer("Baby", "Boy", conn));
+         */
+
+        // System.out.println(playerMetricsData("Bryan", "C", 2012, conn));
+        // System.out.println(generalPlayer("Bryan", "C", conn));
+>>>>>>> fe8ec8d0246313877cc78f2cbbc134d7868ea93e
 
         // general team
 
         // END MAIN CODE
         //
 
-        try {
-            conn.close();
-            // JOptionPane.showMessageDialog(null, "Connection Closed.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Connection NOT Closed.");
-        }
+        // try {
+        // conn.close();
+        // // JOptionPane.showMessageDialog(null, "Connection Closed.");
+        // } catch (Exception e) {
+        // JOptionPane.showMessageDialog(null, "Connection NOT Closed.");
+        // }
 
-    }// end backendmain
+    }
+    // end backendmain
 }// end Class
