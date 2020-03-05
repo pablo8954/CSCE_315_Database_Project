@@ -1213,6 +1213,29 @@ public class jdbcpostgreSQL {
         return result_str;
     }
 
+    public static String questionThree(String team, Integer year, Connection conn) {
+   	 String result_str = "";
+        try {
+       	 if (!team.equals("") && (year > 2013 || year < 2005)) {
+       		 
+       	 }
+
+            ResultSet result = stmt.executeQuery(sqlStmt);
+            while (result.next()) {
+
+                result_str += "\n";
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "Error accessing most rushing yards vs. the given team. Make sure that the Team name and Year is correct");
+        }
+        if (result_str == "") {
+            return "most rushing yards vs. the given team data non existent\n";
+        }
+        return result_str;
+    } 
+   
     public static void main(String args[]) {
         dbSetup my = new dbSetup();
         // Building the connection
@@ -1232,23 +1255,23 @@ public class jdbcpostgreSQL {
         // MAIN CODE
 
         // stadium test
-        System.out.println(stadiumDataFetch("ASU", conn));
-        System.out.println(stadiumDataFetch("Shrey", conn));
-
-        // general conference data
-        System.out.println(confDataFetch("Big Sky", conn));
-        System.out.println(confDataFetch("Football_Sucks", conn));
-
-        // game data with name/year inputs
-        System.out.println(gameDataFetcWithNameYear("Texas A&", 2013, conn));
-        System.out.println(gameDataFetcWithNameYear("", 2013, conn));
-        System.out.println(gameDataFetcWithNameYear("Texas A&", 0, conn));
-        // System.out.println(gameDataFetcWithNameYear("", 0, conn));
-        System.out.println(gameDataFetcWithNameYear("Bazinga", 2003, conn));
-
-        System.out.println(teamGameData("Texas A&M", "Clemson", 2005, conn));
-        System.out.println(generalPlayer("Bryan", "C", conn));
-        System.out.println(generalPlayer("Baby", "Boy", conn));
+//        System.out.println(stadiumDataFetch("ASU", conn));
+//        System.out.println(stadiumDataFetch("Shrey", conn));
+//
+//        // general conference data
+//        System.out.println(confDataFetch("Big Sky", conn));
+//        System.out.println(confDataFetch("Football_Sucks", conn));
+//
+//        // game data with name/year inputs
+//        System.out.println(gameDataFetcWithNameYear("Texas A&", 2013, conn));
+//        System.out.println(gameDataFetcWithNameYear("", 2013, conn));
+//        System.out.println(gameDataFetcWithNameYear("Texas A&", 0, conn));
+//        // System.out.println(gameDataFetcWithNameYear("", 0, conn));
+//        System.out.println(gameDataFetcWithNameYear("Bazinga", 2003, conn));
+//
+//        System.out.println(teamGameData("Texas A&M", "Clemson", 2005, conn));
+//        System.out.println(generalPlayer("Bryan", "C", conn));
+//        System.out.println(generalPlayer("Baby", "Boy", conn));
 
 
        // System.out.println(playerMetricsData("Bryan", "C", 2012, conn));
