@@ -1337,12 +1337,26 @@ public class jdbcpostgreSQL extends Application {
 
     public static String questionThree(String team, Integer year, Connection conn) {
    	 String result_str = "";
-        try {
-       	 if (!team.equals("") && (year > 2013 || year < 2005)) {
-       		 
-       	 }
+   	 
+   	 
+     try {
+         // create a statement object
+         Statement stmt = conn.createStatement();
+         String sqlStatement = "";
+         // create an SQL statement
+         if (!team.equals("") && (year < 2005 || year > 2013)) {
+             sqlStatement = String.format( "SELECT DISTINCT \"HomeTeamName\", \"AwayTeamName\", \"YardsRush\", \"Date\" FROM \"Team_Metrics_Gamewise\""
+            		 + "INNER JOIN (SELECT \"Team\".\"TeamName\" AS \"AwayTeamName\", * FROM \"Team\" INNER JOIN (SELECT \"TeamName\" "
+            		 + "AS \"HomeTeamName\", * FROm \"Team\" INNER JOIN (SELECT * FROM \"Game\" WHERE (\"HomeTeamId\" = ( SELECT DISTINCT \"TeamId\""
+            		 + "FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') OR \"AwayTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE"
+            		 + "\"TeamName\" LIKE '%s%%'))) AS game_data ON \"TeamId\" = \"HomeTeamId\") AS team1_data ON \"Team\".\"TeamId\" = \"AwayTeamId\")"
+            		 + " AS team_data2 ON team_data2. \"GameId\" = \"Team_Metrics_Gamewise\".\"GameId\""
+            		 + "AND \"Team_Metrics_Gamewise\".\"TeamId\" != ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%')"
+            		 + "ORDER BY \"YardsRush\" DESC LIMIT 1;"
+            		 , team, team, team);
 
-            ResultSet result = stmt.executeQuery(sqlStmt);
+
+            ResultSet result = stmt.executeQuery(sqlStatement);
             while (result.next()) {
 
                 result_str += "\n";
@@ -1366,7 +1380,7 @@ public class jdbcpostgreSQL extends Application {
         // MAIN CODE
 
         // stadium test
-<<<<<<< HEAD
+
 //        System.out.println(stadiumDataFetch("ASU", conn));
 //        System.out.println(stadiumDataFetch("Shrey", conn));
 //
@@ -1389,7 +1403,7 @@ public class jdbcpostgreSQL extends Application {
        // System.out.println(playerMetricsData("Bryan", "C", 2012, conn));
 //        System.out.println(generalPlayer("Bryan", "C", conn));
 
-=======
+
         // System.out.println(stadiumDataFetch("ASU", conn));
 
         /*
@@ -1418,7 +1432,7 @@ public class jdbcpostgreSQL extends Application {
 
         // System.out.println(playerMetricsData("Bryan", "C", 2012, conn));
         // System.out.println(generalPlayer("Bryan", "C", conn));
->>>>>>> fe8ec8d0246313877cc78f2cbbc134d7868ea93e
+
 
         // general team
 
