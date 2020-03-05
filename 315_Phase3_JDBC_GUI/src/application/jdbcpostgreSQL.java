@@ -1360,86 +1360,80 @@ public class jdbcpostgreSQL extends Application {
 
     public static String questionFive(String team, Integer year, Connection conn) {
         String result_str = "";
-        Float wins = 0;
-        Float losses = 0;
-
+        double wins = 0.0;
+        double losses = 0.0;
         try {
+            Statement stmt = conn.createStatement();
             if (!team.equals("") && (year > 2013 || year < 2005)) {
                 String sqlStmt = String.format(
                         "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"=(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" .\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'WIN';",
                         team);
-
                 ResultSet result = stmt.executeQuery(sqlStmt);
                 while (result.next()) {
                     result_str += team + "'s Average Attendance with WINS = ";
                     wins = result.getFloat("attendance");
-                    result_str += wins.toString();
+                    result_str += wins;
                     result_str += "\n";
                 }
-                String sqlStmt = String.format(
+                String sqlStmt2 = String.format(
                         "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"=(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" .\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'LOSS';",
                         team);
-
-                ResultSet result = stmt.executeQuery(sqlStmt);
-                while (result.next()) {
+                ResultSet result2 = stmt.executeQuery(sqlStmt2);
+                while (result2.next()) {
                     result_str += team + "'s Average Attendance with LOSSES = ";
-                    losses = result.getFloat("attendance");
-                    result_str += wins.toString();
+                    losses = result2.getFloat("attendance");
+                    result_str += losses;
                     result_str += "\n";
                 }
                 if (wins > losses) {
                     result_str += "We see that the team had a higher attendance in WINS by ";
-                    Float percent = ((wins - losses) * 100 / losses);
-                    result_str += percent.toString();
+                    double percent = ((wins - losses) * 100 / losses);
+                    result_str += percent;
                     result_str += "%%.\n";
                 } else {
                     result_str += "We see that the team had a higher attendance in LOSSES by ";
-                    Float percent = ((wins - losses) * 100 / losses);
-                    result_str += percent.toString();
+                    double percent2 = ((losses - wins) * 100 / wins);
+                    result_str += percent2;
                     result_str += "%%.\n";
                 }
             } else if (!team.equals("") && !(year > 2013 || year < 2005)) {
                 String sqlStmt = String.format(
                         "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"=(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" .\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'WIN' AND EXTRACT(YEAR FROM \"Date\")=%s;",
                         team, year.toString());
-
                 ResultSet result = stmt.executeQuery(sqlStmt);
                 while (result.next()) {
                     result_str += team + "'s Average Attendance with WINS in " + year.toString() + " = ";
                     wins = result.getFloat("attendance");
-                    result_str += wins.toString();
+                    result_str += wins;
                     result_str += "\n";
                 }
-                String sqlStmt = String.format(
+                String sqlStmt2 = String.format(
                         "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"=(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" .\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'LOSS' AND EXTRACT(YEAR FROM \"Date\")=%s;",
                         team, year.toString());
-
-                ResultSet result = stmt.executeQuery(sqlStmt);
-                while (result.next()) {
+                ResultSet result2 = stmt.executeQuery(sqlStmt2);
+                while (result2.next()) {
                     result_str += team + "'s Average Attendance with LOSSES in " + year.toString() + " = ";
-                    losses = result.getFloat("attendance");
-                    result_str += wins.toString();
+                    losses = result2.getFloat("attendance");
+                    result_str += losses;
                     result_str += "\n";
                 }
                 if (wins > losses) {
                     result_str += "We see that the team had a higher attendance in WINS by ";
-                    Float percent = ((wins - losses) * 100 / losses);
-                    result_str += percent.toString();
+                    double percent = ((wins - losses) * 100 / losses);
+                    result_str += percent;
                     result_str += "%%.\n";
                 } else {
                     result_str += "We see that the team had a higher attendance in LOSSES by ";
-                    Float percent = ((wins - losses) * 100 / losses);
-                    result_str += percent.toString();
+                    double percent2 = ((losses - wins) * 100 / wins);
+                    result_str += percent2;
                     result_str += "%%.\n";
                 }
             }
-
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,
-                    "Error accessing most rushing yards vs. the given team. Make sure that the Team name and Year is correct");
+            JOptionPane.showMessageDialog(null, "Error accessing team win vs loss hypothesis");
         }
         if (result_str == "") {
-            return "most rushing yards vs. the given team data non existent\n";
+            return "team win vs loss hypothesis non existent\n";
         }
         return result_str;
     }
