@@ -17,9 +17,9 @@
                      <children>
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
-                              <HBox maxHeight="150.0" maxWidth="250.0" minHeight="150.0" minWidth="250.0" prefHeight="150.0" prefWidth="300.0">
+                              <HBox maxHeight="100.0" maxWidth="250.0" minHeight="100.0" minWidth="250.0" prefHeight="100.0" prefWidth="300.0">
                                  <children>
-                                    <VBox maxHeight="150.0" maxWidth="150.0" minHeight="150.0" minWidth="250.0" prefHeight="150.0" prefWidth="150.0">
+                                    <VBox maxHeight="100.0" maxWidth="150.0" minHeight="100.0" minWidth="250.0" prefHeight="100.0" prefWidth="150.0">
                                        <children>
                                           <Label text="Choose a data type to receive information">
                                              <padding>
@@ -52,13 +52,18 @@
                               </HBox>
                            </children>
                         </VBox>
-                        <VBox maxHeight="300.0" maxWidth="230.0" minHeight="300.0" minWidth="230.0" prefHeight="300.0" prefWidth="230.0">
+                        <VBox maxHeight="100.0" maxWidth="230.0" minHeight="100.0" minWidth="230.0" prefHeight="100.0" prefWidth="230.0">
                            <children>
                               <CheckBox fx:id="generateTextFileCheckBox" mnemonicParsing="false" text="Generate Text File">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </CheckBox>
+                              <TextArea fx:id="userInputLabel" editable="false" prefHeight="200.0" prefWidth="200.0">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" top="10.0" />
+                                 </VBox.margin>
+                              </TextArea>
                            </children></VBox>
                      </children>
                   </HBox>
