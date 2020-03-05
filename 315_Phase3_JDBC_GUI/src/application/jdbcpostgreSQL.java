@@ -1336,6 +1336,7 @@ public class jdbcpostgreSQL extends Application {
     }
 
     public static String questionThree(String team, Integer year, Connection conn) {
+<<<<<<< HEAD
    	 String result_str = "";
    	 
    	 
@@ -1354,6 +1355,13 @@ public class jdbcpostgreSQL extends Application {
             		 + "AND \"Team_Metrics_Gamewise\".\"TeamId\" != ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%')"
             		 + "ORDER BY \"YardsRush\" DESC LIMIT 1;"
             		 , team, team, team);
+=======
+        String result_str = "";
+        try {
+            if (!team.equals("") && (year > 2013 || year < 2005)) {
+
+            }
+>>>>>>> 81bf627ac8612389b30aaea7e0dfcf8467c78885
 
 
             ResultSet result = stmt.executeQuery(sqlStatement);
@@ -1370,8 +1378,94 @@ public class jdbcpostgreSQL extends Application {
             return "most rushing yards vs. the given team data non existent\n";
         }
         return result_str;
-    } 
-   
+    }
+
+    public static String questionFive(String team, Integer year, Connection conn) {
+        String result_str = "";
+        Float wins = 0;
+        Float losses = 0;
+
+        try {
+            if (!team.equals("") && (year > 2013 || year < 2005)) {
+                String sqlStmt = String.format(
+                        "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"=(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" .\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'WIN';",
+                        team);
+
+                ResultSet result = stmt.executeQuery(sqlStmt);
+                while (result.next()) {
+                    result_str += team + "'s Average Attendance with WINS = ";
+                    wins = result.getFloat("attendance");
+                    result_str += wins.toString();
+                    result_str += "\n";
+                }
+                String sqlStmt = String.format(
+                        "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"=(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" .\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'LOSS';",
+                        team);
+
+                ResultSet result = stmt.executeQuery(sqlStmt);
+                while (result.next()) {
+                    result_str += team + "'s Average Attendance with LOSSES = ";
+                    losses = result.getFloat("attendance");
+                    result_str += wins.toString();
+                    result_str += "\n";
+                }
+                if (wins > losses) {
+                    result_str += "We see that the team had a higher attendance in WINS by ";
+                    Float percent = ((wins - losses) * 100 / losses);
+                    result_str += percent.toString();
+                    result_str += "%%.\n";
+                } else {
+                    result_str += "We see that the team had a higher attendance in LOSSES by ";
+                    Float percent = ((wins - losses) * 100 / losses);
+                    result_str += percent.toString();
+                    result_str += "%%.\n";
+                }
+            } else if (!team.equals("") && !(year > 2013 || year < 2005)) {
+                String sqlStmt = String.format(
+                        "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"=(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" .\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'WIN' AND EXTRACT(YEAR FROM \"Date\")=%s;",
+                        team, year.toString());
+
+                ResultSet result = stmt.executeQuery(sqlStmt);
+                while (result.next()) {
+                    result_str += team + "'s Average Attendance with WINS in " + year.toString() + " = ";
+                    wins = result.getFloat("attendance");
+                    result_str += wins.toString();
+                    result_str += "\n";
+                }
+                String sqlStmt = String.format(
+                        "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"=(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" .\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'LOSS' AND EXTRACT(YEAR FROM \"Date\")=%s;",
+                        team, year.toString());
+
+                ResultSet result = stmt.executeQuery(sqlStmt);
+                while (result.next()) {
+                    result_str += team + "'s Average Attendance with LOSSES in " + year.toString() + " = ";
+                    losses = result.getFloat("attendance");
+                    result_str += wins.toString();
+                    result_str += "\n";
+                }
+                if (wins > losses) {
+                    result_str += "We see that the team had a higher attendance in WINS by ";
+                    Float percent = ((wins - losses) * 100 / losses);
+                    result_str += percent.toString();
+                    result_str += "%%.\n";
+                } else {
+                    result_str += "We see that the team had a higher attendance in LOSSES by ";
+                    Float percent = ((wins - losses) * 100 / losses);
+                    result_str += percent.toString();
+                    result_str += "%%.\n";
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "Error accessing most rushing yards vs. the given team. Make sure that the Team name and Year is correct");
+        }
+        if (result_str == "") {
+            return "most rushing yards vs. the given team data non existent\n";
+        }
+        return result_str;
+    }
+
     public static void main(String args[]) {
 
         launch(args);
@@ -1380,6 +1474,7 @@ public class jdbcpostgreSQL extends Application {
         // MAIN CODE
 
         // stadium test
+<<<<<<< HEAD
 
 //        System.out.println(stadiumDataFetch("ASU", conn));
 //        System.out.println(stadiumDataFetch("Shrey", conn));
@@ -1404,6 +1499,8 @@ public class jdbcpostgreSQL extends Application {
 //        System.out.println(generalPlayer("Bryan", "C", conn));
 
 
+=======
+>>>>>>> 81bf627ac8612389b30aaea7e0dfcf8467c78885
         // System.out.println(stadiumDataFetch("ASU", conn));
 
         /*
@@ -1432,7 +1529,10 @@ public class jdbcpostgreSQL extends Application {
 
         // System.out.println(playerMetricsData("Bryan", "C", 2012, conn));
         // System.out.println(generalPlayer("Bryan", "C", conn));
+<<<<<<< HEAD
 
+=======
+>>>>>>> 81bf627ac8612389b30aaea7e0dfcf8467c78885
 
         // general team
 
