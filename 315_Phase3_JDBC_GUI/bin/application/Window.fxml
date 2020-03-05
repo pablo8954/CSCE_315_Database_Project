@@ -59,11 +59,11 @@
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </CheckBox>
-                              <Label fx:id="userInputLabel" text="Label">
+                              <TextArea fx:id="userInputLabel" editable="false" prefHeight="200.0" prefWidth="200.0">
                                  <VBox.margin>
-                                    <Insets top="25.0" />
+                                    <Insets bottom="5.0" top="10.0" />
                                  </VBox.margin>
-                              </Label>
+                              </TextArea>
                            </children></VBox>
                      </children>
                   </HBox>

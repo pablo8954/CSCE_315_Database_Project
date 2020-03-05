@@ -36,7 +36,7 @@ public class WindowController {
 	@FXML
 	CheckBox generateTextFileCheckBox;
 	@FXML 
-	Label userInputLabel;
+	TextArea userInputLabel;
 	
 	String dataSelection = "";
 	String teamName = "";
@@ -69,7 +69,7 @@ public class WindowController {
 		conferenceName = controller.getConferenceName();
 		year = controller.getYear();
 		//Update the userInputLabel
-		String partOne = "Requesting conference data for " + conferenceName;
+		String partOne = "Requesting conference data for\n" + conferenceName;
 		String partTwo = " in " + year;
 		if(year == 0) {
 			userInputLabel.setText(partOne);
@@ -98,7 +98,7 @@ public class WindowController {
 		teamName = controller.getTeamName();
 		year = controller.getYear();
 		//Update userInputLabel
-		String partOne = "Requesting game data for " + teamName;
+		String partOne = "Requesting game data for\n" + teamName;
 		String partTwo = " in " + year;
 		if(year == 0) {
 			userInputLabel.setText(partOne);
@@ -130,7 +130,7 @@ public class WindowController {
 		opposingTeam = controller.getOpposingTeam();
 		year = controller.getYear();
 		//Update userInputLabel
-		String partOne = "Requesting player data for " + playerFirstName + " " + playerLastName;
+		String partOne = "Requesting player data for\n" + playerFirstName + " " + playerLastName;
 		String partTwo = " in " + year;
 		if(year == 0) {
 			userInputLabel.setText(partOne);
@@ -158,7 +158,7 @@ public class WindowController {
 		StadiumController controller = loader.getController();
 		stadiumName = controller.getStadiumName();
 		//Update userInputLabel
-		userInputLabel.setText("Requesting stadium data for " + stadiumName);
+		userInputLabel.setText("Requesting stadium data for\n" + stadiumName);
 		
 	}
 
@@ -184,14 +184,14 @@ public class WindowController {
 		teamType = controller.getTeamType();
 		//Update userInputLabel
 		if(teamType.equals("General")) {
-			userInputLabel.setText("Requesting general data for " + teamName);
+			userInputLabel.setText("Requesting general data for\n" + teamName);
 		}
 		else if(teamType.equals("Game")) {
-			userInputLabel.setText("Requesting game data for " + teamName + " against "
+			userInputLabel.setText("Requesting game data for\n" + teamName + " against "
 					+ opposingTeam + " in year");
 		}
 		else if(teamType.equals("Play")) {
-			userInputLabel.setText("Requesting play data for " + teamName + " against "
+			userInputLabel.setText("Requesting play data for\n" + teamName + " against "
 					+ opposingTeam + " in year");
 		}
 	}
