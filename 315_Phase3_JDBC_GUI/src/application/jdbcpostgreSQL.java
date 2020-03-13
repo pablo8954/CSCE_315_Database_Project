@@ -1470,6 +1470,41 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
+    public static String questionOne(String team, String awayteam, Connection conn) {
+        String result_str = "";
+        try {
+            Statement stmt = conn.createStatement();
+            String sqlStmt = "";
+
+            /*
+             * Two cases: - Only the team name is provided - Both team and year are provided
+             */
+
+            if (!team.equals("") && !awayteam.equals("")) {
+                sqlStmt = String.format(
+                        "SELECT \"TeamId\", \"OpposingTeamId\", \"GameId\" FROM \"Team_Metrics_Gamewise\" WHERE \"Result\"='WIN' AND \"TeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') AND \"OpposingTeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%');",
+                        team, awayteam);
+            }
+
+            ResultSet result = stmt.executeQuery(sqlStmt);
+            while (result.next()) {
+                result_str += String.format("%s won against %s", team, awayteam);
+                result_str += "\n";
+            }
+            if (result_str.equals("")) {
+                return "No direct wins";
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "Error accessing most rushing yards vs. the given team. Make sure that the Team name and Year is correct");
+        }
+        if (result_str == "") {
+            return "most rushing yards vs. the given team data non existent\n";
+        }
+        return result_str;
+    }
+
     public static void main(String args[]) {
 
         //
