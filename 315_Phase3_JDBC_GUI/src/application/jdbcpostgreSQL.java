@@ -1421,12 +1421,12 @@ public class jdbcpostgreSQL extends Application {
                     result_str += "We see that the team had a higher attendance in WINS by ";
                     double percent = ((wins - losses) * 100 / losses);
                     result_str += percent;
-                    result_str += "%%.\n";
+                    result_str += "%.\n";
                 } else {
                     result_str += "We see that the team had a higher attendance in LOSSES by ";
                     double percent2 = ((losses - wins) * 100 / wins);
                     result_str += percent2;
-                    result_str += "%%.\n";
+                    result_str += "%.\n";
                 }
             } else if (!team.equals("") && !(year > 2013 || year < 2005)) {
                 String sqlStmt = String.format(
@@ -1453,12 +1453,12 @@ public class jdbcpostgreSQL extends Application {
                     result_str += "We see that the team had a higher attendance in WINS by ";
                     double percent = ((wins - losses) * 100 / losses);
                     result_str += percent;
-                    result_str += "%%.\n";
+                    result_str += "%.\n";
                 } else {
                     result_str += "We see that the team had a higher attendance in LOSSES by ";
                     double percent2 = ((losses - wins) * 100 / wins);
                     result_str += percent2;
-                    result_str += "%%.\n";
+                    result_str += "%.\n";
                 }
             }
         } catch (Exception e) {
