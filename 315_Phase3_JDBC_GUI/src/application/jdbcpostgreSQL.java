@@ -1340,47 +1340,43 @@ public class jdbcpostgreSQL extends Application {
         try {
             Statement stmt = conn.createStatement();
             String sqlStmt = "";
-            
+
             /*
-             * Two cases:
-             *  - Only the team name is provided
-             *  - Both team and year are provided
-             * 										*/
-            
+             * Two cases: - Only the team name is provided - Both team and year are provided
+             */
+
             if (!team.equals("") && (year > 2013 || year < 2005)) {
-            	sqlStmt = String.format(
-            			"SELECT DISTINCT \"HomeTeamName\", \"AwayTeamName\", \"YardsRush\", \"Date\" "
-            			+ "FROM \"Team_Metrics_Gamewise\" INNER JOIN (SELECT \"Team\".\"TeamName\" AS \"AwayTeamName\", * FROM \"Team\" "
-            			
-            			+ "INNER JOIN (SELECT \"TeamName\" AS \"HomeTeamName\", * FROM \"Team\" "
-            			
-            			+ "INNER JOIN (SELECT * FROM \"Game\" WHERE (\"HomeTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') "
-            			+ "OR \"AwayTeamId\" = (SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%'))) AS game_data ON \"TeamId\" = \"HomeTeamId\") "
-            			+ "AS team1_data ON \"Team\".\"TeamId\" = \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Team_Metrics_Gamewise\".\"GameId\" "
-            			+ "AND \"Team_Metrics_Gamewise\".\"TeamId\" != ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') "
-            			+ "ORDER BY \"YardsRush\" DESC LIMIT 1;"
-            			, team, team, team);
+                sqlStmt = String.format("SELECT DISTINCT \"HomeTeamName\", \"AwayTeamName\", \"YardsRush\", \"Date\" "
+                        + "FROM \"Team_Metrics_Gamewise\" INNER JOIN (SELECT \"Team\".\"TeamName\" AS \"AwayTeamName\", * FROM \"Team\" "
+
+                        + "INNER JOIN (SELECT \"TeamName\" AS \"HomeTeamName\", * FROM \"Team\" "
+
+                        + "INNER JOIN (SELECT * FROM \"Game\" WHERE (\"HomeTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') "
+                        + "OR \"AwayTeamId\" = (SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%'))) AS game_data ON \"TeamId\" = \"HomeTeamId\") "
+                        + "AS team1_data ON \"Team\".\"TeamId\" = \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Team_Metrics_Gamewise\".\"GameId\" "
+                        + "AND \"Team_Metrics_Gamewise\".\"TeamId\" != ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') "
+                        + "ORDER BY \"YardsRush\" DESC LIMIT 1;", team, team, team);
             }
-            
+
             else if (!team.equals("") && !(year > 2013 || year < 2005)) {
-            	sqlStmt = String.format(
-            			"SELECT DISTINCT \"HomeTeamName\", \"AwayTeamName\", \"YardsRush\", \"Date\" FROM \"Team_Metrics_Gamewise\" "
-            			+ "INNER JOIN (SELECT \"Team\".\"TeamName\" AS \"AwayTeamName\", * FROM \"Team\" "
-            			
-            			+ "INNER JOIN (SELECT \"TeamName\" AS \"HomeTeamName\", * FROM \"Team\" "
-            	
-            			+ "INNER JOIN (SELECT * FROM \"Game\" WHERE (\"HomeTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE "
-            			+ "\"TeamName\" LIKE '%s%%') OR \"AwayTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE"
-            			+ "\"TeamName\" LIKE '%s%%'))) AS game_data ON \"TeamId\" = \"HomeTeamId\") AS team1_data ON \"Team\".\"TeamId\" "
-            			+ "= \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Team_Metrics_Gamewise\".\"GameId\" "
-            			+ "AND \"Team_Metrics_Gamewise\".\"TeamId\" != ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%')"
-            			+ "WHERE EXTRACT(YEAR FROM \"Date\") = %s ORDER BY \"YardsRush\" DESC LIMIT 1;"
-            			, team, team, year);
+                sqlStmt = String.format(
+                        "SELECT DISTINCT \"HomeTeamName\", \"AwayTeamName\", \"YardsRush\", \"Date\" FROM \"Team_Metrics_Gamewise\" "
+                                + "INNER JOIN (SELECT \"Team\".\"TeamName\" AS \"AwayTeamName\", * FROM \"Team\" "
+
+                                + "INNER JOIN (SELECT \"TeamName\" AS \"HomeTeamName\", * FROM \"Team\" "
+
+                                + "INNER JOIN (SELECT * FROM \"Game\" WHERE (\"HomeTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE "
+                                + "\"TeamName\" LIKE '%s%%') OR \"AwayTeamId\" = ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE"
+                                + "\"TeamName\" LIKE '%s%%'))) AS game_data ON \"TeamId\" = \"HomeTeamId\") AS team1_data ON \"Team\".\"TeamId\" "
+                                + "= \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Team_Metrics_Gamewise\".\"GameId\" "
+                                + "AND \"Team_Metrics_Gamewise\".\"TeamId\" != ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%')"
+                                + "WHERE EXTRACT(YEAR FROM \"Date\") = %s ORDER BY \"YardsRush\" DESC LIMIT 1;",
+                        team, team, year);
             }
 
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
-            	//TODO: Write print stuff
+                // TODO: Write print stuff
                 result_str += "\n";
             }
 
@@ -1394,7 +1390,6 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
-    
     public static String questionFive(String team, Integer year, Connection conn) {
         String result_str = "";
         double wins = 0.0;
@@ -1476,7 +1471,6 @@ public class jdbcpostgreSQL extends Application {
     }
 
     public static void main(String args[]) {
-
 
         //
         // MAIN CODE
