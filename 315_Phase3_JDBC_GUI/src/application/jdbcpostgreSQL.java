@@ -152,20 +152,13 @@ public class jdbcpostgreSQL extends Application {
         String result_str = "";
         try {
             Statement stmt = conn.createStatement();
-
             String sqlStmt = "";
 
-            /*
-             * 4 cases
-             * 
-             * 1: proper name and year inputs are provided -> return game data for a team in
-             * a specific year 2: only year is provided -> return game data pertaining to
-             * specific year 3: only name is provided -> return game data pertaining to
-             * specific team 4: no name or year inputs are provided -> return all game data
-             * available
-             * 
-             */
-
+            //SQL Query 4 Cases
+            // - Name and Year Provided
+            // - Only Year provided
+            // - Only Name provided
+            // - No input provided -> fetch all game data available
             if (!name.equals("") && !(year < 2005 || year > 2013)) {
                 sqlStmt = String.format("SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\","
                         + "\"StadiumName\",\"Attendance\",\"Duration\" FROM\"Stadium_Yearwise\" "
@@ -175,7 +168,8 @@ public class jdbcpostgreSQL extends Application {
                         + "(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')OR\"AwayTeamId\"="
                         + "(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')))AS game_data ON\"TeamId\"="
                         + "\"HomeTeamId\")AS team1_data ON\"Team\" .\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" ."
-                        + "\"StadiumId\"=team2_data.\"StadiumId\";", year.toString(), name, name);
+                        + "\"StadiumId\"=team2_data.\"StadiumId\";"
+                        ,year.toString(), name, name);
 
             } else if (name.equals("") && !(year < 2005 || year > 2013)) {
                 sqlStmt = String.format("SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\","
@@ -183,8 +177,8 @@ public class jdbcpostgreSQL extends Application {
                         + ".\"TeamName\" AS\"AwayTeamName\",*FROM\"Team\" INNER JOIN(SELECT\"TeamName\" AS"
                         + "\"HomeTeamName\",*FROM\"Team\" INNER JOIN(SELECT*FROM\"Game\" WHERE EXTRACT"
                         + "(YEAR FROM \"Date\")=%s)AS game_data ON\"TeamId\"=\"HomeTeamId\")AS team1_data ON\"Team\" "
-                        + ".\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";",
-                        year.toString());
+                        + ".\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";"
+                        , year.toString());
 
             } else if (!name.equals("") && (year < 2005 || year > 2013)) {
                 sqlStmt = String.format(
@@ -194,31 +188,65 @@ public class jdbcpostgreSQL extends Application {
                                 + "WHERE (\"HomeTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%') OR "
                                 + "\"AwayTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')))AS game_data ON"
                                 + "\"TeamId\"=\"HomeTeamId\")AS team1_data ON\"Team\" .\"TeamId\"=\"AwayTeamId\")AS team2_data ON"
-                                + "\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";",
-                        name, name);
+                                + "\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";"
+                                ,name, name);
             } else if (name.equals("") && (year < 2005 || year > 2013)) {
-                sqlStmt = String.format("SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\","
+                sqlStmt = String.format(
+                		"SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\","
                         + "\"Attendance\",\"Duration\" FROM\"Stadium_Yearwise\" INNER JOIN(SELECT\"Team\" ."
                         + "\"TeamName\" AS\"AwayTeamName\",*FROM\"Team\" INNER JOIN(SELECT\"TeamName\" AS\"HomeTeamName\","
                         + "*FROM\"Team\" INNER JOIN(SELECT*FROM\"Game\")AS game_data ON\"TeamId\"=\"HomeTeamId\")AS team1_data "
                         + "ON\"Team\" .\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" .\"StadiumId\"=team2_data"
-                        + ".\"StadiumId\";", year.toString(), name, name);
+                        + ".\"StadiumId\";"
+                        , year.toString(), name, name);
             }
-
+            
             ResultSet result = stmt.executeQuery(sqlStmt);
+                        
             while (result.next()) {
                 result_str += "Home Team Name: ";
+                try {
+                	result_str += result.getString("HomeTeamName");
+                } catch (Exception e) {
+                	result_str += "Non-existant data";
+                }             
                 result_str += result.getString("HomeTeamName");
+               
                 result_str += " | Away Team Name: ";
-                result_str += result.getString("AwayTeamName");
+                try {
+                	result_str += result.getString("AwayTeamName");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                   
                 result_str += " | Date: ";
-                result_str += result.getString("Date");
+                try {
+                	result_str += result.getString("Date");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Attendance: ";
-                result_str += result.getString("Attendance");
+                try {
+                	result_str += result.getString("Attendance");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Duration: ";
-                result_str += result.getString("Duration");
+                try {
+                	result_str += result.getString("Duration");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Stadium: ";
-                result_str += result.getString("StadiumName");
+                try {
+                    result_str += result.getString("StadiumName");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+
                 result_str += "\n";
             }
 
@@ -226,6 +254,7 @@ public class jdbcpostgreSQL extends Application {
             JOptionPane.showMessageDialog(null,
                     "Error accessing Game Data. Make sure that the Team name and Year is correct");
         }
+        
         if (result_str == "") {
             return "Game Data non existent\n";
         }
@@ -235,35 +264,66 @@ public class jdbcpostgreSQL extends Application {
     public static String stadiumDataFetch(String name, Connection conn) {
         String result_str = "";
         try {
-            // create a statement object
             Statement stmt = conn.createStatement();
-            // create an SQL statement
             String sqlStatement = String
-                    .format("SELECT DISTINCT " + "\"StadiumName\",\"StadiumSurface\",\"StadiumCity\",\"StadiumState\","
+                    .format(
+                    		"SELECT DISTINCT " + "\"StadiumName\",\"StadiumSurface\",\"StadiumCity\",\"StadiumState\","
                             + "\"StadiumCapacity\",\"StadiumYearOpened\" FROM \"Stadium_Yearwise\" WHERE"
                             + " \"StadiumId\" = ( SELECT DISTINCT \"StadiumId\" FROM \"Stadium_Yearwise\" WHERE "
                             + "\"StadiumName\" LIKE '%s%%');", name);
-            // send statement to DBMS
+           
+            //Fetch SQL Results for output in DBMS
             ResultSet result = stmt.executeQuery(sqlStatement);
             while (result.next()) {
                 result_str += "Stadium Name: ";
-                result_str += result.getString("StadiumName");
+                try {
+                    result_str += result.getString("StadiumName");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+
                 result_str += " | Surface: ";
-                result_str += result.getString("StadiumSurface");
+                try {
+                	result_str += result.getString("StadiumSurface");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+               
                 result_str += " | City: ";
-                result_str += result.getString("StadiumCity");
+                try {
+                    result_str += result.getString("StadiumCity");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | State: ";
-                result_str += result.getString("StadiumState");
+                try {
+                	result_str += result.getString("StadiumState");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Capacity: ";
-                result_str += result.getString("StadiumCapacity");
+                try {
+                    result_str += result.getString("StadiumCapacity");                	
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Year Opened: ";
-                result_str += result.getString("StadiumYearOpened");
+                try {
+                	result_str += result.getString("StadiumYearOpened");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+               
                 result_str += "\n";
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,
                     "Error accessing Stadium Data. Make sure that the stadium name is correct");
         }
+        
         if (result_str == "") {
             return "Stadium Data non existent\n";
         }
@@ -273,22 +333,21 @@ public class jdbcpostgreSQL extends Application {
     public static String confDataFetch(String name, Connection conn) {
         String result_str = "";
         try {
-            // create a statement object
             Statement stmt = conn.createStatement();
-            // create an SQL statement
-            String sqlStatement = String.format("SELECT DISTINCT \"Subdivision\", \"ConferenceName\" "
+
+            String sqlStatement = String.format(
+            		"SELECT DISTINCT \"Subdivision\", \"ConferenceName\" "
                     + "FROM \"Conference_Yearwise\" WHERE \"ConfId\" = "
                     + "( SELECT DISTINCT \"ConfId\" FROM \"Conference_Yearwise\" WHERE "
-                    + "\"ConferenceName\" LIKE '%s%%');", name);
-            // send statement to DBMS
+                    + "\"ConferenceName\" LIKE '%s%%');"
+                    , name);
+
             ResultSet result = stmt.executeQuery(sqlStatement);
             while (result.next()) {
                 result_str += "Conference Name: ";
                 result_str += result.getString("ConferenceName");
                 result_str += " | Subdivision: ";
                 result_str += result.getString("Subdivision");
-                // result_str += " | Year: ";
-                // result_str += result.getString("Year");
                 result_str += "\n";
             }
         } catch (Exception e) {
@@ -345,19 +404,17 @@ public class jdbcpostgreSQL extends Application {
     }
 
     public static String teamGameData(String team, String awayteam, Integer year, Connection conn) {
-        // team is the home team
-
         String result_str = "";
         String sqlStmt = "";
 
         try {
             Statement stmt = conn.createStatement();
 
-            /*
-             * 4 cases 1: Home team, Away Team, and Year provided 2: Home team, Away Team
-             * Provided 3: Home team, Year Provided 4: Only home team name provided
-             */
-
+            // SQL Queries - 4 cases:
+            // - Home Team, Away Team, Year provided
+            // - Home Team, Away Team provided
+            // - Home Team, Year Provided
+            // - Only Home Team Provided            
             if (!team.equals("") && !awayteam.equals("") && !(year < 2005 || year > 2013)) {
                 JOptionPane.showMessageDialog(null, "First");
                 sqlStmt = String.format(
@@ -420,7 +477,6 @@ public class jdbcpostgreSQL extends Application {
             }
 
             else if (!team.equals("") && awayteam.equals("") && (year < 2005 || year > 2013)) {
-
                 sqlStmt = String.format(
                         "SELECT DISTINCT \"HomeTeamName\", \"AwayTeamName\", \"Result\" AS \"Result for Team 1\", \"YardsPass\", \"YardsKickoffReturn\", \"YardsPunt"
                                 + "Return\", \"YardsFumbleReturn\", \"YardsInterceptionReturn\", \"YardsMiscReturn\", \"YardsPunt\", \"YardsKickoff\", \"YardsTackleLoss\", \"YardsSack\", "
@@ -668,6 +724,11 @@ public class jdbcpostgreSQL extends Application {
         try {
             Statement stmt = conn.createStatement();
 
+            // SQL Queries - 4 cases
+            // - Home Team, Away Team, and Year given
+            // - Home Team, Away Team given
+            // - Home Team and Year given
+            // - Only Home Team Given
             if (!team.equals("") && !awayteam.equals("") && !(year < 2005 || year > 2013)) {
                 sqlStmt = String.format(
                         "SELECT \"HomeTeamName\", \"AwayTeamName\", \"Quarter\", \"Clock\", \"OffensePoints\", \"DefensePoints\", \"Down\", \"Distance\", \"Spot\", \"PlayType\", \"DriveNumber\","
@@ -719,7 +780,7 @@ public class jdbcpostgreSQL extends Application {
                         year.toString(), team, team);
             }
 
-            else {
+            else if (!team.equals("") && awayteam.equals("") && (year < 2005 || year > 2013)) {
                 sqlStmt = String.format(
                         "SELECT \"HomeTeamName\", \"AwayTeamName\", \"Quarter\", \"Clock\", \"OffensePoints\",\"DefensePoints\", \"Down\",\"Distance\",\"Spot\","
                                 + "\"PlayType\", \"DriveNumber\", \"DrivePlay\", \"Attempt\", \"Yards\", \"FairCatch\", \"Touchback\", \"Downed\", \"OutOfBounds\", "
@@ -735,6 +796,7 @@ public class jdbcpostgreSQL extends Application {
                         team, team);
             }
 
+            //Fetch SQL Results for output in DBMS
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
                 result_str += "Home Team Name: ";
@@ -843,9 +905,8 @@ public class jdbcpostgreSQL extends Application {
     public static String generalPlayer(String fname, String lname, Connection conn) {
         String result_str = "";
         try {
-            // create a statement object
             Statement stmt = conn.createStatement();
-            // create an SQL statement
+            
             String sqlStatement = String.format("SELECT DISTINCT\"FirstName\",\"LastName\",\"TeamName\",\"Uniform\","
                     + "\"Class\",\"Position\",\"Height\",\"Weight\",\"LastSchool\",\"Hometown\",\"HomeState\","
                     + "\"HomeCountry\" "
@@ -855,34 +916,45 @@ public class jdbcpostgreSQL extends Application {
                     + " WHERE\"FirstName\" LIKE'%s%%' AND\"LastName\" LIKE'%s%%')AS player_data ON player_data."
                     + "\"PlayerId\"=\"Player_Yearwise\" .\"PlayerId\")AS player_data2 ON\"Team_Yearwise\""
                     + " .\"TeamYearId\"=player_data2.\"TeamYearId\")AS team_data ON\"Team\" .\"TeamId\"=team_data."
-                    + "\"TeamId\";",
-
-                    fname, lname);
-            // send statement to DBMS
+                    + "\"TeamId\";"
+                    ,fname, lname);
+            
+            //Fetch SQL Results for output in DBMS
             ResultSet result = stmt.executeQuery(sqlStatement);
             while (result.next()) {
                 result_str += "First Name: ";
                 result_str += result.getString("FirstName");
+               
                 result_str += " | Last Name: ";
                 result_str += result.getString("LastName");
+                
                 result_str += " | Team Name: ";
                 result_str += result.getString("TeamName");
+                
                 result_str += " | Uniform: ";
                 result_str += result.getString("Uniform");
+                
                 result_str += " | Class: ";
                 result_str += result.getString("Class");
+                
                 result_str += " | Position: ";
                 result_str += result.getString("Position");
+                
                 result_str += " | Height: ";
                 result_str += result.getString("Height");
+                
                 result_str += " | Last School: ";
                 result_str += result.getString("LastSchool");
+                
                 result_str += " | Home Town: ";
                 result_str += result.getString("Hometown");
+                
                 result_str += " | Home State: ";
                 result_str += result.getString("HomeState");
+                
                 result_str += " | Home Country: ";
                 result_str += result.getString("HomeCountry");
+             
                 result_str += "\n";
             }
         } catch (Exception e) {
@@ -898,10 +970,10 @@ public class jdbcpostgreSQL extends Application {
     public static String playerMetricsData(String fname, String lname, Integer year, Connection conn) {
         String result_str = "";
         try {
-            // create a statement object
             Statement stmt = conn.createStatement();
             String sqlStatement = "";
-            // create an SQL statement
+            
+            //Two cases for SQL Statement - Only Full Name given | Full Name and Year is given
             if (!fname.equals("") && !lname.equals("") && !(year < 2005 || year > 2013)) {
                 sqlStatement = String.format(
                         "SELECT DISTINCT \"FirstName\", \"LastName\", \"Game\".\"GameId\", \"YardsRush\", \"YardsPass\", \"YardsKickoffReturn\","
@@ -922,6 +994,7 @@ public class jdbcpostgreSQL extends Application {
                                 + "\"TeamId\") AS player_data3 ON player_data3. \"MainPlayerId\" = \"Player_Metrics_Gamewise\".\"PlayerId\") AS player_data4 ON "
                                 + "\"Game\".\"GameId\" = player_data4. \"GameId\" WHERE EXTRACT(YEAR FROM \"Game\".\"Date\") = %s;",
                         fname, lname, year.toString());
+                
             } else if (!fname.equals("") && !lname.equals("") && (year < 2005) || year > 2013) {
                 sqlStatement = String.format(
                         "SELECT DISTINCT \"FirstName\", \"LastName\", \"Game\".\"GameId\", \"YardsRush\", \"YardsPass\", "
@@ -945,8 +1018,8 @@ public class jdbcpostgreSQL extends Application {
                                 + "\"Game\".\"GameId\" = player_data4. \"GameId\";",
                         fname, lname);
             }
-
-            // send statement to DBMS
+            
+            //Fetch SQL Results for output in DBMS
             ResultSet result = stmt.executeQuery(sqlStatement);
             while (result.next()) {
                 try {
@@ -1329,6 +1402,7 @@ public class jdbcpostgreSQL extends Application {
             JOptionPane.showMessageDialog(null,
                     "Error accessing Player Metrics Data. Make sure that the Player name is correct");
         }
+        
         if (result_str == "") {
             return "Player Metrics Data non existent\n";
         }
@@ -1340,11 +1414,8 @@ public class jdbcpostgreSQL extends Application {
         try {
             Statement stmt = conn.createStatement();
             String sqlStmt = "";
-
-            /*
-             * Two cases: - Only the team name is provided - Both team and year are provided
-             */
-
+            
+            //SQL Statements Creation; Two Cases - Only Team is given | Both Team and Year are given
             if (!team.equals("") && (year > 2013 || year < 2005)) {
                 sqlStmt = String.format("SELECT DISTINCT \"HomeTeamName\", \"AwayTeamName\", \"YardsRush\", \"Date\" "
                         + "FROM \"Team_Metrics_Gamewise\" INNER JOIN (SELECT \"Team\".\"TeamName\" AS \"AwayTeamName\", * FROM \"Team\" "
@@ -1371,7 +1442,7 @@ public class jdbcpostgreSQL extends Application {
                                 + "= \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Team_Metrics_Gamewise\".\"GameId\" "
                                 + "AND \"Team_Metrics_Gamewise\".\"TeamId\" != ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%')"
                                 + "WHERE EXTRACT(YEAR FROM \"Date\") = %s ORDER BY \"YardsRush\" DESC LIMIT 1;",
-                        team, team, year);
+                        team, team, year.toString());
             }
 
             ResultSet result = stmt.executeQuery(sqlStmt);
@@ -1396,10 +1467,16 @@ public class jdbcpostgreSQL extends Application {
         double losses = 0.0;
         try {
             Statement stmt = conn.createStatement();
+            
+            // Two cases - Only Team given | Team and Year given            
             if (!team.equals("") && (year > 2013 || year < 2005)) {
                 String sqlStmt = String.format(
-                        "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"=(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" .\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'WIN';",
+                        "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" "
+                        + "INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"="
+                        + "(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" "
+                        + ".\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'WIN';",
                         team);
+                
                 ResultSet result = stmt.executeQuery(sqlStmt);
                 while (result.next()) {
                     result_str += team + "'s Average Attendance with WINS = ";
@@ -1407,9 +1484,14 @@ public class jdbcpostgreSQL extends Application {
                     result_str += wins;
                     result_str += "\n";
                 }
+                
                 String sqlStmt2 = String.format(
-                        "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"=(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" .\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'LOSS';",
+                        "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" "
+                        + "INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"="
+                        + "(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" "
+                        + ".\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'LOSS';",
                         team);
+                
                 ResultSet result2 = stmt.executeQuery(sqlStmt2);
                 while (result2.next()) {
                     result_str += team + "'s Average Attendance with LOSSES = ";
@@ -1428,10 +1510,15 @@ public class jdbcpostgreSQL extends Application {
                     result_str += percent2;
                     result_str += "%.\n";
                 }
+                
             } else if (!team.equals("") && !(year > 2013 || year < 2005)) {
                 String sqlStmt = String.format(
-                        "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"=(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" .\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'WIN' AND EXTRACT(YEAR FROM \"Date\")=%s;",
-                        team, year.toString());
+                        "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" "
+                        + "INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\""
+                        + "=(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" "
+                        + ".\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'WIN' AND EXTRACT(YEAR FROM \"Date\")=%s;"
+                        ,team, year.toString());
+                
                 ResultSet result = stmt.executeQuery(sqlStmt);
                 while (result.next()) {
                     result_str += team + "'s Average Attendance with WINS in " + year.toString() + " = ";
@@ -1439,9 +1526,14 @@ public class jdbcpostgreSQL extends Application {
                     result_str += wins;
                     result_str += "\n";
                 }
+                
                 String sqlStmt2 = String.format(
-                        "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"=(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" .\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'LOSS' AND EXTRACT(YEAR FROM \"Date\")=%s;",
-                        team, year.toString());
+                        "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" "
+                        + "INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"="
+                        + "(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" "
+                        + ".\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'LOSS' AND EXTRACT(YEAR FROM \"Date\")=%s;"
+                        ,team, year.toString());
+                
                 ResultSet result2 = stmt.executeQuery(sqlStmt2);
                 while (result2.next()) {
                     result_str += team + "'s Average Attendance with LOSSES in " + year.toString() + " = ";
@@ -1461,12 +1553,15 @@ public class jdbcpostgreSQL extends Application {
                     result_str += "%.\n";
                 }
             }
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error accessing team win vs loss hypothesis");
         }
+        
         if (result_str == "") {
             return "team win vs loss hypothesis non existent\n";
         }
+        
         return result_str;
     }
 
