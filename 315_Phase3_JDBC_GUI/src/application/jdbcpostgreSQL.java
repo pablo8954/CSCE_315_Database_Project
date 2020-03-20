@@ -1915,6 +1915,28 @@ public class jdbcpostgreSQL extends Application {
             String sqlStmt = "";
 
             if (!team.equals("") && !awayteam.equals("")) {
+                sqlStmt = String.format("SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s' LIMIT 1;", team);
+                Integer count = 0;
+                ResultSet result_upper = stmt.executeQuery(sqlStmt);
+                while (result_upper.next()) {
+                    count += 1;
+                }
+                if (count < 1) {
+                    return "Error accessing Team links please make sure team name is correct";
+                }
+                stmt = conn.createStatement();
+                sqlStmt = String.format("SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s' LIMIT 1;", awayteam);
+                count = 0;
+                result_upper = stmt.executeQuery(sqlStmt);
+                while (result_upper.next()) {
+                    count += 1;
+                }
+                if (count < 1) {
+                    return "Error accessing Team links please make sure team name is correct";
+                }
+            }
+            stmt = conn.createStatement();
+            if (!team.equals("") && !awayteam.equals("")) {
                 sqlStmt = String.format(
                         "SELECT \"TeamId\", \"OpposingTeamId\", \"GameId\" FROM \"Team_Metrics_Gamewise\" WHERE \"Result\"='WIN' AND \"TeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s') AND \"OpposingTeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s') LIMIT 1;",
                         team, awayteam);
@@ -1922,7 +1944,7 @@ public class jdbcpostgreSQL extends Application {
 
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
-                result_str += String.format("%s won against %s", team, awayteam);
+                result_str += String.format("%s | %s", team, awayteam);
                 result_str += "\n";
             }
             if (result_str.equals("")) {
