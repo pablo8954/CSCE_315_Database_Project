@@ -183,23 +183,23 @@ public class WindowController {
 		opposingTeam = controller.getOpposingTeam();
 	}
 	
-	public void questionTwoButtonPressed() {
+	public void questionTwoButtonPressed() throws IOException {
 		mbutton.setText("Table Name");
 		questionTwoResultsRequested = true;
 		System.out.println("Question Two Selected");
 		Stage stage = new Stage();
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("QuestionOne.fxml"));
+		loader.setLocation(getClass().getResource("QuestionTwo.fxml"));
 		Parent root = loader.load();
 		Scene scene = new Scene(root, 400, 150);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.setTitle("Question One");
+		stage.setTitle("Question Two");
 		stage.showAndWait();
 		//Get the info from conference window
-		QuestionOneController controller = loader.getController();
+		QuestionTwoController controller = loader.getController();
 		teamName = controller.getTeamName();
-		opposingTeam = controller.getOpposingTeam();
+		year = controller.getYear();
 	}
 	
 	public void questionThreeButtonPressed() {

@@ -89,12 +89,13 @@ public class jdbcpostgreSQL extends Application {
 
                             resultsRequested = controller.getResultsRequested();
                             //questionOneResultsRequested = controller.getQuestionOneResultsRequested();
-                            questionTwoResultsRequested = controller.getQuestionTwoResultsRequested();
+                            //questionTwoResultsRequested = controller.getQuestionTwoResultsRequested();
                             questionThreeResultsRequested = controller.getQuestionThreeResultsRequested();
 
                             // If get results pushed
                             if (resultsRequested) {
                             	 questionOneResultsRequested = controller.getQuestionOneResultsRequested();
+                            	 questionTwoResultsRequested = controller.getQuestionTwoResultsRequested();
                                 dataSelection = controller.getDataSelection();
                                 teamName = controller.getTeamName();
                                 conferenceName = controller.getConferenceName();
@@ -135,7 +136,12 @@ public class jdbcpostgreSQL extends Application {
                                 	result = "Question One Pressed";
                                 	result += "\n" + questionOne(controller.getTeamName(), controller.getOpposingTeamName(), conn);
                                 	controller.updateOutputTextArea(result);
-                                }
+                            	} else if(questionTwoResultsRequested) {
+                            		System.out.println("he");
+                            		result = "Question Two Pressed";
+                            		result += "\n" + questionThree(controller.getTeamName(), controller.getYear(), conn);
+                            		controller.updateOutputTextArea(result);
+                            	}
                                 
 
                                 controller.updateOutputTextArea(result);
@@ -156,20 +162,7 @@ public class jdbcpostgreSQL extends Application {
                                     }
                                 }
                             }
-                            //question one
-                            else if(questionOneResultsRequested) {
-                            	String result = "Question One Button pressed";
-                            }
-                            //question two
-                            else if(questionTwoResultsRequested) {
-                            	String result = "Question Two Button pressed";
-                            	controller.updateOutputTextArea(result);
-                            }
-                            //question three
-                            else if(questionThreeResultsRequested) {
-                            	String result = "Question Three Button pressed";
-                            	controller.updateOutputTextArea(result);
-                            }
+                         
                         }
                     });
                 }

@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.QuestionOneController">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.QuestionTwoController">
    <children>
       <Pane maxHeight="150.0" maxWidth="400.0" minHeight="150.0" minWidth="400.0" prefHeight="150.0" prefWidth="400.0">
          <children>
@@ -33,17 +33,17 @@
                               <Insets left="25.0" top="10.0" />
                            </HBox.margin>
                         </Label>
-                        <MenuButton mnemonicParsing="false" text="MenuButton">
+                        <MenuButton fx:id="yearButton" mnemonicParsing="false" text="MenuButton">
                           <items>
-                            <MenuItem mnemonicParsing="false" text="2005" />
-                            <MenuItem mnemonicParsing="false" text="2006" />
-                              <MenuItem mnemonicParsing="false" text="2007" />
-                              <MenuItem mnemonicParsing="false" text="2008" />
-                              <MenuItem mnemonicParsing="false" text="2009" />
-                              <MenuItem mnemonicParsing="false" text="2010" />
-                              <MenuItem mnemonicParsing="false" text="2011" />
-                              <MenuItem mnemonicParsing="false" text="2012" />
-                              <MenuItem mnemonicParsing="false" text="2013" />
+                            <MenuItem fx:id="item2005" mnemonicParsing="false" onAction="#selected2005" text="2005" />
+                            <MenuItem fx:id="item2006" mnemonicParsing="false" onAction="#selected2006" text="2006" />
+                              <MenuItem fx:id="item2007" mnemonicParsing="false" onAction="#selected2007" text="2007" />
+                              <MenuItem fx:id="item2008" mnemonicParsing="false" onAction="#selected2008" text="2008" />
+                              <MenuItem fx:id="item2009" mnemonicParsing="false" onAction="#selected2009" text="2009" />
+                              <MenuItem fx:id="item2010" mnemonicParsing="false" onAction="#selected2010" text="2010" />
+                              <MenuItem fx:id="item2011" mnemonicParsing="false" onAction="#selected2011" text="2011" />
+                              <MenuItem fx:id="item2012" mnemonicParsing="false" onAction="#selected2012" text="2012" />
+                              <MenuItem fx:id="item2013" mnemonicParsing="false" onAction="#selected2013" text="2013" />
                           </items>
                            <HBox.margin>
                               <Insets left="23.0" top="10.0" />
