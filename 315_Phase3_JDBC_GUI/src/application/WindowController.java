@@ -165,6 +165,7 @@ public class WindowController {
 	}
 	
 	public void questionOneButtonPressed() throws IOException {
+		outputTextArea.setText("Given 2 teams, create a victory chain.");
 		mbutton.setText("Table Name");
 		questionOneResultsRequested = true;
 		System.out.println("Question One Selected");
@@ -184,6 +185,7 @@ public class WindowController {
 	}
 	
 	public void questionTwoButtonPressed() throws IOException {
+		outputTextArea.setText("Given a team, find the team with the most rushing yards vs. the given team.");
 		mbutton.setText("Table Name");
 		questionTwoResultsRequested = true;
 		System.out.println("Question Two Selected");
@@ -203,6 +205,7 @@ public class WindowController {
 	}
 	
 	public void questionThreeButtonPressed() throws IOException {
+		outputTextArea.setText("Given a team, is there a correlation between average attendance and team record.");
 		mbutton.setText("Table Name");
 		questionThreeResultsRequested = true;
 		System.out.println("Question Two Selected");

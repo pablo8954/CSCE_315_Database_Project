@@ -134,15 +134,15 @@ public class jdbcpostgreSQL extends Application {
                                                 controller.getOpposingTeamName(), controller.getYear(), conn);
                                     }
                                 } else if(questionOneResultsRequested) {
-                                	result = "Question One Pressed";
+                                	result = "Given 2 teams, create a victory chain.";
                                 	result += "\n" + questionOne(controller.getTeamName(), controller.getOpposingTeamName(), conn);
                                 	controller.updateOutputTextArea(result);
                             	} else if(questionTwoResultsRequested) {
-                            		result = "Question Two Pressed";
+                            		result = "Given a team, find the team with the most rushing yards vs. the given team.";
                             		result += "\n" + questionThree(controller.getTeamName(), controller.getYear(), conn);
                             		controller.updateOutputTextArea(result);
                             	} else if(questionThreeResultsRequested) {
-                            		result = "Question Three Pressed";
+                            		result = "Given a team, is there a correlation between average attendance and team record.";
                             		result += "\n" + questionFive(controller.getTeamName(), controller.getYear(), conn);
                             		controller.updateOutputTextArea(result);
                             	}
