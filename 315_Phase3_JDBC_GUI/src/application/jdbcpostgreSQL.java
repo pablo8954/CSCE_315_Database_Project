@@ -35,6 +35,10 @@ public class jdbcpostgreSQL extends Application {
     public static Connection conn;
     private static int year;
     public static boolean resultsRequested = false;
+    public static boolean questionOneResultsRequested = false;
+    public static boolean questionTwoResultsRequested = false;
+    public static boolean questionThreeResultsRequested = false;
+
     private static WindowController controller;
     public static Stage mainStage;
 
@@ -82,6 +86,10 @@ public class jdbcpostgreSQL extends Application {
                         public void run() {
 
                             resultsRequested = controller.getResultsRequested();
+                            questionOneResultsRequested = controller.getQuestionOneResultsRequested();
+                            questionTwoResultsRequested = controller.getQuestionTwoResultsRequested();
+                            questionThreeResultsRequested = controller.getQuestionThreeResultsRequested();
+
                             // If get results pushed
                             if (resultsRequested) {
                                 dataSelection = controller.getDataSelection();
@@ -139,6 +147,21 @@ public class jdbcpostgreSQL extends Application {
                                         e.printStackTrace();
                                     }
                                 }
+                            }
+                            //question one
+                            else if(questionOneResultsRequested) {
+                            	String result = "Question One Button pressed";
+                            	controller.updateOutputTextArea(result);
+                            }
+                            //question two
+                            else if(questionTwoResultsRequested) {
+                            	String result = "Question Two Button pressed";
+                            	controller.updateOutputTextArea(result);
+                            }
+                            //question three
+                            else if(questionThreeResultsRequested) {
+                            	String result = "Question Three Button pressed";
+                            	controller.updateOutputTextArea(result);
                             }
                         }
                     });

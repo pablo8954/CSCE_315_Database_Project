@@ -25,7 +25,7 @@
                                              <padding>
                                                 <Insets top="10.0" />
                                              </padding></Label>
-                                          <HBox prefHeight="100.0" prefWidth="200.0">
+                                          <HBox maxHeight="80.0" minHeight="80.0" prefHeight="80.0" prefWidth="200.0">
                                              <children>
                                                 <MenuButton fx:id="mbutton" mnemonicParsing="false" text="Table Name">
                                                   <items>
@@ -52,18 +52,31 @@
                               </HBox>
                            </children>
                         </VBox>
-                        <VBox maxHeight="100.0" maxWidth="230.0" minHeight="100.0" minWidth="230.0" prefHeight="100.0" prefWidth="230.0">
+                        <VBox maxHeight="100.0" maxWidth="230.0" minHeight="100.0" minWidth="230.0" prefHeight="300.0" prefWidth="230.0">
                            <children>
                               <CheckBox fx:id="generateTextFileCheckBox" mnemonicParsing="false" text="Generate Text File">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </CheckBox>
-                              <TextArea fx:id="userInputLabel" editable="false" prefHeight="200.0" prefWidth="200.0">
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="questionOneButton" mnemonicParsing="false" onAction="#questionOneButtonPressed" text="Q1">
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="questionTwoButton" mnemonicParsing="false" onAction="#questionTwoButtonPressed" text="Q2">
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="questionThreeButton" mnemonicParsing="false" onAction="#questionThreeButtonPressed" text="Q3" />
+                                 </children>
                                  <VBox.margin>
-                                    <Insets bottom="5.0" top="10.0" />
+                                    <Insets top="28.0" />
                                  </VBox.margin>
-                              </TextArea>
+                              </HBox>
                            </children></VBox>
                      </children>
                   </HBox>
@@ -72,38 +85,7 @@
                         <TextArea fx:id="outputTextArea" editable="false" maxHeight="450.0" maxWidth="480.0" minHeight="450.0" minWidth="480.0" prefHeight="450.0" prefWidth="480.0" />
                      </children></HBox>
                </children>
-               <padding>
-                  <Insets top="30.0" />
-               </padding>
             </VBox>
-            <MenuBar>
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Save" />
-                        <MenuItem mnemonicParsing="false" text="Save As" />
-                        <MenuItem mnemonicParsing="false" text="Close" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
-                  </items>
-                </Menu>
-                  <Menu mnemonicParsing="false" text="Questions">
-                     <items>
-                        <MenuItem mnemonicParsing="false" text="Question 1" />
-                        <MenuItem mnemonicParsing="false" text="Question 2" />
-                        <MenuItem mnemonicParsing="false" text="Question 3" />
-                     </items>
-                  </Menu>
-              </menus>
-            </MenuBar>
          </children>
       </Pane>
    </children>

@@ -34,6 +34,12 @@ public class WindowController {
 	TextArea outputTextArea;
 	@FXML
 	CheckBox generateTextFileCheckBox;
+	@FXML 
+	Button questionOneButton;
+	@FXML 
+	Button questionTwoButton;
+	@FXML 
+	Button questionThreeButton;
 	
 	String dataSelection = "";
 	String teamName = "";
@@ -45,6 +51,9 @@ public class WindowController {
 	String stadiumName = "";
 	int year = 0; 
 	boolean resultsRequested = false;
+	boolean questionOneResultsRequested = false;
+	boolean questionTwoResultsRequested = false;
+	boolean questionThreeResultsRequested = false;
 	
 	//All functions below are for updating menu text for teams
 	public void confItemSelected() throws IOException {
@@ -155,6 +164,18 @@ public class WindowController {
 		resultsRequested = true;
 	}
 	
+	public void questionOneButtonPressed() {
+		questionOneResultsRequested = true;
+	}
+	
+	public void questionTwoButtonPressed() {
+		questionTwoResultsRequested = true;
+	}
+	
+	public void questionThreeButtonPressed() {
+		questionThreeResultsRequested = true;
+	}
+	
 	public void resetResultsRequested() {
 		resultsRequested = false;
 	}
@@ -162,6 +183,24 @@ public class WindowController {
 	public boolean getResultsRequested() {
 		boolean result = resultsRequested;
 		resultsRequested = false;
+		return result;
+	}
+	
+	public boolean getQuestionOneResultsRequested() {
+		boolean result = questionOneResultsRequested;
+		questionOneResultsRequested = false;
+		return result;
+	}
+	
+	public boolean getQuestionTwoResultsRequested() {
+		boolean result = questionTwoResultsRequested;
+		questionTwoResultsRequested = false;
+		return result;
+	}
+	
+	public boolean getQuestionThreeResultsRequested() {
+		boolean result = questionThreeResultsRequested;
+		questionThreeResultsRequested = false;
 		return result;
 	}
 	
