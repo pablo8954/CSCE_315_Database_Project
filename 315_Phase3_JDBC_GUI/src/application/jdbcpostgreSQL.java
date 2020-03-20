@@ -88,12 +88,13 @@ public class jdbcpostgreSQL extends Application {
                         public void run() {
 
                             resultsRequested = controller.getResultsRequested();
-                            questionOneResultsRequested = controller.getQuestionOneResultsRequested();
+                            //questionOneResultsRequested = controller.getQuestionOneResultsRequested();
                             questionTwoResultsRequested = controller.getQuestionTwoResultsRequested();
                             questionThreeResultsRequested = controller.getQuestionThreeResultsRequested();
 
                             // If get results pushed
                             if (resultsRequested) {
+                            	 questionOneResultsRequested = controller.getQuestionOneResultsRequested();
                                 dataSelection = controller.getDataSelection();
                                 teamName = controller.getTeamName();
                                 conferenceName = controller.getConferenceName();
@@ -130,7 +131,12 @@ public class jdbcpostgreSQL extends Application {
                                         result = teamPlayData(controller.getTeamName(),
                                                 controller.getOpposingTeamName(), controller.getYear(), conn);
                                     }
+                                } else if(questionOneResultsRequested) {
+                                	result = "Question One Pressed";
+                                	result += "\n" + questionOne(controller.getTeamName(), controller.getOpposingTeamName(), conn);
+                                	controller.updateOutputTextArea(result);
                                 }
+                                
 
                                 controller.updateOutputTextArea(result);
                                 System.out.println(result);
@@ -153,7 +159,6 @@ public class jdbcpostgreSQL extends Application {
                             //question one
                             else if(questionOneResultsRequested) {
                             	String result = "Question One Button pressed";
-                            	controller.updateOutputTextArea(result);
                             }
                             //question two
                             else if(questionTwoResultsRequested) {
@@ -2005,21 +2010,10 @@ public class jdbcpostgreSQL extends Application {
 
     public static void main(String args[]) {
 
-        dbSetup my = new dbSetup();
-        // Building the connection
-        Connection conn = null;
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/ace_of_spades", my.user,
-                    my.pswd);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
+        launch(args);
 
         // question three
-        System.out.println(questionThree("Texas A&M", 0, conn));
+       /* System.out.println(questionThree("Texas A&M", 0, conn));
         System.out.println(questionThree("Auburn", 2013, conn));
         System.out.println(questionThree("Texas A&M", 2005, conn));
         System.out.println(questionThree("Clemson", 2013, conn));
@@ -2030,10 +2024,10 @@ public class jdbcpostgreSQL extends Application {
         System.out.println(questionFive("Texas A&M", 0, conn));
         System.out.println("\n");
         System.out.println(questionFive("Clemson", 2013, conn));
-        System.out.println("\n");
+        System.out.println("\n");*/
 
         // TODO: try catch to handle bad team inputs
-        System.out.println(questionFive("Shrey is Bai", 2013, conn));
+        //System.out.println(questionFive("Shrey is Bai", 2013, conn));
 
     }
     // end backendmain
