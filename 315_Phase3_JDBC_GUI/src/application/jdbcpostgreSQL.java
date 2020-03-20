@@ -90,12 +90,13 @@ public class jdbcpostgreSQL extends Application {
                             resultsRequested = controller.getResultsRequested();
                             //questionOneResultsRequested = controller.getQuestionOneResultsRequested();
                             //questionTwoResultsRequested = controller.getQuestionTwoResultsRequested();
-                            questionThreeResultsRequested = controller.getQuestionThreeResultsRequested();
+                            //questionThreeResultsRequested = controller.getQuestionThreeResultsRequested();
 
                             // If get results pushed
                             if (resultsRequested) {
                             	 questionOneResultsRequested = controller.getQuestionOneResultsRequested();
                             	 questionTwoResultsRequested = controller.getQuestionTwoResultsRequested();
+                            	 questionThreeResultsRequested = controller.getQuestionThreeResultsRequested();
                                 dataSelection = controller.getDataSelection();
                                 teamName = controller.getTeamName();
                                 conferenceName = controller.getConferenceName();
@@ -137,9 +138,12 @@ public class jdbcpostgreSQL extends Application {
                                 	result += "\n" + questionOne(controller.getTeamName(), controller.getOpposingTeamName(), conn);
                                 	controller.updateOutputTextArea(result);
                             	} else if(questionTwoResultsRequested) {
-                            		System.out.println("he");
                             		result = "Question Two Pressed";
                             		result += "\n" + questionThree(controller.getTeamName(), controller.getYear(), conn);
+                            		controller.updateOutputTextArea(result);
+                            	} else if(questionThreeResultsRequested) {
+                            		result = "Question Three Pressed";
+                            		result += "\n" + questionFive(controller.getTeamName(), controller.getYear(), conn);
                             		controller.updateOutputTextArea(result);
                             	}
                                 

@@ -202,8 +202,23 @@ public class WindowController {
 		year = controller.getYear();
 	}
 	
-	public void questionThreeButtonPressed() {
+	public void questionThreeButtonPressed() throws IOException {
+		mbutton.setText("Table Name");
 		questionThreeResultsRequested = true;
+		System.out.println("Question Two Selected");
+		Stage stage = new Stage();
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("QuestionThree.fxml"));
+		Parent root = loader.load();
+		Scene scene = new Scene(root, 400, 150);
+		stage.setScene(scene);
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setTitle("Question Two");
+		stage.showAndWait();
+		//Get the info from conference window
+		QuestionThreeController controller = loader.getController();
+		teamName = controller.getTeamName();
+		year = controller.getYear();
 	}
 	
 	public void resetResultsRequested() {
