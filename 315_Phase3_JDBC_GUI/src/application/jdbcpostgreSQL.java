@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.sql.*;
 import java.time.Year;
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -154,7 +156,7 @@ public class jdbcpostgreSQL extends Application {
             Statement stmt = conn.createStatement();
             String sqlStmt = "";
 
-            //SQL Query 4 Cases
+            // SQL Query 4 Cases
             // - Name and Year Provided
             // - Only Year provided
             // - Only Name provided
@@ -168,8 +170,7 @@ public class jdbcpostgreSQL extends Application {
                         + "(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')OR\"AwayTeamId\"="
                         + "(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')))AS game_data ON\"TeamId\"="
                         + "\"HomeTeamId\")AS team1_data ON\"Team\" .\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" ."
-                        + "\"StadiumId\"=team2_data.\"StadiumId\";"
-                        ,year.toString(), name, name);
+                        + "\"StadiumId\"=team2_data.\"StadiumId\";", year.toString(), name, name);
 
             } else if (name.equals("") && !(year < 2005 || year > 2013)) {
                 sqlStmt = String.format("SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\","
@@ -177,8 +178,8 @@ public class jdbcpostgreSQL extends Application {
                         + ".\"TeamName\" AS\"AwayTeamName\",*FROM\"Team\" INNER JOIN(SELECT\"TeamName\" AS"
                         + "\"HomeTeamName\",*FROM\"Team\" INNER JOIN(SELECT*FROM\"Game\" WHERE EXTRACT"
                         + "(YEAR FROM \"Date\")=%s)AS game_data ON\"TeamId\"=\"HomeTeamId\")AS team1_data ON\"Team\" "
-                        + ".\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";"
-                        , year.toString());
+                        + ".\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";",
+                        year.toString());
 
             } else if (!name.equals("") && (year < 2005 || year > 2013)) {
                 sqlStmt = String.format(
@@ -188,62 +189,60 @@ public class jdbcpostgreSQL extends Application {
                                 + "WHERE (\"HomeTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%') OR "
                                 + "\"AwayTeamId\"=(SELECT DISTINCT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%')))AS game_data ON"
                                 + "\"TeamId\"=\"HomeTeamId\")AS team1_data ON\"Team\" .\"TeamId\"=\"AwayTeamId\")AS team2_data ON"
-                                + "\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";"
-                                ,name, name);
+                                + "\"Stadium_Yearwise\" .\"StadiumId\"=team2_data.\"StadiumId\";",
+                        name, name);
             } else if (name.equals("") && (year < 2005 || year > 2013)) {
-                sqlStmt = String.format(
-                		"SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\","
+                sqlStmt = String.format("SELECT DISTINCT \"HomeTeamName\",\"AwayTeamName\",\"Date\",\"StadiumName\","
                         + "\"Attendance\",\"Duration\" FROM\"Stadium_Yearwise\" INNER JOIN(SELECT\"Team\" ."
                         + "\"TeamName\" AS\"AwayTeamName\",*FROM\"Team\" INNER JOIN(SELECT\"TeamName\" AS\"HomeTeamName\","
                         + "*FROM\"Team\" INNER JOIN(SELECT*FROM\"Game\")AS game_data ON\"TeamId\"=\"HomeTeamId\")AS team1_data "
                         + "ON\"Team\" .\"TeamId\"=\"AwayTeamId\")AS team2_data ON\"Stadium_Yearwise\" .\"StadiumId\"=team2_data"
-                        + ".\"StadiumId\";"
-                        , year.toString(), name, name);
+                        + ".\"StadiumId\";", year.toString(), name, name);
             }
-            
+
             ResultSet result = stmt.executeQuery(sqlStmt);
-                        
+
             while (result.next()) {
                 result_str += "Home Team Name: ";
                 try {
-                	result_str += result.getString("HomeTeamName");
+                    result_str += result.getString("HomeTeamName");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-               
+
                 result_str += " | Away Team Name: ";
                 try {
-                	result_str += result.getString("AwayTeamName");
+                    result_str += result.getString("AwayTeamName");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                   
+
                 result_str += " | Date: ";
                 try {
-                	result_str += result.getString("Date");
+                    result_str += result.getString("Date");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Attendance: ";
                 try {
-                	result_str += result.getString("Attendance");
+                    result_str += result.getString("Attendance");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Duration: ";
                 try {
-                	result_str += result.getString("Duration");
+                    result_str += result.getString("Duration");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Stadium: ";
                 try {
                     result_str += result.getString("StadiumName");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += "\n";
@@ -253,7 +252,7 @@ public class jdbcpostgreSQL extends Application {
             JOptionPane.showMessageDialog(null,
                     "Error accessing Game Data. Make sure that the Team name and Year is correct");
         }
-        
+
         if (result_str == "") {
             return "Game Data non existent\n";
         }
@@ -265,64 +264,63 @@ public class jdbcpostgreSQL extends Application {
         try {
             Statement stmt = conn.createStatement();
             String sqlStatement = String
-                    .format(
-                    		"SELECT DISTINCT " + "\"StadiumName\",\"StadiumSurface\",\"StadiumCity\",\"StadiumState\","
+                    .format("SELECT DISTINCT " + "\"StadiumName\",\"StadiumSurface\",\"StadiumCity\",\"StadiumState\","
                             + "\"StadiumCapacity\",\"StadiumYearOpened\" FROM \"Stadium_Yearwise\" WHERE"
                             + " \"StadiumId\" = ( SELECT DISTINCT \"StadiumId\" FROM \"Stadium_Yearwise\" WHERE "
                             + "\"StadiumName\" LIKE '%s%%');", name);
-           
-            //Fetch SQL Results for output in DBMS
+
+            // Fetch SQL Results for output in DBMS
             ResultSet result = stmt.executeQuery(sqlStatement);
             while (result.next()) {
                 result_str += "Stadium Name: ";
                 try {
                     result_str += result.getString("StadiumName");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Surface: ";
                 try {
-                	result_str += result.getString("StadiumSurface");
+                    result_str += result.getString("StadiumSurface");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-               
+
                 result_str += " | City: ";
                 try {
                     result_str += result.getString("StadiumCity");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | State: ";
                 try {
-                	result_str += result.getString("StadiumState");
+                    result_str += result.getString("StadiumState");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Capacity: ";
                 try {
-                    result_str += result.getString("StadiumCapacity");                	
+                    result_str += result.getString("StadiumCapacity");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Year Opened: ";
                 try {
-                	result_str += result.getString("StadiumYearOpened");
+                    result_str += result.getString("StadiumYearOpened");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-               
+
                 result_str += "\n";
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,
                     "Error accessing Stadium Data. Make sure that the stadium name is correct");
         }
-        
+
         if (result_str == "") {
             return "Stadium Data non existent\n";
         }
@@ -334,32 +332,30 @@ public class jdbcpostgreSQL extends Application {
         try {
             Statement stmt = conn.createStatement();
 
-            String sqlStatement = String.format(
-            		"SELECT DISTINCT \"Subdivision\", \"ConferenceName\" "
+            String sqlStatement = String.format("SELECT DISTINCT \"Subdivision\", \"ConferenceName\" "
                     + "FROM \"Conference_Yearwise\" WHERE \"ConfId\" = "
                     + "( SELECT DISTINCT \"ConfId\" FROM \"Conference_Yearwise\" WHERE "
-                    + "\"ConferenceName\" LIKE '%s%%');"
-                    , name);
+                    + "\"ConferenceName\" LIKE '%s%%');", name);
 
             ResultSet result = stmt.executeQuery(sqlStatement);
             while (result.next()) {
                 result_str += "Conference Name: ";
                 try {
-                	result_str += result.getString("ConferenceName");
+                    result_str += result.getString("ConferenceName");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Subdivision: ";
                 try {
-                	result_str += result.getString("Subdivision");
+                    result_str += result.getString("Subdivision");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += "\n";
             }
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,
                     "Error accessing Conference Data. Make sure that the Conference name is correct");
@@ -387,37 +383,37 @@ public class jdbcpostgreSQL extends Application {
             while (result.next()) {
                 result_str += "Team Name: ";
                 try {
-                	result_str += result.getString("TeamName");
+                    result_str += result.getString("TeamName");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Average Attendance: ";
                 try {
-                	result_str += result.getString("AverageAttendance");
-                } catch (Exception e){
-                	result_str += "NULL";
+                    result_str += result.getString("AverageAttendance");
+                } catch (Exception e) {
+                    result_str += "NULL";
                 }
 
                 result_str += " | Conference Name: ";
                 try {
-                	result_str += result.getString("ConferenceName");
+                    result_str += result.getString("ConferenceName");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Subdivision: ";
                 try {
-                	result_str += result.getString("Subdivision");
+                    result_str += result.getString("Subdivision");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Year: ";
                 try {
-                	result_str += result.getString("Year");
+                    result_str += result.getString("Year");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += "\n";
@@ -444,7 +440,7 @@ public class jdbcpostgreSQL extends Application {
             // - Home Team, Away Team, Year provided
             // - Home Team, Away Team provided
             // - Home Team, Year Provided
-            // - Only Home Team Provided            
+            // - Only Home Team Provided
             if (!team.equals("") && !awayteam.equals("") && !(year < 2005 || year > 2013)) {
                 JOptionPane.showMessageDialog(null, "First");
                 sqlStmt = String.format(
@@ -532,479 +528,479 @@ public class jdbcpostgreSQL extends Application {
             while (result.next()) {
                 result_str += "Home Team Name: ";
                 try {
-                	result_str += result.getString("HomeTeamName");
+                    result_str += result.getString("HomeTeamName");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Away Team Name: ";
                 try {
-                	result_str += result.getString("AwayTeamName");
+                    result_str += result.getString("AwayTeamName");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += String.format(" | Result for %s: ", team);
                 try {
-                	result_str += result.getString("Result for Team 1");
+                    result_str += result.getString("Result for Team 1");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Kickoff Return Yards: ";
                 try {
-                	result_str += result.getString("YardsKickoffReturn");
+                    result_str += result.getString("YardsKickoffReturn");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-               
+
                 result_str += " | Punt Return Yards: ";
                 try {
-                	result_str += result.getString("YardsPuntReturn");
+                    result_str += result.getString("YardsPuntReturn");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Fumble Return Yards: ";
                 try {
-                	result_str += result.getString("YardsFumbleReturn");
+                    result_str += result.getString("YardsFumbleReturn");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Interception Return Yards: ";
                 try {
-                	result_str += result.getString("YardsInterceptionReturn");
+                    result_str += result.getString("YardsInterceptionReturn");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Misc Return Yards: ";
                 try {
-                	result_str += result.getString("YardsMiscReturn");
+                    result_str += result.getString("YardsMiscReturn");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Punt Yards: ";
                 try {
-                	result_str += result.getString("YardsPunt");
+                    result_str += result.getString("YardsPunt");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Kickoff Yards: ";
                 try {
-                	result_str += result.getString("YardsKickoff");
+                    result_str += result.getString("YardsKickoff");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Tackle Yards: ";
                 try {
-                	result_str += result.getString("YardsTackleLoss");
+                    result_str += result.getString("YardsTackleLoss");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Tackle Loss Yards: ";
                 try {
-                	result_str += result.getString("YardsTackleLoss");
+                    result_str += result.getString("YardsTackleLoss");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Sack Yards: ";
-                try  {
-                	result_str += result.getString("YardsSack");
+                try {
+                    result_str += result.getString("YardsSack");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Penalty Yards: ";
                 try {
-                	result_str += result.getString("YardsPenalty");
+                    result_str += result.getString("YardsPenalty");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Tackles Solo: ";
                 try {
-                	result_str += result.getString("TacklesSolo");
+                    result_str += result.getString("TacklesSolo");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Tackles Assist: ";
                 try {
-                	result_str += result.getString("TacklesAssist");
+                    result_str += result.getString("TacklesAssist");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Tackles For Loss: ";
                 try {
-                	result_str += result.getString("TacklesForLoss");
+                    result_str += result.getString("TacklesForLoss");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Interceptions Pass: ";
                 try {
-                	result_str += result.getString("InterceptionsPass");
+                    result_str += result.getString("InterceptionsPass");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Interceptions Return: ";
                 try {
-                	result_str += result.getString("InterceptionsReturn");
+                    result_str += result.getString("InterceptionsReturn");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Fumbles: ";
                 try {
-                	result_str += result.getString("Fumbles");
+                    result_str += result.getString("Fumbles");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Fumbles Lost: ";
                 try {
-                	result_str += result.getString("FumblesLost");
+                    result_str += result.getString("FumblesLost");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Fumbles Forced: ";
                 try {
-                	result_str += result.getString("FumblesForced");
+                    result_str += result.getString("FumblesForced");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Rush Attempts: ";
                 try {
-                	result_str += result.getString("AttemptsRush");
+                    result_str += result.getString("AttemptsRush");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Pass Attempts: ";
                 try {
-                	 result_str += result.getString("AttemptsPass");
+                    result_str += result.getString("AttemptsPass");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | FG Attempts: ";
                 try {
-                	result_str += result.getString("AttemptsFG");
+                    result_str += result.getString("AttemptsFG");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Offense XP Kick Attempts: ";
                 try {
-                	result_str += result.getString("AttemptsOffenseXPKick");
+                    result_str += result.getString("AttemptsOffenseXPKick");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Offense 2XP Attempts: ";
                 try {
-                	result_str += result.getString("AttemptsOffense2XP");
+                    result_str += result.getString("AttemptsOffense2XP");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Third Down Attempts: ";
                 try {
-                	result_str += result.getString("AttemptsThirdDown");
+                    result_str += result.getString("AttemptsThirdDown");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Fourth Down Attempts: ";
                 try {
-                	result_str += result.getString("AttemptsFourthDown");
+                    result_str += result.getString("AttemptsFourthDown");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Red Zone Attempts: ";
                 try {
-                	result_str += result.getString("AttemptsRedZone");
+                    result_str += result.getString("AttemptsRedZone");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | TouchDown Rush: ";
                 try {
-                	result_str += result.getString("TDRush");
+                    result_str += result.getString("TDRush");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | TouchDown Kickoff Return: ";
                 try {
-                	result_str += result.getString("TDKickoffReturn");
+                    result_str += result.getString("TDKickoffReturn");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | TouchDown Punt Return: ";
                 try {
-                	result_str += result.getString("TDPuntReturn");
+                    result_str += result.getString("TDPuntReturn");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | TouchDown Fumble Return: ";
                 try {
-                	result_str += result.getString("TDFumbleReturn");
+                    result_str += result.getString("TDFumbleReturn");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | TouchDown Interception Return: ";
                 try {
-                	result_str += result.getString("TDInterceptionReturn");
+                    result_str += result.getString("TDInterceptionReturn");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | TouchDown Misc Return: ";
                 try {
-                	result_str += result.getString("TDMiscReturn");
+                    result_str += result.getString("TDMiscReturn");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | TouchDown Red Zone: ";
                 try {
-                	result_str += result.getString("TDRedZone");
+                    result_str += result.getString("TDRedZone");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Pass Conversion: ";
                 try {
-                	result_str += result.getString("ConvPass");
+                    result_str += result.getString("ConvPass");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Third Down Conversion: ";
                 try {
-                	result_str += result.getString("ConvThirdDown");
+                    result_str += result.getString("ConvThirdDown");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Fourth Down Conversion: ";
                 try {
-                	result_str += result.getString("ConvFourthDown");
+                    result_str += result.getString("ConvFourthDown");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Pass Completion: ";
                 try {
-                	result_str += result.getString("PassCompletion");
+                    result_str += result.getString("PassCompletion");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Misc Return: ";
                 try {
-                	result_str += result.getString("MiscReturn");
+                    result_str += result.getString("MiscReturn");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | FG Made: ";
                 try {
-                	result_str += result.getString("MadeFG");
+                    result_str += result.getString("MadeFG");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Offensive XP Kick Made: ";
                 try {
-                	result_str += result.getString("MadeOffensiveXPKick");
+                    result_str += result.getString("MadeOffensiveXPKick");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Offensive 2XP Made: ";
                 try {
-                	result_str += result.getString("MadeOffensive2XP");
+                    result_str += result.getString("MadeOffensive2XP");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Defensive 2XP Made: ";
                 try {
-                	result_str += result.getString("MadeDefensive2XP");
+                    result_str += result.getString("MadeDefensive2XP");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Safety: ";
                 try {
-                	result_str += result.getString("Safety");
+                    result_str += result.getString("Safety");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
-                
+
                 result_str += " | Points: ";
-                try  {
-                	result_str += result.getString("Points");
+                try {
+                    result_str += result.getString("Points");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Punts: ";
                 try {
-                	result_str += result.getString("Punts");
+                    result_str += result.getString("Punts");
                 } catch (Exception e) {
-                	result_str += "NULL";
+                    result_str += "NULL";
                 }
 
                 result_str += " | Kickoffs Return: ";
                 try {
-                	result_str += result.getString("KickoffsReturn");
+                    result_str += result.getString("KickoffsReturn");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                }                
+                    result_str += "NULL";
+                }
 
                 result_str += " | Kickoffs Out Of Bounds: ";
                 try {
-                	result_str += result.getString("KickoffsOutOfBounds");
+                    result_str += result.getString("KickoffsOutOfBounds");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                }  
-               
+                    result_str += "NULL";
+                }
+
                 result_str += " | Kickoffs Onside: ";
                 try {
-                	result_str += result.getString("KickoffsOnside");
+                    result_str += result.getString("KickoffsOnside");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                } 
-                
+                    result_str += "NULL";
+                }
+
                 result_str += " | Kickoffs TouchBacks: ";
                 try {
-                	result_str += result.getString("KickoffTouchBacks");
+                    result_str += result.getString("KickoffTouchBacks");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                } 
+                    result_str += "NULL";
+                }
 
                 result_str += " | Sacks: ";
                 try {
-                	result_str += result.getString("Sacks");
+                    result_str += result.getString("Sacks");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                } 
+                    result_str += "NULL";
+                }
 
                 result_str += " | QBHurry: ";
                 try {
-                	result_str += result.getString("QBHurry");
+                    result_str += result.getString("QBHurry");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                } 
-                
+                    result_str += "NULL";
+                }
+
                 result_str += " | Pass Broken Up: ";
                 try {
-                	result_str += result.getString("PassBrokenUp");
+                    result_str += result.getString("PassBrokenUp");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                } 
+                    result_str += "NULL";
+                }
 
                 result_str += " | Kick/Punt Blocked: ";
                 try {
-                	result_str += result.getString("KickPuntBlocked");
+                    result_str += result.getString("KickPuntBlocked");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                } 
+                    result_str += "NULL";
+                }
 
                 result_str += " | First Down Rush: ";
                 try {
-                	result_str += result.getString("FirstDownRush");
+                    result_str += result.getString("FirstDownRush");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                } 
+                    result_str += "NULL";
+                }
 
                 result_str += " | First Down Pass: ";
                 try {
-                	result_str += result.getString("FirstDownPass");
+                    result_str += result.getString("FirstDownPass");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                } 
+                    result_str += "NULL";
+                }
 
                 result_str += " | First Down Penalty: ";
                 try {
-                	result_str += result.getString("FirstDownPenalty");
+                    result_str += result.getString("FirstDownPenalty");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                } 
+                    result_str += "NULL";
+                }
 
                 result_str += " | Time Of Possession: ";
                 try {
-                	result_str += result.getString("TimeOfPossession");
+                    result_str += result.getString("TimeOfPossession");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                } 
+                    result_str += "NULL";
+                }
 
                 result_str += " | Penalty: ";
                 try {
-                	result_str += result.getString("Penalty");
+                    result_str += result.getString("Penalty");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                } 
+                    result_str += "NULL";
+                }
 
                 result_str += " | Red Zone FG: ";
                 try {
-                	result_str += result.getString("RedZoneFG");
+                    result_str += result.getString("RedZoneFG");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                } 
+                    result_str += "NULL";
+                }
 
                 result_str += " | TD Pass: ";
                 try {
-                	result_str += result.getString("TDPass");
+                    result_str += result.getString("TDPass");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                }  
+                    result_str += "NULL";
+                }
 
                 result_str += " | Attempts Defense 2XP: ";
                 try {
-                	result_str += result.getString("AttemptsDefense2XP");
+                    result_str += result.getString("AttemptsDefense2XP");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                }         
+                    result_str += "NULL";
+                }
 
                 result_str += " | Punt Return: ";
                 try {
-                	result_str += result.getString("PuntReturn");
+                    result_str += result.getString("PuntReturn");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                }         
-                
+                    result_str += "NULL";
+                }
+
                 result_str += " | Fumble Return: ";
                 try {
-                	result_str += result.getString("FumbleReturn");
+                    result_str += result.getString("FumbleReturn");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                }   
-                
+                    result_str += "NULL";
+                }
+
                 result_str += " | Kickoff: ";
                 try {
-                	result_str += result.getString("Kickoff");
+                    result_str += result.getString("Kickoff");
                 } catch (Exception e) {
-                	result_str += "NULL";
-                }   
+                    result_str += "NULL";
+                }
 
                 result_str += "\n";
             }
@@ -1098,7 +1094,7 @@ public class jdbcpostgreSQL extends Application {
                         team, team);
             }
 
-            //Fetch SQL Results for output in DBMS
+            // Fetch SQL Results for output in DBMS
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
                 result_str += "Home Team Name: ";
@@ -1208,7 +1204,7 @@ public class jdbcpostgreSQL extends Application {
         String result_str = "";
         try {
             Statement stmt = conn.createStatement();
-            
+
             String sqlStatement = String.format("SELECT DISTINCT\"FirstName\",\"LastName\",\"TeamName\",\"Uniform\","
                     + "\"Class\",\"Position\",\"Height\",\"Weight\",\"LastSchool\",\"Hometown\",\"HomeState\","
                     + "\"HomeCountry\" "
@@ -1218,45 +1214,44 @@ public class jdbcpostgreSQL extends Application {
                     + " WHERE\"FirstName\" LIKE'%s%%' AND\"LastName\" LIKE'%s%%')AS player_data ON player_data."
                     + "\"PlayerId\"=\"Player_Yearwise\" .\"PlayerId\")AS player_data2 ON\"Team_Yearwise\""
                     + " .\"TeamYearId\"=player_data2.\"TeamYearId\")AS team_data ON\"Team\" .\"TeamId\"=team_data."
-                    + "\"TeamId\";"
-                    ,fname, lname);
-            
-            //Fetch SQL Results for output in DBMS
+                    + "\"TeamId\";", fname, lname);
+
+            // Fetch SQL Results for output in DBMS
             ResultSet result = stmt.executeQuery(sqlStatement);
             while (result.next()) {
                 result_str += "First Name: ";
                 result_str += result.getString("FirstName");
-               
+
                 result_str += " | Last Name: ";
                 result_str += result.getString("LastName");
-                
+
                 result_str += " | Team Name: ";
                 result_str += result.getString("TeamName");
-                
+
                 result_str += " | Uniform: ";
                 result_str += result.getString("Uniform");
-                
+
                 result_str += " | Class: ";
                 result_str += result.getString("Class");
-                
+
                 result_str += " | Position: ";
                 result_str += result.getString("Position");
-                
+
                 result_str += " | Height: ";
                 result_str += result.getString("Height");
-                
+
                 result_str += " | Last School: ";
                 result_str += result.getString("LastSchool");
-                
+
                 result_str += " | Home Town: ";
                 result_str += result.getString("Hometown");
-                
+
                 result_str += " | Home State: ";
                 result_str += result.getString("HomeState");
-                
+
                 result_str += " | Home Country: ";
                 result_str += result.getString("HomeCountry");
-             
+
                 result_str += "\n";
             }
         } catch (Exception e) {
@@ -1274,8 +1269,9 @@ public class jdbcpostgreSQL extends Application {
         try {
             Statement stmt = conn.createStatement();
             String sqlStatement = "";
-            
-            //Two cases for SQL Statement - Only Full Name given | Full Name and Year is given
+
+            // Two cases for SQL Statement - Only Full Name given | Full Name and Year is
+            // given
             if (!fname.equals("") && !lname.equals("") && !(year < 2005 || year > 2013)) {
                 sqlStatement = String.format(
                         "SELECT DISTINCT \"FirstName\", \"LastName\", \"Game\".\"GameId\", \"YardsRush\", \"YardsPass\", \"YardsKickoffReturn\","
@@ -1296,7 +1292,7 @@ public class jdbcpostgreSQL extends Application {
                                 + "\"TeamId\") AS player_data3 ON player_data3. \"MainPlayerId\" = \"Player_Metrics_Gamewise\".\"PlayerId\") AS player_data4 ON "
                                 + "\"Game\".\"GameId\" = player_data4. \"GameId\" WHERE EXTRACT(YEAR FROM \"Game\".\"Date\") = %s;",
                         fname, lname, year.toString());
-                
+
             } else if (!fname.equals("") && !lname.equals("") && (year < 2005) || year > 2013) {
                 sqlStatement = String.format(
                         "SELECT DISTINCT \"FirstName\", \"LastName\", \"Game\".\"GameId\", \"YardsRush\", \"YardsPass\", "
@@ -1320,8 +1316,8 @@ public class jdbcpostgreSQL extends Application {
                                 + "\"Game\".\"GameId\" = player_data4. \"GameId\";",
                         fname, lname);
             }
-            
-            //Fetch SQL Results for output in DBMS
+
+            // Fetch SQL Results for output in DBMS
             ResultSet result = stmt.executeQuery(sqlStatement);
             while (result.next()) {
                 try {
@@ -1704,7 +1700,7 @@ public class jdbcpostgreSQL extends Application {
             JOptionPane.showMessageDialog(null,
                     "Error accessing Player Metrics Data. Make sure that the Player name is correct");
         }
-        
+
         if (result_str == "") {
             return "Player Metrics Data non existent\n";
         }
@@ -1716,8 +1712,9 @@ public class jdbcpostgreSQL extends Application {
         try {
             Statement stmt = conn.createStatement();
             String sqlStmt = "";
-            
-            //SQL Statements Creation; Two Cases - Only Team is given | Both Team and Year are given
+
+            // SQL Statements Creation; Two Cases - Only Team is given | Both Team and Year
+            // are given
             if (!team.equals("") && (year > 2013 || year < 2005)) {
                 sqlStmt = String.format("SELECT DISTINCT \"HomeTeamName\", \"AwayTeamName\", \"YardsRush\", \"Date\" "
                         + "FROM \"Team_Metrics_Gamewise\" INNER JOIN (SELECT \"Team\".\"TeamName\" AS \"AwayTeamName\", * FROM \"Team\" "
@@ -1746,36 +1743,35 @@ public class jdbcpostgreSQL extends Application {
                                 + "WHERE EXTRACT(YEAR FROM \"Date\") = %s ORDER BY \"YardsRush\" DESC LIMIT 1;",
                         team, team, team, year.toString());
             }
-            
+
             ResultSet result = stmt.executeQuery(sqlStmt);
             String temp = "";
-            
-            while (result.next()) {
-            	result_str += "Team Given: ";
-              	temp = result.getString("HomeTeamName");
-            	
-              	//Adjust Query output to keep GUI output consistent
-              	if (!temp.equals(team)) {
-            		result_str += result.getString("AwayTeamName");
-            		
-            		result_str += " | Team with most yards rushed against given: ";
-            		result_str += temp;
-            	}
-            	
-              	else {
-              		result_str += temp;
-              		
-                	result_str += " | Team with most yards rushed against given: ";
-                	result_str += result.getString("AwayTeamName");
-              	}
 
-              	
-            	result_str += " | Yards rushed: ";
-            	result_str += result.getString("YardsRush");
-            	
-            	result_str += " | Date: ";
-            	result_str += result.getString("Date");
-            	
+            while (result.next()) {
+                result_str += "Team Given: ";
+                temp = result.getString("HomeTeamName");
+
+                // Adjust Query output to keep GUI output consistent
+                if (!temp.equals(team)) {
+                    result_str += result.getString("AwayTeamName");
+
+                    result_str += " | Team with most yards rushed against given: ";
+                    result_str += temp;
+                }
+
+                else {
+                    result_str += temp;
+
+                    result_str += " | Team with most yards rushed against given: ";
+                    result_str += result.getString("AwayTeamName");
+                }
+
+                result_str += " | Yards rushed: ";
+                result_str += result.getString("YardsRush");
+
+                result_str += " | Date: ";
+                result_str += result.getString("Date");
+
                 result_str += "\n";
             }
 
@@ -1795,16 +1791,14 @@ public class jdbcpostgreSQL extends Application {
         double losses = 0.0;
         try {
             Statement stmt = conn.createStatement();
-            
-            // Two cases - Only Team given | Team and Year given            
+
+            // Two cases - Only Team given | Team and Year given
             if (!team.equals("") && (year > 2013 || year < 2005)) {
-                String sqlStmt = String.format(
-                        "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" "
+                String sqlStmt = String.format("SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" "
                         + "INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"="
                         + "(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" "
-                        + ".\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'WIN';",
-                        team);
-                
+                        + ".\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'WIN';", team);
+
                 ResultSet result = stmt.executeQuery(sqlStmt);
                 while (result.next()) {
                     result_str += team + "'s Average Attendance with WINS = ";
@@ -1812,14 +1806,12 @@ public class jdbcpostgreSQL extends Application {
                     result_str += wins;
                     result_str += "\n";
                 }
-                
-                String sqlStmt2 = String.format(
-                        "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" "
+
+                String sqlStmt2 = String.format("SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" "
                         + "INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"="
                         + "(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" "
-                        + ".\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'LOSS';",
-                        team);
-                
+                        + ".\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'LOSS';", team);
+
                 ResultSet result2 = stmt.executeQuery(sqlStmt2);
                 while (result2.next()) {
                     result_str += team + "'s Average Attendance with LOSSES = ";
@@ -1838,15 +1830,14 @@ public class jdbcpostgreSQL extends Application {
                     result_str += percent2;
                     result_str += "%.\n";
                 }
-                
+
             } else if (!team.equals("") && !(year > 2013 || year < 2005)) {
-                String sqlStmt = String.format(
-                        "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" "
+                String sqlStmt = String.format("SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" "
                         + "INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\""
                         + "=(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" "
-                        + ".\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'WIN' AND EXTRACT(YEAR FROM \"Date\")=%s;"
-                        ,team, year.toString());
-                
+                        + ".\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'WIN' AND EXTRACT(YEAR FROM \"Date\")=%s;",
+                        team, year.toString());
+
                 ResultSet result = stmt.executeQuery(sqlStmt);
                 while (result.next()) {
                     result_str += team + "'s Average Attendance with WINS in " + year.toString() + " = ";
@@ -1854,14 +1845,13 @@ public class jdbcpostgreSQL extends Application {
                     result_str += wins;
                     result_str += "\n";
                 }
-                
-                String sqlStmt2 = String.format(
-                        "SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" "
+
+                String sqlStmt2 = String.format("SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" "
                         + "INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\"="
                         + "(SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s%%'))as team_data ON\"Game\" "
-                        + ".\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'LOSS' AND EXTRACT(YEAR FROM \"Date\")=%s;"
-                        ,team, year.toString());
-                
+                        + ".\"GameId\"=team_data.\"GameId\" WHERE\"Result\" LIKE'LOSS' AND EXTRACT(YEAR FROM \"Date\")=%s;",
+                        team, year.toString());
+
                 ResultSet result2 = stmt.executeQuery(sqlStmt2);
                 while (result2.next()) {
                     result_str += team + "'s Average Attendance with LOSSES in " + year.toString() + " = ";
@@ -1881,15 +1871,15 @@ public class jdbcpostgreSQL extends Application {
                     result_str += "%.\n";
                 }
             }
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error accessing team win vs loss hypothesis");
         }
-        
+
         if (result_str == "") {
             return "team win vs loss hypothesis non existent\n";
         }
-        
+
         return result_str;
     }
 
@@ -1899,13 +1889,9 @@ public class jdbcpostgreSQL extends Application {
             Statement stmt = conn.createStatement();
             String sqlStmt = "";
 
-            /*
-             * Two cases: - Only the team name is provided - Both team and year are provided
-             */
-
             if (!team.equals("") && !awayteam.equals("")) {
                 sqlStmt = String.format(
-                        "SELECT \"TeamId\", \"OpposingTeamId\", \"GameId\" FROM \"Team_Metrics_Gamewise\" WHERE \"Result\"='WIN' AND \"TeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') AND \"OpposingTeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%');",
+                        "SELECT \"TeamId\", \"OpposingTeamId\", \"GameId\" FROM \"Team_Metrics_Gamewise\" WHERE \"Result\"='WIN' AND \"TeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s') AND \"OpposingTeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s') LIMIT 1;",
                         team, awayteam);
             }
 
@@ -1915,15 +1901,81 @@ public class jdbcpostgreSQL extends Application {
                 result_str += "\n";
             }
             if (result_str.equals("")) {
-                return "No direct wins";
+                List<String> teams = new ArrayList<>();
+                JOptionPane.showMessageDialog(null,
+                        "The function might take around 30s to run as we are trying our best to find a link.");
+
+                result_str = qOneHelper(team, awayteam, team, teams, conn);
+                if (result_str.contains("After going over 15 links, no match found.")) {
+                    result_str = "After going over 15 links, no match found.";
+                }
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,
-                    "Error accessing most rushing yards vs. the given team. Make sure that the Team name and Year is correct");
+            JOptionPane.showMessageDialog(null, "Error accessing Team links please make sure team name is correct");
         }
-        if (result_str == "") {
-            return "most rushing yards vs. the given team data non existent\n";
+        return result_str;
+    }
+
+    public static String qOneHelper(String team, String awayteam, String initTeam, List<String> teams,
+            Connection conn) {
+        String result_str = "";
+        if (teams.size() > 15) {
+            return "After going over 15 links, no match found.";
+        }
+        try {
+            Statement stmt = conn.createStatement();
+            String sqlStmt = "";
+
+            if (!team.equals("") && !awayteam.equals("")) {
+                sqlStmt = String.format(
+                        "SELECT \"TeamId\", \"OpposingTeamId\", \"GameId\" FROM \"Team_Metrics_Gamewise\" WHERE \"Result\"='WIN' AND \"TeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s') AND \"OpposingTeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s') LIMIT 1;",
+                        team, awayteam);
+            }
+
+            ResultSet result = stmt.executeQuery(sqlStmt);
+            while (result.next()) {
+                result_str += String.format("%s | %s", team, awayteam);
+            }
+            if (result_str.equals("")) {
+
+                // selecting team with max wins
+                Integer max = 0;
+                String maxOppTeam = "";
+
+                stmt = conn.createStatement();
+                sqlStmt = "";
+                if (!team.equals("") && !awayteam.equals("")) {
+                    sqlStmt = String.format(
+                            "SELECT\"Team_Metrics_Gamewise\" .\"TeamId\",\"OpposingTeamId\",\"TeamName\",\"GameId\" FROM\"Team_Metrics_Gamewise\" INNER JOIN\"Team\" ON\"OpposingTeamId\"=\"Team\" .\"TeamId\" WHERE\"Result\"='WIN' AND\"Team_Metrics_Gamewise\" .\"TeamId\"=(SELECT\"Team\" .\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s')LIMIT 15;",
+                            team);
+                }
+                result = stmt.executeQuery(sqlStmt);
+                while (result.next()) {
+                    String oppTeam = result.getString("TeamName");
+                    Statement stmt2 = conn.createStatement();
+                    String sqlStmt2 = "";
+                    if (!team.equals("") && !awayteam.equals("")) {
+                        sqlStmt2 = String.format(
+                                "SELECT Count(*) FROM \"Team_Metrics_Gamewise\" WHERE\"Result\"='WIN' AND \"TeamId\"=(SELECT\"Team\" .\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s') AND \"OpposingTeamId\"!=(SELECT\"Team\" .\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s');",
+                                oppTeam, initTeam);
+                    }
+                    ResultSet result2 = stmt2.executeQuery(sqlStmt2);
+
+                    while (result2.next()) {
+                        Integer count = result2.getInt("count");
+                        if (count > max && !teams.contains(oppTeam)) {
+                            max = count;
+                            maxOppTeam = oppTeam;
+                        }
+                    }
+                }
+                teams.add(maxOppTeam);
+                result_str = String.format("%s | %s", team, qOneHelper(maxOppTeam, awayteam, initTeam, teams, conn));
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error accessing Team links please make sure team name is correct");
         }
         return result_str;
     }
@@ -1942,25 +1994,24 @@ public class jdbcpostgreSQL extends Application {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-    	
-        //question three
+
+        // question three
         System.out.println(questionThree("Texas A&M", 0, conn));
         System.out.println(questionThree("Auburn", 2013, conn));
         System.out.println(questionThree("Texas A&M", 2005, conn));
         System.out.println(questionThree("Clemson", 2013, conn));
         System.out.println(questionThree("Baylor", 0, conn));
         System.out.println("\n");
-        
 
-        //question five
-    	System.out.println(questionFive("Texas A&M",0,conn));
-    	System.out.println("\n");
-    	System.out.println(questionFive("Clemson",2013,conn));
-    	System.out.println("\n");
-    	
-    	//TODO: try catch to handle bad team inputs
-    	System.out.println(questionFive("Shrey is Bai",2013,conn));
-    	
+        // question five
+        System.out.println(questionFive("Texas A&M", 0, conn));
+        System.out.println("\n");
+        System.out.println(questionFive("Clemson", 2013, conn));
+        System.out.println("\n");
+
+        // TODO: try catch to handle bad team inputs
+        System.out.println(questionFive("Shrey is Bai", 2013, conn));
+
     }
     // end backendmain
 }// end Class
