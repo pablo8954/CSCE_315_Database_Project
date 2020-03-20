@@ -208,9 +208,8 @@ public class jdbcpostgreSQL extends Application {
                 try {
                 	result_str += result.getString("HomeTeamName");
                 } catch (Exception e) {
-                	result_str += "Non-existant data";
-                }             
-                result_str += result.getString("HomeTeamName");
+                	result_str += "NULL";
+                }
                
                 result_str += " | Away Team Name: ";
                 try {
@@ -345,11 +344,22 @@ public class jdbcpostgreSQL extends Application {
             ResultSet result = stmt.executeQuery(sqlStatement);
             while (result.next()) {
                 result_str += "Conference Name: ";
-                result_str += result.getString("ConferenceName");
+                try {
+                	result_str += result.getString("ConferenceName");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Subdivision: ";
-                result_str += result.getString("Subdivision");
+                try {
+                	result_str += result.getString("Subdivision");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += "\n";
             }
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,
                     "Error accessing Conference Data. Make sure that the Conference name is correct");
@@ -376,19 +386,39 @@ public class jdbcpostgreSQL extends Application {
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
                 result_str += "Team Name: ";
-                result_str += result.getString("TeamName");
+                try {
+                	result_str += result.getString("TeamName");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Average Attendance: ";
-                result_str += result.getString("AverageAttendance");
+                try {
+                	result_str += result.getString("AverageAttendance");
+                } catch (Exception e){
+                	result_str += "NULL";
+                }
 
                 result_str += " | Conference Name: ";
-                result_str += result.getString("ConferenceName");
-
+                try {
+                	result_str += result.getString("ConferenceName");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Subdivision: ";
-                result_str += result.getString("Subdivision");
-
+                try {
+                	result_str += result.getString("Subdivision");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Year: ";
-                result_str += result.getString("Year");
+                try {
+                	result_str += result.getString("Year");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += "\n";
             }
@@ -501,208 +531,480 @@ public class jdbcpostgreSQL extends Application {
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
                 result_str += "Home Team Name: ";
-                result_str += result.getString("HomeTeamName");
+                try {
+                	result_str += result.getString("HomeTeamName");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Away Team Name: ";
-                result_str += result.getString("AwayTeamName");
-
+                try {
+                	result_str += result.getString("AwayTeamName");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += String.format(" | Result for %s: ", team);
-                result_str += result.getString("Result for Team 1");
-
+                try {
+                	result_str += result.getString("Result for Team 1");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Kickoff Return Yards: ";
-                result_str += result.getString("YardsKickoffReturn");
-
+                try {
+                	result_str += result.getString("YardsKickoffReturn");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+               
                 result_str += " | Punt Return Yards: ";
-                result_str += result.getString("YardsPuntReturn");
-
+                try {
+                	result_str += result.getString("YardsPuntReturn");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Fumble Return Yards: ";
-                result_str += result.getString("YardsFumbleReturn");
-
+                try {
+                	result_str += result.getString("YardsFumbleReturn");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Interception Return Yards: ";
-                result_str += result.getString("YardsInterceptionReturn");
+                try {
+                	result_str += result.getString("YardsInterceptionReturn");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Misc Return Yards: ";
-                result_str += result.getString("YardsMiscReturn");
-
+                try {
+                	result_str += result.getString("YardsMiscReturn");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Punt Yards: ";
-                result_str += result.getString("YardsPunt");
-
+                try {
+                	result_str += result.getString("YardsPunt");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Kickoff Yards: ";
-                result_str += result.getString("YardsKickoff");
-
+                try {
+                	result_str += result.getString("YardsKickoff");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Tackle Yards: ";
-                result_str += result.getString("YardsTackleLoss");
-
+                try {
+                	result_str += result.getString("YardsTackleLoss");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Tackle Loss Yards: ";
-                result_str += result.getString("YardsTackleLoss");
+                try {
+                	result_str += result.getString("YardsTackleLoss");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Sack Yards: ";
-                result_str += result.getString("YardsSack");
+                try  {
+                	result_str += result.getString("YardsSack");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Penalty Yards: ";
-                result_str += result.getString("YardsPenalty");
+                try {
+                	result_str += result.getString("YardsPenalty");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Tackles Solo: ";
-                result_str += result.getString("TacklesSolo");
-
+                try {
+                	result_str += result.getString("TacklesSolo");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Tackles Assist: ";
-                result_str += result.getString("TacklesAssist");
-
+                try {
+                	result_str += result.getString("TacklesAssist");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Tackles For Loss: ";
-                result_str += result.getString("TacklesForLoss");
-
+                try {
+                	result_str += result.getString("TacklesForLoss");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Interceptions Pass: ";
-                result_str += result.getString("InterceptionsPass");
-
+                try {
+                	result_str += result.getString("InterceptionsPass");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Interceptions Return: ";
-                result_str += result.getString("InterceptionsReturn");
+                try {
+                	result_str += result.getString("InterceptionsReturn");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Fumbles: ";
-                result_str += result.getString("Fumbles");
-
+                try {
+                	result_str += result.getString("Fumbles");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Fumbles Lost: ";
-                result_str += result.getString("FumblesLost");
-
+                try {
+                	result_str += result.getString("FumblesLost");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Fumbles Forced: ";
-                result_str += result.getString("FumblesForced");
+                try {
+                	result_str += result.getString("FumblesForced");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Rush Attempts: ";
-                result_str += result.getString("AttemptsRush");
+                try {
+                	result_str += result.getString("AttemptsRush");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Pass Attempts: ";
-                result_str += result.getString("AttemptsPass");
+                try {
+                	 result_str += result.getString("AttemptsPass");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | FG Attempts: ";
-                result_str += result.getString("AttemptsFG");
+                try {
+                	result_str += result.getString("AttemptsFG");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Offense XP Kick Attempts: ";
-                result_str += result.getString("AttemptsOffenseXPKick");
+                try {
+                	result_str += result.getString("AttemptsOffenseXPKick");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Offense 2XP Attempts: ";
-                result_str += result.getString("AttemptsOffense2XP");
+                try {
+                	result_str += result.getString("AttemptsOffense2XP");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Third Down Attempts: ";
-                result_str += result.getString("AttemptsThirdDown");
+                try {
+                	result_str += result.getString("AttemptsThirdDown");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Fourth Down Attempts: ";
-                result_str += result.getString("AttemptsFourthDown");
+                try {
+                	result_str += result.getString("AttemptsFourthDown");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Red Zone Attempts: ";
-                result_str += result.getString("AttemptsRedZone");
-
+                try {
+                	result_str += result.getString("AttemptsRedZone");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | TouchDown Rush: ";
-                result_str += result.getString("TDRush");
+                try {
+                	result_str += result.getString("TDRush");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | TouchDown Kickoff Return: ";
-                result_str += result.getString("TDKickoffReturn");
-
+                try {
+                	result_str += result.getString("TDKickoffReturn");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | TouchDown Punt Return: ";
-                result_str += result.getString("TDPuntReturn");
-
+                try {
+                	result_str += result.getString("TDPuntReturn");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | TouchDown Fumble Return: ";
-                result_str += result.getString("TDFumbleReturn");
+                try {
+                	result_str += result.getString("TDFumbleReturn");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | TouchDown Interception Return: ";
-                result_str += result.getString("TDInterceptionReturn");
-
+                try {
+                	result_str += result.getString("TDInterceptionReturn");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | TouchDown Misc Return: ";
-                result_str += result.getString("TDMiscReturn");
+                try {
+                	result_str += result.getString("TDMiscReturn");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | TouchDown Red Zone: ";
-                result_str += result.getString("TDRedZone");
-
+                try {
+                	result_str += result.getString("TDRedZone");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Pass Conversion: ";
-                result_str += result.getString("ConvPass");
-
+                try {
+                	result_str += result.getString("ConvPass");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Third Down Conversion: ";
-                result_str += result.getString("ConvThirdDown");
+                try {
+                	result_str += result.getString("ConvThirdDown");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Fourth Down Conversion: ";
-                result_str += result.getString("ConvFourthDown");
+                try {
+                	result_str += result.getString("ConvFourthDown");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Pass Completion: ";
-                result_str += result.getString("PassCompletion");
-
+                try {
+                	result_str += result.getString("PassCompletion");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Misc Return: ";
-                result_str += result.getString("MiscReturn");
+                try {
+                	result_str += result.getString("MiscReturn");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | FG Made: ";
-                result_str += result.getString("MadeFG");
-
+                try {
+                	result_str += result.getString("MadeFG");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Offensive XP Kick Made: ";
-                result_str += result.getString("MadeOffensiveXPKick");
+                try {
+                	result_str += result.getString("MadeOffensiveXPKick");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Offensive 2XP Made: ";
-                result_str += result.getString("MadeOffensive2XP");
-
+                try {
+                	result_str += result.getString("MadeOffensive2XP");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Defensive 2XP Made: ";
-                result_str += result.getString("MadeDefensive2XP");
+                try {
+                	result_str += result.getString("MadeDefensive2XP");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Safety: ";
-                result_str += result.getString("Safety");
-
+                try {
+                	result_str += result.getString("Safety");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
+                
                 result_str += " | Points: ";
-                result_str += result.getString("Points");
+                try  {
+                	result_str += result.getString("Points");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Punts: ";
-                result_str += result.getString("Punts");
+                try {
+                	result_str += result.getString("Punts");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }
 
                 result_str += " | Kickoffs Return: ";
-                result_str += result.getString("KickoffsReturn");
+                try {
+                	result_str += result.getString("KickoffsReturn");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }                
 
                 result_str += " | Kickoffs Out Of Bounds: ";
-                result_str += result.getString("KickoffsOutOfBounds");
-
+                try {
+                	result_str += result.getString("KickoffsOutOfBounds");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }  
+               
                 result_str += " | Kickoffs Onside: ";
-                result_str += result.getString("KickoffsOnside");
-
+                try {
+                	result_str += result.getString("KickoffsOnside");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                } 
+                
                 result_str += " | Kickoffs TouchBacks: ";
-                result_str += result.getString("KickoffTouchBacks");
+                try {
+                	result_str += result.getString("KickoffTouchBacks");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                } 
 
                 result_str += " | Sacks: ";
-                result_str += result.getString("Sacks");
+                try {
+                	result_str += result.getString("Sacks");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                } 
 
                 result_str += " | QBHurry: ";
-                result_str += result.getString("QBHurry");
-
+                try {
+                	result_str += result.getString("QBHurry");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                } 
+                
                 result_str += " | Pass Broken Up: ";
-                result_str += result.getString("PassBrokenUp");
+                try {
+                	result_str += result.getString("PassBrokenUp");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                } 
 
                 result_str += " | Kick/Punt Blocked: ";
-                result_str += result.getString("KickPuntBlocked");
+                try {
+                	result_str += result.getString("KickPuntBlocked");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                } 
 
                 result_str += " | First Down Rush: ";
-                result_str += result.getString("FirstDownRush");
+                try {
+                	result_str += result.getString("FirstDownRush");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                } 
 
                 result_str += " | First Down Pass: ";
-                result_str += result.getString("FirstDownPass");
+                try {
+                	result_str += result.getString("FirstDownPass");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                } 
 
                 result_str += " | First Down Penalty: ";
-                result_str += result.getString("FirstDownPenalty");
+                try {
+                	result_str += result.getString("FirstDownPenalty");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                } 
 
                 result_str += " | Time Of Possession: ";
-                result_str += result.getString("TimeOfPossession");
+                try {
+                	result_str += result.getString("TimeOfPossession");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                } 
 
                 result_str += " | Penalty: ";
-                result_str += result.getString("Penalty");
+                try {
+                	result_str += result.getString("Penalty");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                } 
 
                 result_str += " | Red Zone FG: ";
-                result_str += result.getString("RedZoneFG");
+                try {
+                	result_str += result.getString("RedZoneFG");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                } 
 
                 result_str += " | TD Pass: ";
-                result_str += result.getString("TDPass");
+                try {
+                	result_str += result.getString("TDPass");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }  
 
                 result_str += " | Attempts Defense 2XP: ";
-                result_str += result.getString("AttemptsDefense2XP");
+                try {
+                	result_str += result.getString("AttemptsDefense2XP");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }         
 
                 result_str += " | Punt Return: ";
-                result_str += result.getString("PuntReturn");
-
+                try {
+                	result_str += result.getString("PuntReturn");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }         
+                
                 result_str += " | Fumble Return: ";
-                result_str += result.getString("FumbleReturn");
-
+                try {
+                	result_str += result.getString("FumbleReturn");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }   
+                
                 result_str += " | Kickoff: ";
-                result_str += result.getString("Kickoff");
+                try {
+                	result_str += result.getString("Kickoff");
+                } catch (Exception e) {
+                	result_str += "NULL";
+                }   
 
                 result_str += "\n";
             }
@@ -1442,12 +1744,38 @@ public class jdbcpostgreSQL extends Application {
                                 + "= \"AwayTeamId\") AS team_data2 ON team_data2. \"GameId\" = \"Team_Metrics_Gamewise\".\"GameId\" "
                                 + "AND \"Team_Metrics_Gamewise\".\"TeamId\" != ( SELECT DISTINCT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%')"
                                 + "WHERE EXTRACT(YEAR FROM \"Date\") = %s ORDER BY \"YardsRush\" DESC LIMIT 1;",
-                        team, team, year.toString());
+                        team, team, team, year.toString());
             }
-
+            
             ResultSet result = stmt.executeQuery(sqlStmt);
+            String temp = "";
+            
             while (result.next()) {
-                // TODO: Write print stuff
+            	result_str += "Team Given: ";
+              	temp = result.getString("HomeTeamName");
+            	
+              	//Adjust Query output to keep GUI output consistent
+              	if (!temp.equals(team)) {
+            		result_str += result.getString("AwayTeamName");
+            		
+            		result_str += " | Team with most yards rushed against given: ";
+            		result_str += temp;
+            	}
+            	
+              	else {
+              		result_str += temp;
+              		
+                	result_str += " | Team with most yards rushed against given: ";
+                	result_str += result.getString("AwayTeamName");
+              	}
+
+              	
+            	result_str += " | Yards rushed: ";
+            	result_str += result.getString("YardsRush");
+            	
+            	result_str += " | Date: ";
+            	result_str += result.getString("Date");
+            	
                 result_str += "\n";
             }
 
@@ -1602,51 +1930,37 @@ public class jdbcpostgreSQL extends Application {
 
     public static void main(String args[]) {
 
-        //
-        // MAIN CODE
+        dbSetup my = new dbSetup();
+        // Building the connection
+        Connection conn = null;
+        try {
+            Class.forName("org.postgresql.Driver");
+            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/ace_of_spades", my.user,
+                    my.pswd);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+    	
+        //question three
+        System.out.println(questionThree("Texas A&M", 0, conn));
+        System.out.println(questionThree("Auburn", 2013, conn));
+        System.out.println(questionThree("Texas A&M", 2005, conn));
+        System.out.println(questionThree("Clemson", 2013, conn));
+        System.out.println(questionThree("Baylor", 0, conn));
+        System.out.println("\n");
+        
 
-        // stadium test
-        // System.out.println(stadiumDataFetch("ASU", conn));
-
-        /*
-         * System.out.println(stadiumDataFetch("ASU", conn));
-         * 
-         * System.out.println(stadiumDataFetch("Shrey", conn));
-         * 
-         * // general conference data System.out.println(confDataFetch("Big Sky",
-         * conn)); System.out.println(confDataFetch("Football_Sucks", conn));
-         * 
-         * // game data with name/year inputs
-         * System.out.println(gameDataFetcWithNameYear("Texas A&", 2013, conn));
-         * System.out.println(gameDataFetcWithNameYear("", 2013, conn));
-         * System.out.println(gameDataFetcWithNameYear("Texas A&", 0, conn));
-         * 
-         * // System.out.println(gameDataFetcWithNameYear("", 0, conn));
-         * System.out.println(gameDataFetcWithNameYear("Bazinga", 2003, conn));
-         * System.out.println(gameDataFetcWithNameYear("", 0, conn));
-         * System.out.println(gameDataFetcWithNameYear("Bazinga", 2003, conn));
-         */
-        /*
-         * System.out.println(teamGameData("Texas A&M", "Clemson", 2005, conn));
-         * System.out.println(generalPlayer("Bryan", "C", conn));
-         * System.out.println(generalPlayer("Baby", "Boy", conn));
-         */
-
-        // System.out.println(playerMetricsData("Bryan", "C", 2012, conn));
-        // System.out.println(generalPlayer("Bryan", "C", conn));
-
-        // general team
-
-        // END MAIN CODE
-        //
-
-        // try {
-        // conn.close();
-        // // JOptionPane.showMessageDialog(null, "Connection Closed.");
-        // } catch (Exception e) {
-        // JOptionPane.showMessageDialog(null, "Connection NOT Closed.");
-        // }
-
+        //question five
+    	System.out.println(questionFive("Texas A&M",0,conn));
+    	System.out.println("\n");
+    	System.out.println(questionFive("Clemson",2013,conn));
+    	System.out.println("\n");
+    	
+    	//TODO: try catch to handle bad team inputs
+    	System.out.println(questionFive("Shrey is Bai",2013,conn));
+    	
     }
     // end backendmain
 }// end Class
