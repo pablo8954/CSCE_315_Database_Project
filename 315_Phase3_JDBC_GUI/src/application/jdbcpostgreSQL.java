@@ -88,15 +88,16 @@ public class jdbcpostgreSQL extends Application {
                         public void run() {
 
                             resultsRequested = controller.getResultsRequested();
-                            //questionOneResultsRequested = controller.getQuestionOneResultsRequested();
-                            //questionTwoResultsRequested = controller.getQuestionTwoResultsRequested();
-                            //questionThreeResultsRequested = controller.getQuestionThreeResultsRequested();
+                            // questionOneResultsRequested = controller.getQuestionOneResultsRequested();
+                            // questionTwoResultsRequested = controller.getQuestionTwoResultsRequested();
+                            // questionThreeResultsRequested =
+                            // controller.getQuestionThreeResultsRequested();
 
                             // If get results pushed
                             if (resultsRequested) {
-                            	 questionOneResultsRequested = controller.getQuestionOneResultsRequested();
-                            	 questionTwoResultsRequested = controller.getQuestionTwoResultsRequested();
-                            	 questionThreeResultsRequested = controller.getQuestionThreeResultsRequested();
+                                questionOneResultsRequested = controller.getQuestionOneResultsRequested();
+                                questionTwoResultsRequested = controller.getQuestionTwoResultsRequested();
+                                questionThreeResultsRequested = controller.getQuestionThreeResultsRequested();
                                 dataSelection = controller.getDataSelection();
                                 teamName = controller.getTeamName();
                                 conferenceName = controller.getConferenceName();
@@ -133,20 +134,21 @@ public class jdbcpostgreSQL extends Application {
                                         result = teamPlayData(controller.getTeamName(),
                                                 controller.getOpposingTeamName(), controller.getYear(), conn);
                                     }
-                                } else if(questionOneResultsRequested) {
-                                	result = "Given 2 teams, create a victory chain.";
-                                	result += "\n" + questionOne(controller.getTeamName(), controller.getOpposingTeamName(), conn);
-                                	controller.updateOutputTextArea(result);
-                            	} else if(questionTwoResultsRequested) {
-                            		result = "Given a team, find the team with the most rushing yards vs. the given team.";
-                            		result += "\n" + questionThree(controller.getTeamName(), controller.getYear(), conn);
-                            		controller.updateOutputTextArea(result);
-                            	} else if(questionThreeResultsRequested) {
-                            		result = "Given a team, is there a correlation between average attendance and team record.";
-                            		result += "\n" + questionFive(controller.getTeamName(), controller.getYear(), conn);
-                            		controller.updateOutputTextArea(result);
-                            	}
-                                
+                                } else if (questionOneResultsRequested) {
+                                    result = "Given 2 teams, create a victory chain.";
+                                    result += "\n" + questionOne(controller.getTeamName(),
+                                            controller.getOpposingTeamName(), conn);
+                                    controller.updateOutputTextArea(result);
+                                } else if (questionTwoResultsRequested) {
+                                    result = "Given a team, find the team with the most rushing yards vs. the given team.";
+                                    result += "\n"
+                                            + questionThree(controller.getTeamName(), controller.getYear(), conn);
+                                    controller.updateOutputTextArea(result);
+                                } else if (questionThreeResultsRequested) {
+                                    result = "Given a team, is there a correlation between average attendance and team record.";
+                                    result += "\n" + questionFive(controller.getTeamName(), controller.getYear(), conn);
+                                    controller.updateOutputTextArea(result);
+                                }
 
                                 controller.updateOutputTextArea(result);
                                 System.out.println(result);
@@ -166,7 +168,7 @@ public class jdbcpostgreSQL extends Application {
                                     }
                                 }
                             }
-                         
+
                         }
                     });
                 }
@@ -1817,6 +1819,21 @@ public class jdbcpostgreSQL extends Application {
         try {
             Statement stmt = conn.createStatement();
 
+            // verify input string is a valid team
+            if (!team.equals("")) {
+                String verifyInput = String.format(
+                        "SELECT DISTINCT \"TeamName\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s' LIMIT 1;", team);
+
+                ResultSet result = stmt.executeQuery(verifyInput);
+                while (result.next()) {
+                    result_str += result.getString("TeamName");
+                }
+                if (result_str.equals("")) {
+                    return "Invalid team name - please make sure team name is correct.";
+                }
+            }
+
+            result_str = "";
             // Two cases - Only Team given | Team and Year given
             if (!team.equals("") && (year > 2013 || year < 2005)) {
                 String sqlStmt = String.format("SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" "
@@ -1915,6 +1932,8 @@ public class jdbcpostgreSQL extends Application {
             String sqlStmt = "";
 
             if (!team.equals("") && !awayteam.equals("")) {
+
+                // verify that team input is valid
                 sqlStmt = String.format("SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s' LIMIT 1;", team);
                 Integer count = 0;
                 ResultSet result_upper = stmt.executeQuery(sqlStmt);
@@ -1924,6 +1943,7 @@ public class jdbcpostgreSQL extends Application {
                 if (count < 1) {
                     return "Error accessing Team links please make sure team name is correct";
                 }
+
                 stmt = conn.createStatement();
                 sqlStmt = String.format("SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s' LIMIT 1;", awayteam);
                 count = 0;
@@ -2032,21 +2052,21 @@ public class jdbcpostgreSQL extends Application {
         launch(args);
 
         // question three
-       /* System.out.println(questionThree("Texas A&M", 0, conn));
-        System.out.println(questionThree("Auburn", 2013, conn));
-        System.out.println(questionThree("Texas A&M", 2005, conn));
-        System.out.println(questionThree("Clemson", 2013, conn));
-        System.out.println(questionThree("Baylor", 0, conn));
-        System.out.println("\n");
-
-        // question five
-        System.out.println(questionFive("Texas A&M", 0, conn));
-        System.out.println("\n");
-        System.out.println(questionFive("Clemson", 2013, conn));
-        System.out.println("\n");*/
+        /*
+         * System.out.println(questionThree("Texas A&M", 0, conn));
+         * System.out.println(questionThree("Auburn", 2013, conn));
+         * System.out.println(questionThree("Texas A&M", 2005, conn));
+         * System.out.println(questionThree("Clemson", 2013, conn));
+         * System.out.println(questionThree("Baylor", 0, conn));
+         * System.out.println("\n");
+         * 
+         * // question five System.out.println(questionFive("Texas A&M", 0, conn));
+         * System.out.println("\n"); System.out.println(questionFive("Clemson", 2013,
+         * conn)); System.out.println("\n");
+         */
 
         // TODO: try catch to handle bad team inputs
-        //System.out.println(questionFive("Shrey is Bai", 2013, conn));
+        // System.out.println(questionFive("Shrey is Bai", 2013, conn));
 
     }
     // end backendmain
