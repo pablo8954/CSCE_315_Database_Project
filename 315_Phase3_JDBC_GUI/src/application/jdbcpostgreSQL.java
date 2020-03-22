@@ -1792,6 +1792,22 @@ public class jdbcpostgreSQL extends Application {
         try {
             Statement stmt = conn.createStatement();
 
+            //verify input string is a valid team
+            if (!team.equals("")) {
+            	String verifyInput = String.format(
+					"SELECT DISTINCT \"TeamName\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s' LIMIT 1;",
+            			team);
+            	
+            	ResultSet result = stmt.executeQuery(verifyInput);
+            	while (result.next()) {
+            		result_str += result.getString("TeamName");
+            	}
+            	if(result_str.equals("")) {
+            		return "Invalid team name - please make sure team name is correct.";
+            	}
+            }
+            
+            result_str = "";
             // Two cases - Only Team given | Team and Year given
             if (!team.equals("") && (year > 2013 || year < 2005)) {
                 String sqlStmt = String.format("SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" "
@@ -1831,6 +1847,7 @@ public class jdbcpostgreSQL extends Application {
                     result_str += "%.\n";
                 }
 
+                
             } else if (!team.equals("") && !(year > 2013 || year < 2005)) {
                 String sqlStmt = String.format("SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" "
                         + "INNER JOIN(SELECT*from\"Team_Metrics_Gamewise\" WHERE\"TeamId\""
@@ -1890,7 +1907,9 @@ public class jdbcpostgreSQL extends Application {
             String sqlStmt = "";
 
             if (!team.equals("") && !awayteam.equals("")) {
-                sqlStmt = String.format("SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s' LIMIT 1;", team);
+                
+            	//verify that team input is valid
+            	sqlStmt = String.format("SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s' LIMIT 1;", team);
                 Integer count = 0;
                 ResultSet result_upper = stmt.executeQuery(sqlStmt);
                 while (result_upper.next()) {
@@ -1899,6 +1918,7 @@ public class jdbcpostgreSQL extends Application {
                 if (count < 1) {
                     return "Error accessing Team links please make sure team name is correct";
                 }
+                
                 stmt = conn.createStatement();
                 sqlStmt = String.format("SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s' LIMIT 1;", awayteam);
                 count = 0;
@@ -2032,7 +2052,7 @@ public class jdbcpostgreSQL extends Application {
         System.out.println("\n");
 
         // TODO: try catch to handle bad team inputs
-        System.out.println(questionFive("Shrey is Bai", 2013, conn));
+        System.out.println(questionFive("Shrey is Bae", 2013, conn));
 
     }
     // end backendmain
