@@ -1801,6 +1801,9 @@ public class jdbcpostgreSQL extends Application {
 
                 result_str += "\n";
             }
+            if (result_str.equals("")) {
+                result_str = "The game data for the given team is not available. Please check the team name as well.";
+            }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,
@@ -1912,6 +1915,9 @@ public class jdbcpostgreSQL extends Application {
                     result_str += percent2;
                     result_str += "%.\n";
                 }
+            }
+            if (result_str.equals("")) {
+                result_str = "The game data for the given team is not available. Please check the team name as well.";
             }
 
         } catch (Exception e) {
