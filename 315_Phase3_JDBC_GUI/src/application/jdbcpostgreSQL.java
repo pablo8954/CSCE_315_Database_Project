@@ -1981,8 +1981,8 @@ public class jdbcpostgreSQL extends Application {
             }
             if (result_str.equals("")) {
                 List<String> teams = new ArrayList<>();
-                JOptionPane.showMessageDialog(null,
-                        "The function might take around 30s to run as we are trying our best to find a link.");
+               /* JOptionPane.showMessageDialog(null,
+                        "The function might take around 30s to run as we are trying our best to find a link.");*/
 
                 result_str = qOneHelper(team, awayteam, team, teams, conn);
                 if (result_str.contains("After going over 15 links, no match found.")) {
