@@ -79,7 +79,6 @@ public class jdbcpostgreSQL extends Application {
                     try {
                         Thread.sleep(new Random().nextInt(1000));
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
 
@@ -88,10 +87,6 @@ public class jdbcpostgreSQL extends Application {
                         public void run() {
 
                             resultsRequested = controller.getResultsRequested();
-                            // questionOneResultsRequested = controller.getQuestionOneResultsRequested();
-                            // questionTwoResultsRequested = controller.getQuestionTwoResultsRequested();
-                            // questionThreeResultsRequested =
-                            // controller.getQuestionThreeResultsRequested();
 
                             // If get results pushed
                             if (resultsRequested) {
@@ -163,7 +158,6 @@ public class jdbcpostgreSQL extends Application {
                                         writer.write(result);
                                         writer.close();
                                     } catch (IOException e) {
-                                        // TODO Auto-generated catch block
                                         e.printStackTrace();
                                     }
                                 }
@@ -177,6 +171,7 @@ public class jdbcpostgreSQL extends Application {
 
     }
 
+    //fetch game data using team name and year
     public static String gameDataFetcWithNameYear(String name, Integer year, Connection conn) {
         String result_str = "";
         try {
@@ -229,6 +224,7 @@ public class jdbcpostgreSQL extends Application {
 
             ResultSet result = stmt.executeQuery(sqlStmt);
 
+            // send output to DBMS Application
             while (result.next()) {
                 result_str += "Home Team Name: ";
                 try {
@@ -286,6 +282,7 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
+    //Fetch stadium data using stadium name
     public static String stadiumDataFetch(String name, Connection conn) {
         String result_str = "";
         try {
@@ -354,6 +351,7 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
+    //Fetch Conference Data
     public static String confDataFetch(String name, Connection conn) {
         String result_str = "";
         try {
@@ -393,6 +391,7 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
+    //Grab team data pertaining to general information 
     public static String generalTeam(String name, Connection conn) {
         String result_str = "";
         try {
@@ -456,6 +455,7 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
+    // Handle Team Performance statistics
     public static String teamGameData(String team, String awayteam, Integer year, Connection conn) {
         String result_str = "";
         String sqlStmt = "";
@@ -1041,6 +1041,7 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
+    //Handle all team play performance against a given team
     public static String teamPlayData(String team, String awayteam, Integer year, Connection conn) {
 
         String result_str = "";
@@ -1227,6 +1228,7 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
+    //Fetch Individual Player Information not pertaining to in-game performance
     public static String generalPlayer(String fname, String lname, Connection conn) {
         String result_str = "";
         try {
@@ -1291,14 +1293,16 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
+    // Handle Individual Player data pertaining to in-game statistics
     public static String playerMetricsData(String fname, String lname, Integer year, Connection conn) {
         String result_str = "";
         try {
             Statement stmt = conn.createStatement();
             String sqlStatement = "";
 
-            // Two cases for SQL Statement - Only Full Name given | Full Name and Year is
-            // given
+            // Two cases for SQL Statement 
+            //- Only Full Name given 
+            // Full Name and Year is given
             if (!fname.equals("") && !lname.equals("") && !(year < 2005 || year > 2013)) {
                 sqlStatement = String.format(
                         "SELECT DISTINCT \"FirstName\", \"LastName\", \"Game\".\"GameId\", \"YardsRush\", \"YardsPass\", \"YardsKickoffReturn\","
@@ -1939,7 +1943,7 @@ public class jdbcpostgreSQL extends Application {
 
             if (!team.equals("") && !awayteam.equals("")) {
 
-                // verify that team input is valid
+                // verify that home team input, team, is valid
                 sqlStmt = String.format("SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s' LIMIT 1;", team);
                 Integer count = 0;
                 ResultSet result_upper = stmt.executeQuery(sqlStmt);
@@ -1949,7 +1953,8 @@ public class jdbcpostgreSQL extends Application {
                 if (count < 1) {
                     return "Error accessing Team links please make sure team name is correct";
                 }
-
+                
+                //verify away team input is valid
                 stmt = conn.createStatement();
                 sqlStmt = String.format("SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s' LIMIT 1;", awayteam);
                 count = 0;
@@ -1961,6 +1966,7 @@ public class jdbcpostgreSQL extends Application {
                     return "Error accessing Team links please make sure team name is correct";
                 }
             }
+            
             stmt = conn.createStatement();
             if (!team.equals("") && !awayteam.equals("")) {
                 sqlStmt = String.format(
@@ -2054,25 +2060,7 @@ public class jdbcpostgreSQL extends Application {
     }
 
     public static void main(String args[]) {
-
         launch(args);
-
-        // question three
-        /*
-         * System.out.println(questionThree("Texas A&M", 0, conn));
-         * System.out.println(questionThree("Auburn", 2013, conn));
-         * System.out.println(questionThree("Texas A&M", 2005, conn));
-         * System.out.println(questionThree("Clemson", 2013, conn));
-         * System.out.println(questionThree("Baylor", 0, conn));
-         * System.out.println("\n");
-         * 
-         * // question five System.out.println(questionFive("Texas A&M", 0, conn));
-         * System.out.println("\n"); System.out.println(questionFive("Clemson", 2013,
-         * conn)); System.out.println("\n");
-         */
-
-        // TODO: try catch to handle bad team inputs
-        // System.out.println(questionFive("Shrey is Bai", 2013, conn));
 
     }
     // end backendmain
