@@ -52,6 +52,9 @@ public class TeamController {
 		GameRadio.setSelected(false);
 		PlayRadio.setSelected(false);
 		type = "General";
+		OpposingTeamText.setPromptText("Not Applicable");
+		OpposingTeamText.setText("");
+		OpposingTeamText.setEditable(false);
 	}
 	
 	public void gameRadioSelected() {
@@ -59,6 +62,10 @@ public class TeamController {
 		GameRadio.setSelected(true);
 		PlayRadio.setSelected(false);
 		type = "Game";
+		OpposingTeamText.setPromptText("");
+		OpposingTeamText.setText("");
+		OpposingTeamText.setEditable(true);
+
 	}
 	
 	public void playRadioSelected() {
@@ -66,6 +73,10 @@ public class TeamController {
 		GameRadio.setSelected(false);
 		PlayRadio.setSelected(true);
 		type = "Play";
+		OpposingTeamText.setPromptText("");
+		OpposingTeamText.setText("");
+		OpposingTeamText.setEditable(true);
+
 	}
 	
 	public String getTeamName() {

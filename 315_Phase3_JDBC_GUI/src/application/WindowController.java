@@ -108,7 +108,7 @@ public class WindowController {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("Player.fxml"));
 		Parent root = loader.load();
-		Scene scene = new Scene(root, 400, 250);
+		Scene scene = new Scene(root, 400, 200);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle("Player Data");
