@@ -379,8 +379,7 @@ public class jdbcpostgreSQL extends Application {
             }
 
         } catch (Exception e) {
-            return 
-                    "Error accessing Conference Data. Make sure that the Conference name is correct");
+            return "Error accessing Conference Data. Make sure that the Conference name is correct");
         }
         if (result_str == "") {
             return "Conference Data non existent\n";
