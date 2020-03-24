@@ -9,8 +9,6 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
