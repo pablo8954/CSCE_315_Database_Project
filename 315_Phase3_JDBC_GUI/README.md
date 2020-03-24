@@ -1,6 +1,6 @@
 To run this application, run the following command:
 
-Windows: java --module-path './java-fx-sdk-11.0.2/lib' --add-modules javafx.controls,javafx.fxml -jar CollegeFootballData.jar
+Windows: java --module-path './javafx-sdk-11.0.2/lib' --add-modules javafx.controls,javafx.fxml -jar CollegeFootballData.jar
 
 MacOS: java --module-path "./_mac-javafx-sdk-11.0.2/lib" --add-modules javafx.controls,javafx.fxml -jar CollegeFootballData.jar
 
