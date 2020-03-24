@@ -58,7 +58,6 @@ public class jdbcpostgreSQL extends Application {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         } // end try catch
-          // JOptionPane.showMessageDialog(null, "Opened database successfully");
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("Window.fxml"));
@@ -272,8 +271,7 @@ public class jdbcpostgreSQL extends Application {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,
-                    "Error accessing Game Data. Make sure that the Team name and Year is correct");
+            return "Error accessing Game Data. Make sure that the Team name and Year is correct";
         }
 
         if (result_str == "") {
@@ -341,8 +339,7 @@ public class jdbcpostgreSQL extends Application {
                 result_str += "\n";
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,
-                    "Error accessing Stadium Data. Make sure that the stadium name is correct");
+            return "Error accessing Stadium Data. Make sure that the stadium name is correct");
         }
 
         if (result_str == "") {
@@ -382,7 +379,7 @@ public class jdbcpostgreSQL extends Application {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,
+            return 
                     "Error accessing Conference Data. Make sure that the Conference name is correct");
         }
         if (result_str == "") {
@@ -446,7 +443,7 @@ public class jdbcpostgreSQL extends Application {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,
+            return 
                     "Error accessing General Team Data. Make sure that the Conference name is correct");
         }
         if (result_str == "") {
@@ -469,7 +466,7 @@ public class jdbcpostgreSQL extends Application {
             // - Home Team, Year Provided
             // - Only Home Team Provided
             if (!team.equals("") && !awayteam.equals("") && !(year < 2005 || year > 2013)) {
-                JOptionPane.showMessageDialog(null, "First");
+                return  "First");
                 sqlStmt = String.format(
                         "SELECT DISTINCT \"HomeTeamName\", \"AwayTeamName\", \"Result\" AS \"Result for Team 1\", \"YardsPass\", \"YardsKickoffReturn\", \"YardsPuntReturn\", "
                                 + "\"YardsFumbleReturn\", \"YardsInterceptionReturn\",\"YardsMiscReturn\", \"YardsPunt\", \"YardsKickoff\", \"YardsTackleLoss\", \"YardsSack\", \"YardsPenalty\", "
@@ -491,7 +488,7 @@ public class jdbcpostgreSQL extends Application {
             }
 
             else if (!team.equals("") && !awayteam.equals("") && (year < 2005 || year > 2013)) {
-                JOptionPane.showMessageDialog(null, "second");
+                return  "second");
                 sqlStmt = String.format(
                         "SELECT DISTINCT \"HomeTeamName\", \"AwayTeamName\", \"Result\" AS \"Result for Team 1\", \"YardsPass\", \"YardsKickoffReturn\", \"YardsPuntReturn\", "
                                 + "\"YardsFumbleReturn\", \"YardsInterceptionReturn\", \"YardsMiscReturn\", \"YardsPunt\", \"YardsKickoff\", \"YardsTackleLoss\", \"YardsSack\", \"YardsPenalty\", "
@@ -1033,7 +1030,7 @@ public class jdbcpostgreSQL extends Application {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error accessing Team Data. Make sure that the Team name is correct");
+            return  "Error accessing Team Data. Make sure that the Team name is correct");
         }
         if (result_str == "") {
             return "Team Game Data non existent\n";
@@ -1218,7 +1215,7 @@ public class jdbcpostgreSQL extends Application {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,
+            return 
                     "Error accessing Team Play Data. Make sure that the Team name is correct");
         }
 
@@ -1284,7 +1281,7 @@ public class jdbcpostgreSQL extends Application {
                 result_str += "\n";
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,
+            return 
                     "Error accessing Player Data. Make sure that the Player name is correct");
         }
         if (result_str == "") {
@@ -1728,7 +1725,7 @@ public class jdbcpostgreSQL extends Application {
                 result_str += "\n";
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,
+            return 
                     "Error accessing Player Metrics Data. Make sure that the Player name is correct");
         }
 
@@ -1810,7 +1807,7 @@ public class jdbcpostgreSQL extends Application {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,
+            return 
                     "Error accessing most rushing yards vs. the given team. Make sure that the Team name and Year is correct");
         }
         if (result_str == "") {
@@ -1925,7 +1922,7 @@ public class jdbcpostgreSQL extends Application {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error accessing team win vs loss hypothesis");
+            return  "Error accessing team win vs loss hypothesis");
         }
 
         if (result_str == "") {
@@ -1967,10 +1964,14 @@ public class jdbcpostgreSQL extends Application {
                 }
             }
             
+            //checks for a direct link between the victor and loser
             stmt = conn.createStatement();
             if (!team.equals("") && !awayteam.equals("")) {
                 sqlStmt = String.format(
-                        "SELECT \"TeamId\", \"OpposingTeamId\", \"GameId\" FROM \"Team_Metrics_Gamewise\" WHERE \"Result\"='WIN' AND \"TeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s') AND \"OpposingTeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s') LIMIT 1;",
+                        "SELECT \"TeamId\", \"OpposingTeamId\", "
+                        + "\"GameId\" FROM \"Team_Metrics_Gamewise\" WHERE \"Result\"='WIN' "
+                        + "AND \"TeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s') "
+                        + "AND \"OpposingTeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s') LIMIT 1;",
                         team, awayteam);
             }
 
@@ -1979,11 +1980,12 @@ public class jdbcpostgreSQL extends Application {
                 result_str += String.format("%s | %s", team, awayteam);
                 result_str += "\n";
             }
+            
+            // 
             if (result_str.equals("")) {
                 List<String> teams = new ArrayList<>();
-                JOptionPane.showMessageDialog(null,
-                        "The function might take around 30s to run as we are trying our best to find a link.");
 
+                //recursive function to find chain
                 result_str = qOneHelper(team, awayteam, team, teams, conn);
                 if (result_str.contains("After going over 15 links, no match found.")) {
                     result_str = "After going over 15 links, no match found.";
@@ -1991,11 +1993,12 @@ public class jdbcpostgreSQL extends Application {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error accessing Team links please make sure team name is correct");
+            return "Error accessing Team links please make sure team name is correct";
         }
         return result_str;
     }
 
+    
     public static String qOneHelper(String team, String awayteam, String initTeam, List<String> teams,
             Connection conn) {
         String result_str = "";
@@ -2006,9 +2009,12 @@ public class jdbcpostgreSQL extends Application {
             Statement stmt = conn.createStatement();
             String sqlStmt = "";
 
+          
             if (!team.equals("") && !awayteam.equals("")) {
                 sqlStmt = String.format(
-                        "SELECT \"TeamId\", \"OpposingTeamId\", \"GameId\" FROM \"Team_Metrics_Gamewise\" WHERE \"Result\"='WIN' AND \"TeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s') AND \"OpposingTeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s') LIMIT 1;",
+                        "SELECT \"TeamId\", \"OpposingTeamId\", \"GameId\" FROM \"Team_Metrics_Gamewise\" WHERE "
+                        + "\"Result\"='WIN' AND \"TeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s') AND "
+                        + "\"OpposingTeamId\"=(SELECT \"TeamId\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s') LIMIT 1;",
                         team, awayteam);
             }
 
@@ -2022,21 +2028,31 @@ public class jdbcpostgreSQL extends Application {
                 Integer max = 0;
                 String maxOppTeam = "";
 
+                // looks at 15 teams beat by victory team in 15 games and picks the team not in our list and has the max wins 
                 stmt = conn.createStatement();
                 sqlStmt = "";
                 if (!team.equals("") && !awayteam.equals("")) {
                     sqlStmt = String.format(
-                            "SELECT\"Team_Metrics_Gamewise\" .\"TeamId\",\"OpposingTeamId\",\"TeamName\",\"GameId\" FROM\"Team_Metrics_Gamewise\" INNER JOIN\"Team\" ON\"OpposingTeamId\"=\"Team\" .\"TeamId\" WHERE\"Result\"='WIN' AND\"Team_Metrics_Gamewise\" .\"TeamId\"=(SELECT\"Team\" .\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s')LIMIT 15;",
+                            "SELECT\"Team_Metrics_Gamewise\" "
+                            + ".\"TeamId\",\"OpposingTeamId\",\"TeamName\","
+                            + "\"GameId\" FROM\"Team_Metrics_Gamewise\" INNER JOIN\"Team\" "
+                            + "ON\"OpposingTeamId\"=\"Team\" .\"TeamId\" WHERE\"Result\"='WIN' AND\"Team_Metrics_Gamewise\" "
+                            + ".\"TeamId\"=(SELECT\"Team\" .\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s')LIMIT 15;",
                             team);
                 }
                 result = stmt.executeQuery(sqlStmt);
+                
+                // looks at 15 teams which beat opposing team in 15 games and picks team with most losses
                 while (result.next()) {
                     String oppTeam = result.getString("TeamName");
                     Statement stmt2 = conn.createStatement();
                     String sqlStmt2 = "";
                     if (!team.equals("") && !awayteam.equals("")) {
                         sqlStmt2 = String.format(
-                                "SELECT Count(*) FROM \"Team_Metrics_Gamewise\" WHERE\"Result\"='WIN' AND \"TeamId\"=(SELECT\"Team\" .\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s') AND \"OpposingTeamId\"!=(SELECT\"Team\" .\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s');",
+                                "SELECT Count(*) FROM \"Team_Metrics_Gamewise\" "
+                                + "WHERE\"Result\"='WIN' AND \"TeamId\"=(SELECT\"Team\" .\"TeamId\" "
+                                + "FROM\"Team\" WHERE\"TeamName\" LIKE'%s') AND \"OpposingTeamId\"!=(SELECT\"Team\" "
+                                + ".\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s');",
                                 oppTeam, initTeam);
                     }
                     ResultSet result2 = stmt2.executeQuery(sqlStmt2);
@@ -2054,7 +2070,7 @@ public class jdbcpostgreSQL extends Application {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error accessing Team links please make sure team name is correct");
+            return "Error accessing Team links please make sure team name is correct";
         }
         return result_str;
     }
