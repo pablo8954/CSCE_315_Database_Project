@@ -295,11 +295,18 @@ public class jdbcpostgreSQL extends Application {
         String result_str = "";
         try {
             Statement stmt = conn.createStatement();
-            String sqlStatement = String
-                    .format("SELECT DISTINCT " + "\"StadiumName\",\"StadiumSurface\",\"StadiumCity\",\"StadiumState\","
-                            + "\"StadiumCapacity\",\"StadiumYearOpened\" FROM \"Stadium_Yearwise\" WHERE"
-                            + " \"StadiumId\" = ( SELECT DISTINCT \"StadiumId\" FROM \"Stadium_Yearwise\" WHERE "
-                            + "\"StadiumName\" LIKE '%s%%');", name);
+            if (name.equals("")) {
+                String sqlStatement = String.format(
+                        "SELECT DISTINCT " + "\"StadiumName\",\"StadiumSurface\",\"StadiumCity\",\"StadiumState\","
+                                + "\"StadiumCapacity\",\"StadiumYearOpened\" FROM \"Stadium_Yearwise\"");
+            } else {
+                String sqlStatement = String.format(
+                        "SELECT DISTINCT " + "\"StadiumName\",\"StadiumSurface\",\"StadiumCity\",\"StadiumState\","
+                                + "\"StadiumCapacity\",\"StadiumYearOpened\" FROM \"Stadium_Yearwise\" WHERE"
+                                + " \"StadiumId\" = ( SELECT DISTINCT \"StadiumId\" FROM \"Stadium_Yearwise\" WHERE "
+                                + "\"StadiumName\" LIKE '%s%%');",
+                        name);
+            }
 
             // Fetch SQL Results for output in DBMS
             ResultSet result = stmt.executeQuery(sqlStatement);
@@ -364,10 +371,16 @@ public class jdbcpostgreSQL extends Application {
         try {
             Statement stmt = conn.createStatement();
 
-            String sqlStatement = String.format("SELECT DISTINCT \"Subdivision\", \"ConferenceName\" "
-                    + "FROM \"Conference_Yearwise\" WHERE \"ConfId\" = "
-                    + "( SELECT DISTINCT \"ConfId\" FROM \"Conference_Yearwise\" WHERE "
-                    + "\"ConferenceName\" LIKE '%s%%');", name);
+            // check name if not there, send in all conf
+            if (!name.equals("")) {
+                String sqlStatement = String.format("SELECT DISTINCT \"Subdivision\", \"ConferenceName\" "
+                        + "FROM \"Conference_Yearwise\" WHERE \"ConfId\" = "
+                        + "( SELECT DISTINCT \"ConfId\" FROM \"Conference_Yearwise\" WHERE "
+                        + "\"ConferenceName\" LIKE '%s%%');", name);
+            } else {
+                String sqlStatement = String.format(
+                        "SELECT DISTINCT \"Subdivision\", \"ConferenceName\" " + "FROM \"Conference_Yearwise\"");
+            }
 
             ResultSet result = stmt.executeQuery(sqlStatement);
             while (result.next()) {
@@ -403,13 +416,23 @@ public class jdbcpostgreSQL extends Application {
         try {
             Statement stmt = conn.createStatement();
             String sqlStmt = "";
-
-            sqlStmt = String.format("SELECT DISTINCT \"TeamName\", \"AverageAttendance\", "
-                    + "\"ConferenceName\", \"Subdivision\", \"Conference_Yearwise\".\"Year\" FROM "
-                    + "\"Conference_Yearwise\" INNER JOIN (SELECT * FROM \"Team_Yearwise\" "
-                    + "INNER JOIN (SELECT * FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') "
-                    + "AS Team_Data_Inner ON Team_Data_Inner.\"TeamId\" = \"Team_Yearwise\".\"TeamId\") "
-                    + "AS Team_Data ON \"Conference_Yearwise\".\"ConfYearId\"=Team_Data.\"ConfYearId\";", name);
+            if (name.equals("")) {
+                sqlStmt = String.format("SELECT DISTINCT \"TeamName\", \"AverageAttendance\", "
+                        + "\"ConferenceName\", \"Subdivision\", \"Conference_Yearwise\".\"Year\" FROM "
+                        + "\"Conference_Yearwise\" INNER JOIN (SELECT * FROM \"Team_Yearwise\" "
+                        + "INNER JOIN (SELECT * FROM \"Team\") "
+                        + "AS Team_Data_Inner ON Team_Data_Inner.\"TeamId\" = \"Team_Yearwise\".\"TeamId\") "
+                        + "AS Team_Data ON \"Conference_Yearwise\".\"ConfYearId\"=Team_Data.\"ConfYearId\";");
+            } else {
+                sqlStmt = String.format(
+                        "SELECT DISTINCT \"TeamName\", \"AverageAttendance\", "
+                                + "\"ConferenceName\", \"Subdivision\", \"Conference_Yearwise\".\"Year\" FROM "
+                                + "\"Conference_Yearwise\" INNER JOIN (SELECT * FROM \"Team_Yearwise\" "
+                                + "INNER JOIN (SELECT * FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') "
+                                + "AS Team_Data_Inner ON Team_Data_Inner.\"TeamId\" = \"Team_Yearwise\".\"TeamId\") "
+                                + "AS Team_Data ON \"Conference_Yearwise\".\"ConfYearId\"=Team_Data.\"ConfYearId\";",
+                        name);
+            }
 
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
