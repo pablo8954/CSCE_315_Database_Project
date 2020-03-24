@@ -339,7 +339,7 @@ public class jdbcpostgreSQL extends Application {
                 result_str += "\n";
             }
         } catch (Exception e) {
-            return "Error accessing Stadium Data. Make sure that the stadium name is correct");
+            return "Error accessing Stadium Data. Make sure that the stadium name is correct";
         }
 
         if (result_str == "") {
@@ -379,7 +379,7 @@ public class jdbcpostgreSQL extends Application {
             }
 
         } catch (Exception e) {
-            return "Error accessing Conference Data. Make sure that the Conference name is correct");
+            return "Error accessing Conference Data. Make sure that the Conference name is correct";
         }
         if (result_str == "") {
             return "Conference Data non existent\n";
@@ -443,7 +443,7 @@ public class jdbcpostgreSQL extends Application {
 
         } catch (Exception e) {
             return 
-                    "Error accessing General Team Data. Make sure that the Conference name is correct");
+                    "Error accessing General Team Data. Make sure that the Conference name is correct";
         }
         if (result_str == "") {
             return "Team Data non existent\n";
@@ -465,7 +465,7 @@ public class jdbcpostgreSQL extends Application {
             // - Home Team, Year Provided
             // - Only Home Team Provided
             if (!team.equals("") && !awayteam.equals("") && !(year < 2005 || year > 2013)) {
-                return  "First");
+               
                 sqlStmt = String.format(
                         "SELECT DISTINCT \"HomeTeamName\", \"AwayTeamName\", \"Result\" AS \"Result for Team 1\", \"YardsPass\", \"YardsKickoffReturn\", \"YardsPuntReturn\", "
                                 + "\"YardsFumbleReturn\", \"YardsInterceptionReturn\",\"YardsMiscReturn\", \"YardsPunt\", \"YardsKickoff\", \"YardsTackleLoss\", \"YardsSack\", \"YardsPenalty\", "
@@ -487,7 +487,7 @@ public class jdbcpostgreSQL extends Application {
             }
 
             else if (!team.equals("") && !awayteam.equals("") && (year < 2005 || year > 2013)) {
-                return  "second");
+    
                 sqlStmt = String.format(
                         "SELECT DISTINCT \"HomeTeamName\", \"AwayTeamName\", \"Result\" AS \"Result for Team 1\", \"YardsPass\", \"YardsKickoffReturn\", \"YardsPuntReturn\", "
                                 + "\"YardsFumbleReturn\", \"YardsInterceptionReturn\", \"YardsMiscReturn\", \"YardsPunt\", \"YardsKickoff\", \"YardsTackleLoss\", \"YardsSack\", \"YardsPenalty\", "
@@ -1029,7 +1029,7 @@ public class jdbcpostgreSQL extends Application {
             }
 
         } catch (Exception e) {
-            return  "Error accessing Team Data. Make sure that the Team name is correct");
+            return  "Error accessing Team Data. Make sure that the Team name is correct";
         }
         if (result_str == "") {
             return "Team Game Data non existent\n";
@@ -1215,7 +1215,7 @@ public class jdbcpostgreSQL extends Application {
 
         } catch (Exception e) {
             return 
-                    "Error accessing Team Play Data. Make sure that the Team name is correct");
+                    "Error accessing Team Play Data. Make sure that the Team name is correct";
         }
 
         if (result_str == "") {
@@ -1281,7 +1281,7 @@ public class jdbcpostgreSQL extends Application {
             }
         } catch (Exception e) {
             return 
-                    "Error accessing Player Data. Make sure that the Player name is correct");
+                    "Error accessing Player Data. Make sure that the Player name is correct";
         }
         if (result_str == "") {
             return "Player Data non existent\n";
@@ -1725,7 +1725,7 @@ public class jdbcpostgreSQL extends Application {
             }
         } catch (Exception e) {
             return 
-                    "Error accessing Player Metrics Data. Make sure that the Player name is correct");
+                    "Error accessing Player Metrics Data. Make sure that the Player name is correct";
         }
 
         if (result_str == "") {
@@ -1806,8 +1806,7 @@ public class jdbcpostgreSQL extends Application {
             }
 
         } catch (Exception e) {
-            return 
-                    "Error accessing most rushing yards vs. the given team. Make sure that the Team name and Year is correct");
+            return "Error accessing most rushing yards vs. the given team. Make sure that the Team name and Year is correct";
         }
         if (result_str == "") {
             return "most rushing yards vs. the given team data non existent\n";
@@ -1921,7 +1920,7 @@ public class jdbcpostgreSQL extends Application {
             }
 
         } catch (Exception e) {
-            return  "Error accessing team win vs loss hypothesis");
+            return  "Error accessing team win vs loss hypothesis";
         }
 
         if (result_str == "") {
@@ -1976,7 +1975,7 @@ public class jdbcpostgreSQL extends Application {
 
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
-                result_str += String.format("%s | %s", team, awayteam);
+                result_str += String.format("%s -> %s", team, awayteam);
                 result_str += "\n";
             }
             
@@ -2019,7 +2018,7 @@ public class jdbcpostgreSQL extends Application {
 
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
-                result_str += String.format("%s | %s", team, awayteam);
+                result_str += String.format("%s -> %s", team, awayteam);
             }
             if (result_str.equals("")) {
 
@@ -2065,7 +2064,7 @@ public class jdbcpostgreSQL extends Application {
                     }
                 }
                 teams.add(maxOppTeam);
-                result_str = String.format("%s | %s", team, qOneHelper(maxOppTeam, awayteam, initTeam, teams, conn));
+                result_str = String.format("%s -> %s", team, qOneHelper(maxOppTeam, awayteam, initTeam, teams, conn));
             }
 
         } catch (Exception e) {

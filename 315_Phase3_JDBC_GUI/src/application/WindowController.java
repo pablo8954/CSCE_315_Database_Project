@@ -196,7 +196,7 @@ public class WindowController {
 		Scene scene = new Scene(root, 400, 150);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.setTitle("Question Two");
+		stage.setTitle("Question Three");
 		stage.showAndWait();
 		//Get the info from conference window
 		QuestionTwoController controller = loader.getController();
@@ -216,7 +216,7 @@ public class WindowController {
 		Scene scene = new Scene(root, 400, 150);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.setTitle("Question Two");
+		stage.setTitle("Question Five");
 		stage.showAndWait();
 		//Get the info from conference window
 		QuestionThreeController controller = loader.getController();

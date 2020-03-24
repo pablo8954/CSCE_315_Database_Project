@@ -66,12 +66,12 @@
                                           <Insets right="10.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="questionTwoButton" mnemonicParsing="false" onAction="#questionTwoButtonPressed" text="Q2">
+                                    <Button fx:id="questionTwoButton" mnemonicParsing="false" onAction="#questionTwoButtonPressed" text="Q3">
                                        <HBox.margin>
                                           <Insets right="10.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="questionThreeButton" mnemonicParsing="false" onAction="#questionThreeButtonPressed" text="Q3" />
+                                    <Button fx:id="questionThreeButton" mnemonicParsing="false" onAction="#questionThreeButtonPressed" text="Q5" />
                                  </children>
                                  <VBox.margin>
                                     <Insets top="28.0" />
