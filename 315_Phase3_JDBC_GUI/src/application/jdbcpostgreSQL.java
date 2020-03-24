@@ -54,7 +54,7 @@ public class jdbcpostgreSQL extends Application {
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
+            System.exit(0); 
         } // end try catch
 
         // Create a controller to the main window
@@ -293,14 +293,15 @@ public class jdbcpostgreSQL extends Application {
     // Fetch stadium data using stadium name
     public static String stadiumDataFetch(String name, Connection conn) {
         String result_str = "";
+        String sqlStatement = "";
         try {
             Statement stmt = conn.createStatement();
             if (name.equals("")) {
-                String sqlStatement = String.format(
+                sqlStatement = String.format(
                         "SELECT DISTINCT " + "\"StadiumName\",\"StadiumSurface\",\"StadiumCity\",\"StadiumState\","
                                 + "\"StadiumCapacity\",\"StadiumYearOpened\" FROM \"Stadium_Yearwise\"");
             } else {
-                String sqlStatement = String.format(
+                sqlStatement = String.format(
                         "SELECT DISTINCT " + "\"StadiumName\",\"StadiumSurface\",\"StadiumCity\",\"StadiumState\","
                                 + "\"StadiumCapacity\",\"StadiumYearOpened\" FROM \"Stadium_Yearwise\" WHERE"
                                 + " \"StadiumId\" = ( SELECT DISTINCT \"StadiumId\" FROM \"Stadium_Yearwise\" WHERE "
@@ -370,15 +371,16 @@ public class jdbcpostgreSQL extends Application {
         String result_str = "";
         try {
             Statement stmt = conn.createStatement();
+            String sqlStatement = "";
 
             // check name if not there, send in all conf
             if (!name.equals("")) {
-                String sqlStatement = String.format("SELECT DISTINCT \"Subdivision\", \"ConferenceName\" "
+                sqlStatement = String.format("SELECT DISTINCT \"Subdivision\", \"ConferenceName\" "
                         + "FROM \"Conference_Yearwise\" WHERE \"ConfId\" = "
                         + "( SELECT DISTINCT \"ConfId\" FROM \"Conference_Yearwise\" WHERE "
                         + "\"ConferenceName\" LIKE '%s%%');", name);
             } else {
-                String sqlStatement = String.format(
+                sqlStatement = String.format(
                         "SELECT DISTINCT \"Subdivision\", \"ConferenceName\" " + "FROM \"Conference_Yearwise\"");
             }
 

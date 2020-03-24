@@ -52,7 +52,7 @@
                               <Insets left="25.0" top="10.0" />
                            </HBox.margin>
                         </Label>
-                        <MenuButton fx:id="yearButton" mnemonicParsing="false" text="Select Year">
+                        <MenuButton fx:id="yearButton" disable="true" mnemonicParsing="false" text="Not Applicable">
                           <items>
                             <MenuItem fx:id="item2005" mnemonicParsing="false" onAction="#selected2005" text="2005" />
                             <MenuItem fx:id="item2006" mnemonicParsing="false" onAction="#selected2006" text="2006" />

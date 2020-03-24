@@ -55,6 +55,8 @@ public class TeamController {
 		OpposingTeamText.setPromptText("Not Applicable");
 		OpposingTeamText.setText("");
 		OpposingTeamText.setEditable(false);
+		yearButton.setText("Not Applicable");
+		yearButton.setDisable(true);
 	}
 	
 	public void gameRadioSelected() {
@@ -65,10 +67,12 @@ public class TeamController {
 		OpposingTeamText.setPromptText("");
 		OpposingTeamText.setText("");
 		OpposingTeamText.setEditable(true);
+		yearButton.setText("Select Year");
+		yearButton.setDisable(false);
 
 	}
 	
-	public void playRadioSelected() {
+	public void playRadioSelected() { 
 		GeneralRadio.setSelected(false);
 		GameRadio.setSelected(false);
 		PlayRadio.setSelected(true);
@@ -76,6 +80,8 @@ public class TeamController {
 		OpposingTeamText.setPromptText("");
 		OpposingTeamText.setText("");
 		OpposingTeamText.setEditable(true);
+		yearButton.setText("Select Year");
+		yearButton.setDisable(false);
 
 	}
 	
