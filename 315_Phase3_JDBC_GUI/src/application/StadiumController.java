@@ -23,6 +23,7 @@ public class StadiumController {
 	}
 	
 	public void OKPressed() {
+		//Extract stadium name and close window
 		stadiumName = StadiumNameText.getText();
 		Stage s = (Stage) OKButton.getScene().getWindow();
 		s.close();

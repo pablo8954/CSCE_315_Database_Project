@@ -57,36 +57,44 @@ public class jdbcpostgreSQL extends Application {
             System.exit(0);
         } // end try catch
 
+        // Create a controller to the main window
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("Window.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root, 600, 800);
         controller = loader.getController();
 
+        // Show the main window
         primaryStage.setScene(scene);
         primaryStage.setTitle("College Football Data");
         primaryStage.resizableProperty().setValue(Boolean.FALSE);
         primaryStage.show();
 
+        // Create new thread to interact with backend
         new Thread() {
             public void run() {
                 // Keep waking up thread for duration of program
                 while (true) {
 
                     try {
+                        // Sleep to allow interaction with GUI
                         Thread.sleep(new Random().nextInt(1000));
                     } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
 
                     Platform.runLater(new Runnable() {
 
+                        // Running when woken up
                         public void run() {
 
                             resultsRequested = controller.getResultsRequested();
 
                             // If get results pushed
                             if (resultsRequested) {
+
+                                // Extract all information user may have provided
                                 questionOneResultsRequested = controller.getQuestionOneResultsRequested();
                                 questionTwoResultsRequested = controller.getQuestionTwoResultsRequested();
                                 questionThreeResultsRequested = controller.getQuestionThreeResultsRequested();
@@ -99,14 +107,15 @@ public class jdbcpostgreSQL extends Application {
                                 stadiumName = controller.getStadiumName();
                                 year = controller.getYear();
 
-                                System.out.println(dataSelection + " selected");
+                                // Get result
                                 String result = "";
+                                // Tables
                                 if (dataSelection.equals("Conference")) {
                                     result = confDataFetch(conferenceName, conn);
                                 } else if (dataSelection.equals("Game")) {
                                     result = gameDataFetcWithNameYear(teamName, year, conn);
                                 } else if (dataSelection.equals("Player")) {
-                                    System.out.println(controller.getPlayerFirstName());
+                                    // If year was not provided
                                     if (controller.getYear() == 0) {
                                         result = generalPlayer(controller.getPlayerFirstName(),
                                                 controller.getPlayerLastName(), conn);
@@ -117,6 +126,7 @@ public class jdbcpostgreSQL extends Application {
                                 } else if (dataSelection.equals("Stadium")) {
                                     result = stadiumDataFetch(stadiumName, conn);
                                 } else if (dataSelection.equals("Team")) {
+                                    // Different radio button options
                                     if (controller.getTeamType().equals("General")) {
                                         result = generalTeam(controller.getTeamName(), conn);
                                     } else if (controller.getTeamType().equals("Game")) {
@@ -126,7 +136,9 @@ public class jdbcpostgreSQL extends Application {
                                         result = teamPlayData(controller.getTeamName(),
                                                 controller.getOpposingTeamName(), controller.getYear(), conn);
                                     }
-                                } else if (questionOneResultsRequested) {
+                                }
+                                // Question buttons
+                                else if (questionOneResultsRequested) {
                                     result = "Given 2 teams, create a victory chain.";
                                     result += "\n" + questionOne(controller.getTeamName(),
                                             controller.getOpposingTeamName(), conn);
@@ -142,9 +154,9 @@ public class jdbcpostgreSQL extends Application {
                                     controller.updateOutputTextArea(result);
                                 }
 
+                                // Update the output to the screen
                                 controller.updateOutputTextArea(result);
-                                System.out.println(result);
-
+                                // If user chose to generate text file
                                 if (controller.generateTextFile()) {
                                     // write to file
                                     File generatedFile = new File("results.txt");
@@ -155,6 +167,7 @@ public class jdbcpostgreSQL extends Application {
                                         writer.write(result);
                                         writer.close();
                                     } catch (IOException e) {
+                                        // TODO Auto-generated catch block
                                         e.printStackTrace();
                                     }
                                 }
@@ -221,7 +234,6 @@ public class jdbcpostgreSQL extends Application {
 
             ResultSet result = stmt.executeQuery(sqlStmt);
 
-            // send output to DBMS Application
             while (result.next()) {
                 result_str += "Home Team Name: ";
                 try {
@@ -283,11 +295,18 @@ public class jdbcpostgreSQL extends Application {
         String result_str = "";
         try {
             Statement stmt = conn.createStatement();
-            String sqlStatement = String
-                    .format("SELECT DISTINCT " + "\"StadiumName\",\"StadiumSurface\",\"StadiumCity\",\"StadiumState\","
-                            + "\"StadiumCapacity\",\"StadiumYearOpened\" FROM \"Stadium_Yearwise\" WHERE"
-                            + " \"StadiumId\" = ( SELECT DISTINCT \"StadiumId\" FROM \"Stadium_Yearwise\" WHERE "
-                            + "\"StadiumName\" LIKE '%s%%');", name);
+            if (name.equals("")) {
+                String sqlStatement = String.format(
+                        "SELECT DISTINCT " + "\"StadiumName\",\"StadiumSurface\",\"StadiumCity\",\"StadiumState\","
+                                + "\"StadiumCapacity\",\"StadiumYearOpened\" FROM \"Stadium_Yearwise\"");
+            } else {
+                String sqlStatement = String.format(
+                        "SELECT DISTINCT " + "\"StadiumName\",\"StadiumSurface\",\"StadiumCity\",\"StadiumState\","
+                                + "\"StadiumCapacity\",\"StadiumYearOpened\" FROM \"Stadium_Yearwise\" WHERE"
+                                + " \"StadiumId\" = ( SELECT DISTINCT \"StadiumId\" FROM \"Stadium_Yearwise\" WHERE "
+                                + "\"StadiumName\" LIKE '%s%%');",
+                        name);
+            }
 
             // Fetch SQL Results for output in DBMS
             ResultSet result = stmt.executeQuery(sqlStatement);
@@ -352,10 +371,16 @@ public class jdbcpostgreSQL extends Application {
         try {
             Statement stmt = conn.createStatement();
 
-            String sqlStatement = String.format("SELECT DISTINCT \"Subdivision\", \"ConferenceName\" "
-                    + "FROM \"Conference_Yearwise\" WHERE \"ConfId\" = "
-                    + "( SELECT DISTINCT \"ConfId\" FROM \"Conference_Yearwise\" WHERE "
-                    + "\"ConferenceName\" LIKE '%s%%');", name);
+            // check name if not there, send in all conf
+            if (!name.equals("")) {
+                String sqlStatement = String.format("SELECT DISTINCT \"Subdivision\", \"ConferenceName\" "
+                        + "FROM \"Conference_Yearwise\" WHERE \"ConfId\" = "
+                        + "( SELECT DISTINCT \"ConfId\" FROM \"Conference_Yearwise\" WHERE "
+                        + "\"ConferenceName\" LIKE '%s%%');", name);
+            } else {
+                String sqlStatement = String.format(
+                        "SELECT DISTINCT \"Subdivision\", \"ConferenceName\" " + "FROM \"Conference_Yearwise\"");
+            }
 
             ResultSet result = stmt.executeQuery(sqlStatement);
             while (result.next()) {
@@ -391,13 +416,23 @@ public class jdbcpostgreSQL extends Application {
         try {
             Statement stmt = conn.createStatement();
             String sqlStmt = "";
-
-            sqlStmt = String.format("SELECT DISTINCT \"TeamName\", \"AverageAttendance\", "
-                    + "\"ConferenceName\", \"Subdivision\", \"Conference_Yearwise\".\"Year\" FROM "
-                    + "\"Conference_Yearwise\" INNER JOIN (SELECT * FROM \"Team_Yearwise\" "
-                    + "INNER JOIN (SELECT * FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') "
-                    + "AS Team_Data_Inner ON Team_Data_Inner.\"TeamId\" = \"Team_Yearwise\".\"TeamId\") "
-                    + "AS Team_Data ON \"Conference_Yearwise\".\"ConfYearId\"=Team_Data.\"ConfYearId\";", name);
+            if (name.equals("")) {
+                sqlStmt = String.format("SELECT DISTINCT \"TeamName\", \"AverageAttendance\", "
+                        + "\"ConferenceName\", \"Subdivision\", \"Conference_Yearwise\".\"Year\" FROM "
+                        + "\"Conference_Yearwise\" INNER JOIN (SELECT * FROM \"Team_Yearwise\" "
+                        + "INNER JOIN (SELECT * FROM \"Team\") "
+                        + "AS Team_Data_Inner ON Team_Data_Inner.\"TeamId\" = \"Team_Yearwise\".\"TeamId\") "
+                        + "AS Team_Data ON \"Conference_Yearwise\".\"ConfYearId\"=Team_Data.\"ConfYearId\";");
+            } else {
+                sqlStmt = String.format(
+                        "SELECT DISTINCT \"TeamName\", \"AverageAttendance\", "
+                                + "\"ConferenceName\", \"Subdivision\", \"Conference_Yearwise\".\"Year\" FROM "
+                                + "\"Conference_Yearwise\" INNER JOIN (SELECT * FROM \"Team_Yearwise\" "
+                                + "INNER JOIN (SELECT * FROM \"Team\" WHERE \"TeamName\" LIKE '%s%%') "
+                                + "AS Team_Data_Inner ON Team_Data_Inner.\"TeamId\" = \"Team_Yearwise\".\"TeamId\") "
+                                + "AS Team_Data ON \"Conference_Yearwise\".\"ConfYearId\"=Team_Data.\"ConfYearId\";",
+                        name);
+            }
 
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
@@ -448,7 +483,6 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
-    // Handle Team Performance statistics
     public static String teamGameData(String team, String awayteam, Integer year, Connection conn) {
         String result_str = "";
         String sqlStmt = "";
@@ -1284,7 +1318,6 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
-    // Handle Individual Player data pertaining to in-game statistics
     public static String playerMetricsData(String fname, String lname, Integer year, Connection conn) {
         String result_str = "";
         try {
@@ -1795,9 +1828,6 @@ public class jdbcpostgreSQL extends Application {
 
                 result_str += "\n";
             }
-            if (result_str.equals("")) {
-                result_str = "The game data for the given team is not available. Please check the team name as well.";
-            }
 
         } catch (Exception e) {
             return "Error accessing most rushing yards vs. the given team. Make sure that the Team name and Year is correct";
@@ -1815,21 +1845,6 @@ public class jdbcpostgreSQL extends Application {
         try {
             Statement stmt = conn.createStatement();
 
-            // verify input string is a valid team
-            if (!team.equals("")) {
-                String verifyInput = String.format(
-                        "SELECT DISTINCT \"TeamName\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s' LIMIT 1;", team);
-
-                ResultSet result = stmt.executeQuery(verifyInput);
-                while (result.next()) {
-                    result_str += result.getString("TeamName");
-                }
-                if (result_str.equals("")) {
-                    return "Invalid team name - please make sure team name is correct.";
-                }
-            }
-
-            result_str = "";
             // Two cases - Only Team given | Team and Year given
             if (!team.equals("") && (year > 2013 || year < 2005)) {
                 String sqlStmt = String.format("SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" "
@@ -1909,9 +1924,6 @@ public class jdbcpostgreSQL extends Application {
                     result_str += "%.\n";
                 }
             }
-            if (result_str.equals("")) {
-                result_str = "The game data for the given team is not available. Please check the team name as well.";
-            }
 
         } catch (Exception e) {
             return "Error accessing team win vs loss hypothesis";
@@ -1931,8 +1943,6 @@ public class jdbcpostgreSQL extends Application {
             String sqlStmt = "";
 
             if (!team.equals("") && !awayteam.equals("")) {
-
-                // verify that home team input, team, is valid
                 sqlStmt = String.format("SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s' LIMIT 1;", team);
                 Integer count = 0;
                 ResultSet result_upper = stmt.executeQuery(sqlStmt);
@@ -2064,7 +2074,25 @@ public class jdbcpostgreSQL extends Application {
     }
 
     public static void main(String args[]) {
+
         launch(args);
+
+        // question three
+        /*
+         * System.out.println(questionThree("Texas A&M", 0, conn));
+         * System.out.println(questionThree("Auburn", 2013, conn));
+         * System.out.println(questionThree("Texas A&M", 2005, conn));
+         * System.out.println(questionThree("Clemson", 2013, conn));
+         * System.out.println(questionThree("Baylor", 0, conn));
+         * System.out.println("\n");
+         * 
+         * // question five System.out.println(questionFive("Texas A&M", 0, conn));
+         * System.out.println("\n"); System.out.println(questionFive("Clemson", 2013,
+         * conn)); System.out.println("\n");
+         */
+
+        // TODO: try catch to handle bad team inputs
+        // System.out.println(questionFive("Shrey is Bai", 2013, conn));
 
     }
     // end backendmain

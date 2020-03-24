@@ -30,6 +30,7 @@ public class QuestionOneController {
 	
 	
 	public void OKPressed() {
+		//Extract team names and close window
 		teamName = TeamNameText.getText();
 		opposingTeamName = OpposingTeamNameText.getText();
 		Stage s = (Stage) OKButton.getScene().getWindow();

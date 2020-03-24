@@ -45,13 +45,16 @@ public class TeamController {
 	String teamName;
 	String opposingTeam;
 	int year;
-	String type = "General";
+	String type = "General"; 
 	
 	public void generalRadioSelected() {
 		GeneralRadio.setSelected(true);
 		GameRadio.setSelected(false);
 		PlayRadio.setSelected(false);
 		type = "General";
+		OpposingTeamText.setPromptText("Not Applicable");
+		OpposingTeamText.setText("");
+		OpposingTeamText.setEditable(false);
 	}
 	
 	public void gameRadioSelected() {
@@ -59,6 +62,10 @@ public class TeamController {
 		GameRadio.setSelected(true);
 		PlayRadio.setSelected(false);
 		type = "Game";
+		OpposingTeamText.setPromptText("");
+		OpposingTeamText.setText("");
+		OpposingTeamText.setEditable(true);
+
 	}
 	
 	public void playRadioSelected() {
@@ -66,6 +73,10 @@ public class TeamController {
 		GameRadio.setSelected(false);
 		PlayRadio.setSelected(true);
 		type = "Play";
+		OpposingTeamText.setPromptText("");
+		OpposingTeamText.setText("");
+		OpposingTeamText.setEditable(true);
+
 	}
 	
 	public String getTeamName() {
@@ -79,6 +90,7 @@ public class TeamController {
 		return opposingTeam;
 	}
 	public void selected2005() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2005;
 		m.setText(mitem.getText());
@@ -86,6 +98,7 @@ public class TeamController {
 	}
 	
 	public void selected2006() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2006;
 		m.setText(mitem.getText());
@@ -93,6 +106,7 @@ public class TeamController {
 	}
 	
 	public void selected2007() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2007;
 		m.setText(mitem.getText());
@@ -100,6 +114,7 @@ public class TeamController {
 	}
 	
 	public void selected2008() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2008;
 		m.setText(mitem.getText());
@@ -107,6 +122,7 @@ public class TeamController {
 	}
 	
 	public void selected2009() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2009;
 		m.setText(mitem.getText());
@@ -114,6 +130,7 @@ public class TeamController {
 	}
 	
 	public void selected2010() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2010;
 		m.setText(mitem.getText());
@@ -121,6 +138,7 @@ public class TeamController {
 	}
 	
 	public void selected2011() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2011;
 		m.setText(mitem.getText());
@@ -128,6 +146,7 @@ public class TeamController {
 	}
 	
 	public void selected2012() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2012;
 		m.setText(mitem.getText());
@@ -135,6 +154,7 @@ public class TeamController {
 	}
 	
 	public void selected2013() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2013;
 		m.setText(mitem.getText());
@@ -142,6 +162,7 @@ public class TeamController {
 	}
 	
 	public void OKPressed() {
+		//Extract team names and close window
 		teamName = TeamNameText.getText();
 		opposingTeam = OpposingTeamText.getText();
 		Stage s = (Stage) OKButton.getScene().getWindow();

@@ -77,7 +77,7 @@
                               <Insets left="25.0" top="10.0" />
                            </HBox.margin>
                         </Label>
-                        <TextField fx:id="OpposingTeamText">
+                        <TextField fx:id="OpposingTeamText" editable="false" promptText="Not Applicable">
                            <HBox.margin>
                               <Insets left="15.0" top="10.0" />
                            </HBox.margin>
