@@ -171,7 +171,7 @@ public class jdbcpostgreSQL extends Application {
 
     }
 
-    //fetch game data using team name and year
+    // fetch game data using team name and year
     public static String gameDataFetcWithNameYear(String name, Integer year, Connection conn) {
         String result_str = "";
         try {
@@ -282,7 +282,7 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
-    //Fetch stadium data using stadium name
+    // Fetch stadium data using stadium name
     public static String stadiumDataFetch(String name, Connection conn) {
         String result_str = "";
         try {
@@ -351,7 +351,7 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
-    //Fetch Conference Data
+    // Fetch Conference Data
     public static String confDataFetch(String name, Connection conn) {
         String result_str = "";
         try {
@@ -391,7 +391,7 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
-    //Grab team data pertaining to general information 
+    // Grab team data pertaining to general information
     public static String generalTeam(String name, Connection conn) {
         String result_str = "";
         try {
@@ -1041,7 +1041,7 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
-    //Handle all team play performance against a given team
+    // Handle all team play performance against a given team
     public static String teamPlayData(String team, String awayteam, Integer year, Connection conn) {
 
         String result_str = "";
@@ -1228,7 +1228,7 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
-    //Fetch Individual Player Information not pertaining to in-game performance
+    // Fetch Individual Player Information not pertaining to in-game performance
     public static String generalPlayer(String fname, String lname, Connection conn) {
         String result_str = "";
         try {
@@ -1300,8 +1300,8 @@ public class jdbcpostgreSQL extends Application {
             Statement stmt = conn.createStatement();
             String sqlStatement = "";
 
-            // Two cases for SQL Statement 
-            //- Only Full Name given 
+            // Two cases for SQL Statement
+            // - Only Full Name given
             // Full Name and Year is given
             if (!fname.equals("") && !lname.equals("") && !(year < 2005 || year > 2013)) {
                 sqlStatement = String.format(
@@ -1953,8 +1953,8 @@ public class jdbcpostgreSQL extends Application {
                 if (count < 1) {
                     return "Error accessing Team links please make sure team name is correct";
                 }
-                
-                //verify away team input is valid
+
+                // verify away team input is valid
                 stmt = conn.createStatement();
                 sqlStmt = String.format("SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s' LIMIT 1;", awayteam);
                 count = 0;
@@ -1966,7 +1966,7 @@ public class jdbcpostgreSQL extends Application {
                     return "Error accessing Team links please make sure team name is correct";
                 }
             }
-            
+
             stmt = conn.createStatement();
             if (!team.equals("") && !awayteam.equals("")) {
                 sqlStmt = String.format(
@@ -1981,8 +1981,11 @@ public class jdbcpostgreSQL extends Application {
             }
             if (result_str.equals("")) {
                 List<String> teams = new ArrayList<>();
-               /* JOptionPane.showMessageDialog(null,
-                        "The function might take around 30s to run as we are trying our best to find a link.");*/
+                /*
+                 * JOptionPane.showMessageDialog(null,
+                 * "The function might take around 30s to run as we are trying our best to find a link."
+                 * );
+                 */
 
                 result_str = qOneHelper(team, awayteam, team, teams, conn);
                 if (result_str.contains("After going over 15 links, no match found.")) {
