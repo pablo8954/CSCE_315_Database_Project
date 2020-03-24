@@ -55,7 +55,7 @@ public class WindowController {
 	boolean questionTwoResultsRequested = false;
 	boolean questionThreeResultsRequested = false;
 	
-	//All functions below are for updating menu text for teams
+	//Conference table selected
 	public void confItemSelected() throws IOException {
 		MenuButton m = mbutton;
 		MenuItem mitem = confItem;
@@ -76,6 +76,7 @@ public class WindowController {
 		year = controller.getYear();
 	}
 	
+	//Game table selected
 	public void gameItemSelected() throws IOException {
 		MenuButton m = mbutton;
 		MenuItem mitem = gameItem;
@@ -97,6 +98,7 @@ public class WindowController {
 	}
 	
 	
+	//Player table selected
 	public void playerItemSelected() throws IOException {
 		MenuButton m = mbutton;
 		MenuItem mitem = playerItem;
@@ -119,6 +121,7 @@ public class WindowController {
 		year = controller.getYear();
 	}
 	
+	//Stadium table selected
 	public void satdiumYearwiseItemSelected() throws IOException {
 		MenuButton m = mbutton;
 		MenuItem mitem = stadiumYearwiseItem;
@@ -138,6 +141,7 @@ public class WindowController {
 		stadiumName = controller.getStadiumName();
 	}
 
+	//Team table selected
 	public void teamItemSelected() throws IOException {
 		MenuButton m = mbutton;
 		MenuItem mitem = teamItem;
@@ -160,20 +164,24 @@ public class WindowController {
 		teamType = controller.getTeamType();
 	}
 	
+	//Update boolean if user as pressed Get Results
 	public void getResultsPressed() {
 		resultsRequested = true;
 	}
 	
+	//Open new window for question one
 	public void questionOneButtonPressed() throws IOException {
-		outputTextArea.setText("Given 2 teams, create a victory chain.");
+		outputTextArea.setText("Given 2 teams, create a victory chain." + 
+				"\n This may take up to 30 seconds...");
+		//Ensure tables unselected
 		mbutton.setText("Table Name");
 		questionOneResultsRequested = true;
-		System.out.println("Question One Selected");
+		//Boot window
 		Stage stage = new Stage();
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("QuestionOne.fxml"));
 		Parent root = loader.load();
-		Scene scene = new Scene(root, 400, 150);
+		Scene scene = new Scene(root, 400, 175);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle("Question One");
@@ -184,16 +192,18 @@ public class WindowController {
 		opposingTeam = controller.getOpposingTeam();
 	}
 	
+	//Open new window for question two
 	public void questionTwoButtonPressed() throws IOException {
 		outputTextArea.setText("Given a team, find the team with the most rushing yards vs. the given team.");
+		//Ensure tables unselected
 		mbutton.setText("Table Name");
 		questionTwoResultsRequested = true;
-		System.out.println("Question Two Selected");
+		//Boot new window
 		Stage stage = new Stage();
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("QuestionTwo.fxml"));
 		Parent root = loader.load();
-		Scene scene = new Scene(root, 400, 150);
+		Scene scene = new Scene(root, 400, 200);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle("Question Three");
@@ -204,16 +214,18 @@ public class WindowController {
 		year = controller.getYear();
 	}
 	
+	//Open new window for question two
 	public void questionThreeButtonPressed() throws IOException {
 		outputTextArea.setText("Given a team, is there a correlation between average attendance and team record.");
+		//Ensure tables unselected
 		mbutton.setText("Table Name");
-		questionThreeResultsRequested = true;
-		System.out.println("Question Two Selected");
+		questionThreeResultsRequested = true; 
+		//Boot new window
 		Stage stage = new Stage();
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("QuestionThree.fxml"));
 		Parent root = loader.load();
-		Scene scene = new Scene(root, 400, 150);
+		Scene scene = new Scene(root, 400, 200);
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle("Question Five");
@@ -229,24 +241,28 @@ public class WindowController {
 	}
 	
 	public boolean getResultsRequested() {
+		//Make sure right result sent using temp
 		boolean result = resultsRequested;
 		resultsRequested = false;
 		return result;
 	}
 	
 	public boolean getQuestionOneResultsRequested() {
+		//Make sure right result sent using temp
 		boolean result = questionOneResultsRequested;
 		questionOneResultsRequested = false;
 		return result;
 	}
 	
 	public boolean getQuestionTwoResultsRequested() {
+		//Make sure right result sent using temp
 		boolean result = questionTwoResultsRequested;
 		questionTwoResultsRequested = false;
 		return result;
 	}
 	
 	public boolean getQuestionThreeResultsRequested() {
+		//Make sure right result sent using temp
 		boolean result = questionThreeResultsRequested;
 		questionThreeResultsRequested = false;
 		return result;
@@ -292,10 +308,12 @@ public class WindowController {
 		return stadiumName;
 	}
 	
+	//get year
 	public int getYear() {
 		return year;
 	}
 	
+	//get team type
 	public String getTeamType() {
 		return teamType;
 	}

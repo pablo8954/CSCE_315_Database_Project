@@ -37,7 +37,7 @@ public class jdbcpostgreSQL extends Application {
     public static Connection conn;
     private static int year;
     public static boolean resultsRequested = false;
-    public static boolean questionOneResultsRequested = false;
+    public static boolean questionOneResultsRequested = false; 
     public static boolean questionTwoResultsRequested = false;
     public static boolean questionThreeResultsRequested = false;
 
@@ -58,41 +58,48 @@ public class jdbcpostgreSQL extends Application {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         } // end try catch
-          // JOptionPane.showMessageDialog(null, "Opened database successfully");
 
+        //Create a controller to the main window
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("Window.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root, 600, 800);
         controller = loader.getController();
 
+        //Show the main window
         primaryStage.setScene(scene);
         primaryStage.setTitle("College Football Data");
         primaryStage.resizableProperty().setValue(Boolean.FALSE);
         primaryStage.show();
 
+        //Create new thread to interact with backend
         new Thread() {
             public void run() {
                 // Keep waking up thread for duration of program
                 while (true) {
 
                     try {
+                    	//Sleep to allow interaction with GUI
                         Thread.sleep(new Random().nextInt(1000));
                     } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-
+                    
                     Platform.runLater(new Runnable() {
 
+                    	//Running when woken up
                         public void run() {
 
                             resultsRequested = controller.getResultsRequested();
 
                             // If get results pushed
                             if (resultsRequested) {
-                                questionOneResultsRequested = controller.getQuestionOneResultsRequested();
-                                questionTwoResultsRequested = controller.getQuestionTwoResultsRequested();
-                                questionThreeResultsRequested = controller.getQuestionThreeResultsRequested();
+                            	
+                            	//Extract all information user may have provided
+                            	questionOneResultsRequested = controller.getQuestionOneResultsRequested();
+                            	questionTwoResultsRequested = controller.getQuestionTwoResultsRequested();
+                            	questionThreeResultsRequested = controller.getQuestionThreeResultsRequested();
                                 dataSelection = controller.getDataSelection();
                                 teamName = controller.getTeamName();
                                 conferenceName = controller.getConferenceName();
@@ -101,53 +108,64 @@ public class jdbcpostgreSQL extends Application {
                                 opposingTeam = controller.getOpposingTeamName();
                                 stadiumName = controller.getStadiumName();
                                 year = controller.getYear();
-
-                                System.out.println(dataSelection + " selected");
+                                
+                                //Get result
                                 String result = "";
+                                //Tables
                                 if (dataSelection.equals("Conference")) {
                                     result = confDataFetch(conferenceName, conn);
-                                } else if (dataSelection.equals("Game")) {
+                                } 
+                                else if (dataSelection.equals("Game")) {
                                     result = gameDataFetcWithNameYear(teamName, year, conn);
-                                } else if (dataSelection.equals("Player")) {
-                                    System.out.println(controller.getPlayerFirstName());
+                                } 
+                                else if (dataSelection.equals("Player")) {
+                                	//If year was not provided
                                     if (controller.getYear() == 0) {
                                         result = generalPlayer(controller.getPlayerFirstName(),
                                                 controller.getPlayerLastName(), conn);
-                                    } else {
+                                    } 
+                                    else {
                                         result = playerMetricsData(controller.getPlayerFirstName(),
                                                 controller.getPlayerLastName(), controller.getYear(), conn);
                                     }
-                                } else if (dataSelection.equals("Stadium")) {
+                                } 
+                                else if (dataSelection.equals("Stadium")) {
                                     result = stadiumDataFetch(stadiumName, conn);
-                                } else if (dataSelection.equals("Team")) {
+                                } 
+                                else if (dataSelection.equals("Team")) {
+                                	//Different radio button options
                                     if (controller.getTeamType().equals("General")) {
                                         result = generalTeam(controller.getTeamName(), conn);
-                                    } else if (controller.getTeamType().equals("Game")) {
+                                    } 
+                                    else if (controller.getTeamType().equals("Game")) {
                                         result = teamGameData(controller.getTeamName(),
                                                 controller.getOpposingTeamName(), controller.getYear(), conn);
-                                    } else if (controller.getTeamType().equals("Play")) {
+                                    } 
+                                    else if (controller.getTeamType().equals("Play")) {
                                         result = teamPlayData(controller.getTeamName(),
                                                 controller.getOpposingTeamName(), controller.getYear(), conn);
                                     }
-                                } else if (questionOneResultsRequested) {
-                                    result = "Given 2 teams, create a victory chain.";
-                                    result += "\n" + questionOne(controller.getTeamName(),
-                                            controller.getOpposingTeamName(), conn);
-                                    controller.updateOutputTextArea(result);
-                                } else if (questionTwoResultsRequested) {
-                                    result = "Given a team, find the team with the most rushing yards vs. the given team.";
-                                    result += "\n"
-                                            + questionThree(controller.getTeamName(), controller.getYear(), conn);
-                                    controller.updateOutputTextArea(result);
-                                } else if (questionThreeResultsRequested) {
-                                    result = "Given a team, is there a correlation between average attendance and team record.";
-                                    result += "\n" + questionFive(controller.getTeamName(), controller.getYear(), conn);
-                                    controller.updateOutputTextArea(result);
-                                }
-
+                                } 
+                                //Question buttons
+                                else if(questionOneResultsRequested) {
+                                	result = "Given 2 teams, create a victory chain.";
+                                	result += "\n" + questionOne(controller.getTeamName(), controller.getOpposingTeamName(), conn);
+                                	controller.updateOutputTextArea(result);
+                            	}
+                                else if(questionTwoResultsRequested) {
+                            		result = "Given a team, find the team with the most rushing yards vs. the given team.";
+                            		result += "\n" + questionThree(controller.getTeamName(), controller.getYear(), conn);
+                            		controller.updateOutputTextArea(result);
+                            	} 
+                                else if(questionThreeResultsRequested) {
+                            		result = "Given a team, is there a correlation between average attendance and team record.";
+                            		result += "\n" + questionFive(controller.getTeamName(), controller.getYear(), conn);
+                            		controller.updateOutputTextArea(result);
+                            	}
+                                
+                                //Update the output to the screen
                                 controller.updateOutputTextArea(result);
-                                System.out.println(result);
-
+                                //If user chose to generate text file
                                 if (controller.generateTextFile()) {
                                     // write to file
                                     File generatedFile = new File("results.txt");
@@ -158,11 +176,12 @@ public class jdbcpostgreSQL extends Application {
                                         writer.write(result);
                                         writer.close();
                                     } catch (IOException e) {
+                                        // TODO Auto-generated catch block
                                         e.printStackTrace();
                                     }
                                 }
                             }
-
+                         
                         }
                     });
                 }
@@ -171,7 +190,6 @@ public class jdbcpostgreSQL extends Application {
 
     }
 
-    //fetch game data using team name and year
     public static String gameDataFetcWithNameYear(String name, Integer year, Connection conn) {
         String result_str = "";
         try {
@@ -224,7 +242,6 @@ public class jdbcpostgreSQL extends Application {
 
             ResultSet result = stmt.executeQuery(sqlStmt);
 
-            // send output to DBMS Application
             while (result.next()) {
                 result_str += "Home Team Name: ";
                 try {
@@ -282,7 +299,6 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
-    //Fetch stadium data using stadium name
     public static String stadiumDataFetch(String name, Connection conn) {
         String result_str = "";
         try {
@@ -351,7 +367,6 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
-    //Fetch Conference Data
     public static String confDataFetch(String name, Connection conn) {
         String result_str = "";
         try {
@@ -391,7 +406,6 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
-    //Grab team data pertaining to general information 
     public static String generalTeam(String name, Connection conn) {
         String result_str = "";
         try {
@@ -455,7 +469,6 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
-    // Handle Team Performance statistics
     public static String teamGameData(String team, String awayteam, Integer year, Connection conn) {
         String result_str = "";
         String sqlStmt = "";
@@ -1041,7 +1054,6 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
-    //Handle all team play performance against a given team
     public static String teamPlayData(String team, String awayteam, Integer year, Connection conn) {
 
         String result_str = "";
@@ -1228,7 +1240,6 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
-    //Fetch Individual Player Information not pertaining to in-game performance
     public static String generalPlayer(String fname, String lname, Connection conn) {
         String result_str = "";
         try {
@@ -1293,16 +1304,14 @@ public class jdbcpostgreSQL extends Application {
         return result_str;
     }
 
-    // Handle Individual Player data pertaining to in-game statistics
     public static String playerMetricsData(String fname, String lname, Integer year, Connection conn) {
         String result_str = "";
         try {
             Statement stmt = conn.createStatement();
             String sqlStatement = "";
 
-            // Two cases for SQL Statement 
-            //- Only Full Name given 
-            // Full Name and Year is given
+            // Two cases for SQL Statement - Only Full Name given | Full Name and Year is
+            // given
             if (!fname.equals("") && !lname.equals("") && !(year < 2005 || year > 2013)) {
                 sqlStatement = String.format(
                         "SELECT DISTINCT \"FirstName\", \"LastName\", \"Game\".\"GameId\", \"YardsRush\", \"YardsPass\", \"YardsKickoffReturn\","
@@ -1805,9 +1814,6 @@ public class jdbcpostgreSQL extends Application {
 
                 result_str += "\n";
             }
-            if (result_str.equals("")) {
-                result_str = "The game data for the given team is not available. Please check the team name as well.";
-            }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,
@@ -1826,21 +1832,6 @@ public class jdbcpostgreSQL extends Application {
         try {
             Statement stmt = conn.createStatement();
 
-            // verify input string is a valid team
-            if (!team.equals("")) {
-                String verifyInput = String.format(
-                        "SELECT DISTINCT \"TeamName\" FROM \"Team\" WHERE \"TeamName\" LIKE '%s' LIMIT 1;", team);
-
-                ResultSet result = stmt.executeQuery(verifyInput);
-                while (result.next()) {
-                    result_str += result.getString("TeamName");
-                }
-                if (result_str.equals("")) {
-                    return "Invalid team name - please make sure team name is correct.";
-                }
-            }
-
-            result_str = "";
             // Two cases - Only Team given | Team and Year given
             if (!team.equals("") && (year > 2013 || year < 2005)) {
                 String sqlStmt = String.format("SELECT AVG(\"Attendance\")as Attendance FROM\"Game\" "
@@ -1920,9 +1911,6 @@ public class jdbcpostgreSQL extends Application {
                     result_str += "%.\n";
                 }
             }
-            if (result_str.equals("")) {
-                result_str = "The game data for the given team is not available. Please check the team name as well.";
-            }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error accessing team win vs loss hypothesis");
@@ -1942,8 +1930,6 @@ public class jdbcpostgreSQL extends Application {
             String sqlStmt = "";
 
             if (!team.equals("") && !awayteam.equals("")) {
-
-                // verify that home team input, team, is valid
                 sqlStmt = String.format("SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s' LIMIT 1;", team);
                 Integer count = 0;
                 ResultSet result_upper = stmt.executeQuery(sqlStmt);
@@ -1953,8 +1939,6 @@ public class jdbcpostgreSQL extends Application {
                 if (count < 1) {
                     return "Error accessing Team links please make sure team name is correct";
                 }
-                
-                //verify away team input is valid
                 stmt = conn.createStatement();
                 sqlStmt = String.format("SELECT\"TeamId\" FROM\"Team\" WHERE\"TeamName\" LIKE'%s' LIMIT 1;", awayteam);
                 count = 0;
@@ -1966,7 +1950,6 @@ public class jdbcpostgreSQL extends Application {
                     return "Error accessing Team links please make sure team name is correct";
                 }
             }
-            
             stmt = conn.createStatement();
             if (!team.equals("") && !awayteam.equals("")) {
                 sqlStmt = String.format(
@@ -2060,7 +2043,25 @@ public class jdbcpostgreSQL extends Application {
     }
 
     public static void main(String args[]) {
+
         launch(args);
+
+        // question three
+       /* System.out.println(questionThree("Texas A&M", 0, conn));
+        System.out.println(questionThree("Auburn", 2013, conn));
+        System.out.println(questionThree("Texas A&M", 2005, conn));
+        System.out.println(questionThree("Clemson", 2013, conn));
+        System.out.println(questionThree("Baylor", 0, conn));
+        System.out.println("\n");
+
+        // question five
+        System.out.println(questionFive("Texas A&M", 0, conn));
+        System.out.println("\n");
+        System.out.println(questionFive("Clemson", 2013, conn));
+        System.out.println("\n");*/
+
+        // TODO: try catch to handle bad team inputs
+        //System.out.println(questionFive("Shrey is Bai", 2013, conn));
 
     }
     // end backendmain

@@ -56,6 +56,7 @@ public class PlayerController {
 		return opposingTeam;
 	}
 	public void selected2005() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2005;
 		m.setText(mitem.getText());
@@ -63,6 +64,7 @@ public class PlayerController {
 	}
 	
 	public void selected2006() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2006;
 		m.setText(mitem.getText());
@@ -70,6 +72,7 @@ public class PlayerController {
 	}
 	
 	public void selected2007() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2007;
 		m.setText(mitem.getText());
@@ -77,6 +80,7 @@ public class PlayerController {
 	}
 	
 	public void selected2008() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2008;
 		m.setText(mitem.getText());
@@ -84,6 +88,7 @@ public class PlayerController {
 	}
 	
 	public void selected2009() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2009;
 		m.setText(mitem.getText());
@@ -91,6 +96,7 @@ public class PlayerController {
 	}
 	
 	public void selected2010() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2010;
 		m.setText(mitem.getText());
@@ -98,6 +104,7 @@ public class PlayerController {
 	}
 	
 	public void selected2011() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2011;
 		m.setText(mitem.getText());
@@ -105,6 +112,7 @@ public class PlayerController {
 	}
 	
 	public void selected2012() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2012;
 		m.setText(mitem.getText());
@@ -112,6 +120,7 @@ public class PlayerController {
 	}
 	
 	public void selected2013() {
+		//Modify menu item text
 		MenuButton m = yearButton;
 		MenuItem mitem = item2013;
 		m.setText(mitem.getText());
@@ -119,6 +128,7 @@ public class PlayerController {
 	}
 	
 	public void OKPressed() {
+		//Extract player name and team name and close window
 		firstName = FirstNameText.getText();
 		lastName = LastNameText.getText();
 		opposingTeam = OpposingTeamText.getText();
