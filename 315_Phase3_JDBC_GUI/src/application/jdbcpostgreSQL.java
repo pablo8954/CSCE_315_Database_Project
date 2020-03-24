@@ -1970,7 +1970,7 @@ public class jdbcpostgreSQL extends Application {
 
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
-                result_str += String.format("%s | %s", team, awayteam);
+                result_str += String.format("%s -> %s", team, awayteam);
                 result_str += "\n";
             }
             if (result_str.equals("")) {
@@ -2008,7 +2008,7 @@ public class jdbcpostgreSQL extends Application {
 
             ResultSet result = stmt.executeQuery(sqlStmt);
             while (result.next()) {
-                result_str += String.format("%s | %s", team, awayteam);
+                result_str += String.format("%s -> %s", team, awayteam);
             }
             if (result_str.equals("")) {
 
@@ -2044,7 +2044,7 @@ public class jdbcpostgreSQL extends Application {
                     }
                 }
                 teams.add(maxOppTeam);
-                result_str = String.format("%s | %s", team, qOneHelper(maxOppTeam, awayteam, initTeam, teams, conn));
+                result_str = String.format("%s -> %s", team, qOneHelper(maxOppTeam, awayteam, initTeam, teams, conn));
             }
 
         } catch (Exception e) {
